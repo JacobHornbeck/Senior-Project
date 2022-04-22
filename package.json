@@ -1,0 +1,14 @@
+{
+  "name": "senior-project",
+  "version": "1.0.0",
+  "description": "Rebuild Genius Coding website, writing both backend (using MongoDB, Express.js, and Node.js), and frontend (using EJS templating (which is compiled into HTML), JavaScript, and Sass (*.scss) which will be compiled to CSS for the browser to handle.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Jacob Hornbeck",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.3"
+  }
+}

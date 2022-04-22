@@ -1,0 +1,2 @@
+# Do not commit and push all node modules
+node_modules/
