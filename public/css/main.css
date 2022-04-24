@@ -1,0 +1,210 @@
+@import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@300&family=Gafata&family=Play:wght@700&family=Play:wght@300&family=Press+Start+2P&display=swap');
+
+:root {
+    --primary-color: #676767;
+    --secondary-color: #FFFF64;
+    --accent1-color: #10D15A;
+    --accent2-color: #202020;
+    --other-color: #FEFEFE;
+    --heading-font: 'Play', arial bold, sans-serif;
+    --paragraph-font: 'Gafata', arial, sans-serif;
+    --code-font: 'Fira Code', monospace;
+}
+
+
+/* Global Styles */
+* {
+    font-family: var(--paragraph-font);
+    box-sizing: border-box;
+}
+h1, h2, h3, h4, h5, h6 {
+    font-family: var(--heading-font);
+}
+pre, code, .code {
+    font-family: var(--code-font);
+}
+.bigText {
+    font-family: 'Press Start 2P', sans-serif;
+    font-size: 3rem;
+    margin-bottom: 0;
+}
+body {
+    margin: 0;
+}
+main {
+    min-height: calc(100vh - 112px - 60px);
+    padding: 1rem;
+}
+img {
+    max-width: 100%;
+}
+
+
+/* Logo Styles */
+.logo-name {
+    width: 330px;
+    display: grid;
+    justify-self: start;
+    grid-template-columns: 80px auto;
+    justify-items: center;
+    align-items: center;
+}
+.logo-name a {
+    display: block;
+    justify-self: start;
+    text-decoration: none;
+    margin: 0.5rem 0;
+}
+.logo-name h1 {
+    margin: 0;
+    font-size: 1.5rem;
+    color: var(--other-color);
+    padding-left: 5px;
+    width: auto;
+}
+.logo-name .logo {
+    position: relative;
+    height: 60px;
+    width: 60px;
+}
+.logo > div {
+    position: absolute;
+    width: calc(50% - 10px);
+    height: calc(50% - 10px);
+    transform: rotate(45deg);
+    border-radius: 12%;
+}
+.logo .green {
+    z-index: 2;
+    top: 9px; left: 9px;
+    background-color: var(--accent1-color);
+    box-shadow: 0 0 2px var(--other-color);
+}
+.logo .yellow {
+    z-index: 1;
+    top: 9px; right: 9px;
+    background-color: var(--secondary-color);
+    box-shadow: 0 0 2px var(--other-color);
+}
+.logo .gray {
+    z-index: 1;
+    bottom: 9px; left: 9px;
+    background-color: var(--primary-color);
+    box-shadow: 0 0 2px var(--other-color);
+}
+.logo .blue {
+    z-index: 2;
+    bottom: 9px; right: 9px;
+    background-color: #2B22E3;
+    box-shadow: 0 0 2px var(--other-color);
+}
+
+
+/* Header Styles */
+header {
+    padding: 0 0.25rem;
+    background-color: var(--primary-color);
+    grid-template-columns: 260px auto;
+    align-items: center;
+    justify-items: end;
+    position: sticky;
+    display: grid;
+    height: 60px;
+    top: 0;
+}
+.nav-list {
+    list-style: none;
+    padding-left: 0;
+    display: flex;
+    margin: 0;
+}
+.nav-list-item-link {
+    padding: 0.75rem 1rem;
+    color: var(--secondary-color);
+    font-family: var(--heading-font);
+    text-decoration: none;
+}
+.nav-list-item-link.active {
+    background-color: rgba(255,255,255,0.2);
+}
+.nav-list-item-link:hover {
+    color: var(--primary-color);
+    background-color: var(--secondary-color);
+}
+
+
+/* Error Page Styles */
+.centerContent {
+    width: 100%;
+    min-height: 100px;
+    justify-content: center;
+    height: calc(100vh - 112px - 60px - 2rem);
+    align-items: center;
+    display: flex;
+}
+.centeredPart {
+    width: max-content;
+    height: max-content;
+    flex-direction: column;
+    align-items: center;
+    display: flex;
+}
+
+
+
+/* Footer Style */
+footer {
+    background-color: var(--primary-color);
+    padding: 3rem 1rem 10px;
+}
+.footer-section {
+    display: grid;
+    padding: 10px;
+    border-top: solid 2px var(--other-color);
+    grid-template-columns: 2fr 1fr;
+    align-items: center;
+}
+.footer-section-left {
+    padding-left: 10px;
+    align-items: center;
+    justify-self: left;
+    column-gap: 10px;
+    display: flex;
+}
+.footer-copyright {
+    padding-right: 10px;
+    font-weight: bold;
+    color: var(--other-color);
+    text-shadow: 0 0 2px var(--primary-color),
+                 0 0 4px var(--accent2-color);
+}
+.footer-link {
+    display: block;
+    color: var(--other-color);
+    transition: color 0.3s,
+                background 0.3s;
+    text-decoration: none;
+    padding: 0.2rem 0.5rem;
+    border-radius: 2px;
+}
+.footer-link:hover {
+    color: var(--secondary-color);
+    background-color: rgba(255,255,255,0.2);
+}
+.footer-section-right {
+    padding-right: 10px;
+    justify-self: right;
+    align-items: center;
+    column-gap: 5px;
+    display: flex;
+}
+.footer-social-link-image {
+    display: block;
+    height: 32px;
+    width: 32px;
+    transition: all 0.2s;
+}
+.footer-social-link-image:hover {
+    transform: scale(1.1);
+}
+
