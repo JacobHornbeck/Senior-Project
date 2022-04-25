@@ -6,3 +6,6 @@ status_reports/
 
 # Do not commit environment file
 .env
+
+# Do not commit project proposal document
+project-proposal.txt
