@@ -1,0 +1,54 @@
+<%- include('../includes/head.ejs') %>
+</head>
+
+<body>
+    <%- include('../includes/nav.ejs') %>
+    <main class="white-background">
+        <div class="header-image"></div>
+        <section class="overlap-top">
+            <p class="prompt">Already have an account? <a href="/login">Login now</a>.</p>
+            <h2>Create Account</h2>
+            <form action="/signup" method="post">
+                <div class="input-container">
+                    <input type="text" name="email" id="email">
+                    <label for="email">Email</label>
+                </div>
+                <div class="input-container">
+                    <input type="text" name="username" id="username">
+                    <label for="username">Username</label>
+                    <div class="valid">
+                        <div class="green"></div>
+                        <div class="yellow"></div>
+                        <div class="gray"></div>
+                        <div class="blue"></div>
+                    </div>
+                </div>
+                <div class="input-container">
+                    <input type="text" name="firstname" id="firstname">
+                    <label for="firstname">First Name</label>
+                </div>
+                <div class="input-container">
+                    <input type="text" name="lastname" id="lastname">
+                    <label for="lastname">Last Name</label>
+                </div>
+                <div class="input-container">
+                    <input type="password" name="password" id="password">
+                    <label for="password">Password</label>
+                </div>
+                <div class="input-container">
+                    <input type="password" name="confirm-password" id="confirm-password">
+                    <label for="confirm-password">Confirm Password</label>
+                    <div class="valid">
+                        <div class="green"></div>
+                        <div class="yellow"></div>
+                        <div class="gray"></div>
+                        <div class="blue"></div>
+                    </div>
+                </div>
+                <input type="submit" value="Create Account">
+            </form>
+            <!-- Add external sign ups? -->
+        </section>
+    </main>
+
+<%- include('../includes/end.ejs') %>

@@ -10,7 +10,7 @@ const MongoDBStore = require("connect-mongodb-session")(session)
 const app = express();
 // const adminRoutes = require("./routes/admin")
 // const shopRoutes = require("./routes/shop")
-// const authRoutes = require("./routes/auth")
+const authRoutes = require("./routes/auth")
 const errorController = require("./controllers/error")
 // const User = require("./models/user")
 const csrf = require("csurf")
@@ -87,28 +87,30 @@ app.set('view engine', 'ejs')
         } else {
             res.locals.links = [
                 { 'href': '/', 'text': 'Home' },
-                { 'href': '/login', 'text': 'Login/Signup' },
+                { 'href': '/login', 'text': 'Login' },
+                { 'href': '/signup', 'text': 'Sign Up' },
             ]
         }
         next()
     })
-    //    .use((req, res, next) => {
-    //         if (!req.session.user) return next()
-    //         User.findById(req.session.user._id)
-    //             .then((user) => {
-    //                 req.user = user
-    //                 next()
-    //             })
-    //             .catch(err => {
-    //                 const error = new Error(err)
-    //                 error.httpStatusCode = 500
-    //                 return next(error)
-    //             })
-    //    })
+    .use((req, res, next) => {
+        if (!req.session.user) return next()
+        User.findById(req.session.user._id)
+            .then((user) => {
+                req.user = user
+                next()
+            })
+            .catch(err => {
+                const error = new Error(err)
+                error.httpStatusCode = 500
+                return next(error)
+            })
+    })
     //    .use(routes)
+    .use(authRoutes)
     .use('/500', errorController.get500)
     .use('/', (req, res, next) => {
-        res.render('index', {
+        res.render('homepage', {
             pageTitle: 'Homepage'
         })
     })
