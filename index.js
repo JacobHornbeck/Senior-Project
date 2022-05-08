@@ -12,7 +12,7 @@ const app = express();
 // const shopRoutes = require("./routes/shop")
 const authRoutes = require("./routes/auth")
 const errorController = require("./controllers/error")
-// const User = require("./models/user")
+const User = require("./models/user")
 const csrf = require("csurf")
 const flash = require("connect-flash")
 const multer = require("multer")
@@ -72,14 +72,12 @@ app.set('view engine', 'ejs')
         next();
     })
     .use((req, res, next) => {
-        res.locals.isAuthenticated = req.session.authenticated
+        res.locals.isAuthenticated = req.session.isLoggedIn
         res.locals.csrfToken = req.csrfToken()
-        res.locals.message = {
-            content: req.flash('message-content'),
-            type: req.flash('message-type')
-        }
+        res.locals.message = req.flash('message')
+        res.locals.previous = req.flash('previous')
         res.locals.path = req.url
-        if (req.session.authenticated) {
+        if (req.session.isLoggedIn) {
             res.locals.links = [
                 { 'href': '/', 'text': 'Home' },
                 { 'href': '/logout', 'text': 'Logout' },
@@ -108,10 +106,10 @@ app.set('view engine', 'ejs')
     })
     //    .use(routes)
     .use(authRoutes)
-    .use('/500', errorController.get500)
-    .use('/', (req, res, next) => {
+    .get('/500', errorController.get500)
+    .get('/', (req, res, next) => {
         res.render('homepage', {
-            pageTitle: 'Homepage'
+            pageTitle: 'Home'
         })
     })
     .use(errorController.get404)

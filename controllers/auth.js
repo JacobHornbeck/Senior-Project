@@ -1,15 +1,15 @@
 const bcrypt = require("bcrypt")
-const { validationResult } = require("express-validator/check")
+const { validationResult } = require("express-validator")
 const User = require('../models/user')
 
-/* const nodemailer = require('nodemailer')
+const nodemailer = require('nodemailer')
 const sendgridTransport = require('nodemailer-sendgrid-transport')
 
 const transporter = nodemailer.createTransport(sendgridTransport({
     auth: {
         api_key: process.env.mailerAPI
     }
-})) */
+}))
 
 exports.getLogin = (req, res, next) => {
     res.render('auth/login', {
@@ -25,20 +25,37 @@ exports.getSignUp = (req, res, next) => {
     })
 }
 
+exports.getForgot = (req, res, next) => {
+    res.render('auth/forgot-password', {
+        pageTitle: 'Forgot Password',
+        isAuthenticated: false
+    })
+}
+
+exports.getEmailConfirmation = (req, res, next) => {
+    
+}
+
 exports.postLogin = (req, res, next) => {
     const errors = validationResult(req)
     if (!errors.isEmpty()) {
-        req.flash('message-content', errors.array()[0].msg)
-        req.flash('message-type','error')
-        // req.flash('previous-email', req.body.email)
+        req.flash('message', {
+            content:  errors.array()[0].msg,
+            type:     'error'
+        })
+        req.flash('previous', {
+            email: req.body.email
+        })
         return res.redirect('/login')
     }
 
     User.findOne({email: req.body.email.toLowerCase()})
         .then(user => {
             if (!user) {
-                req.flash('message-content', 'Invalid credentials, please try again')
-                req.flash('message-type', 'error')
+                req.flash('message', {
+                    content:  'Invalid credentials, please try again',
+                    type:     'error'
+                })
                 return res.redirect('/login')
             }
             bcrypt
@@ -52,8 +69,10 @@ exports.postLogin = (req, res, next) => {
                             res.redirect('/')
                         })
                     }
-                    req.flash('message-content', 'Invalid credentials, please try again')
-                    req.flash('message-type', 'error')
+                    req.flash('message', {
+                        content:  'Invalid credentials, please try again',
+                        type:     'error'
+                    })
                     res.redirect('/login')
                 })
                 .catch(err => console.log(err))
@@ -64,11 +83,16 @@ exports.postLogin = (req, res, next) => {
 exports.postSignUp = (req, res, next) => {
     const errors = validationResult(req)
     if (!errors.isEmpty()) {
-        req.flash('message-content',errors.array()[0].msg)
-        req.flash('message-type','error')
-        req.flash('previous-firstname', req.body.firstname)
-        req.flash('previous-lastname', req.body.lastname)
-        req.flash('previous-email', req.body.email)
+        req.flash('message', {
+            content:  errors.array()[0].msg,
+            type:     'error'
+        })
+        req.flash('previous', {
+            email:      req.body.email,
+            username:   req.body.username,
+            firstname:  req.body.firstname,
+            lastname:   req.body.lastname,
+        })
         return res.redirect('/signup')
     }
 
@@ -76,16 +100,16 @@ exports.postSignUp = (req, res, next) => {
         .hash(req.body.password, 12)
         .then(hashedPassword => {
             const user = new User({
-                email: req.body.email.toLowerCase(),
-                password: hashedPassword,
-                name: req.body.firstname.toString() + " " + req.body.lastname,
-                cart: {items: []}
+                username:   req.body.username,
+                firstName:  req.body.firstname,
+                lastName:   req.body.lastname,
+                email:      req.body.email.toLowerCase(),
+                password:   hashedPassword,
             })
             return user.save()
         })
         .then(() => {
-            // If we decide to use the mail transporter...
-            /* transporter.sendMail({
+            transporter.sendMail({
                 to: req.body.email,
                 from: 'Account Management<Jacob.Hornbeck@outlook.com>',
                 subject: 'Account Creation Successful!',
@@ -94,10 +118,12 @@ exports.postSignUp = (req, res, next) => {
                     <p style="text-align: center;">${req.body.firstname} ${req.body.lastname}, you successfully signed up for an account!</p>
                 </section>`
             })
-            .catch(err => console.log(err)) */
+            .catch(err => console.log(err))
 
-            req.flash('message-content', 'Please use your email and password to login')
-            req.flash('message-type', 'success')
+            req.flash('message', {
+                content:  'To login, please confirm your email address',
+                type:     'success'
+            })
             res.redirect('/login')
         })
 }
