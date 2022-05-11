@@ -74,8 +74,10 @@ app.set('view engine', 'ejs')
     .use((req, res, next) => {
         res.locals.isAuthenticated = req.session.isLoggedIn
         res.locals.csrfToken = req.csrfToken()
-        res.locals.message = req.flash('message')
-        res.locals.previous = req.flash('previous')
+        let temp1 = req.flash('message')
+        res.locals.message = temp1.length > 0 ? temp1[0] : undefined
+        let temp2 = req.flash('previous')
+        res.locals.previous = temp2.length > 0 ? temp2[0] : undefined
         res.locals.path = req.url
         if (req.session.isLoggedIn) {
             res.locals.links = [

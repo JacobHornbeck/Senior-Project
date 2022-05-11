@@ -21,3 +21,10 @@
         </ul>
     </nav>
 </header>
+<% if (message) { %>
+    <div class="notif <%= message?.type %>">
+        <img src="/images/site-images/notif-<%= message?.type %>.png" alt="<%= message?.type %> notification icon">
+        <span><%= message?.content %></span>
+        <span class="close">×</span>
+    </div>
+<% } %>

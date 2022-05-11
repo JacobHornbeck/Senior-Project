@@ -128,7 +128,7 @@ exports.postSignUp = (req, res, next) => {
         })
 }
 
-exports.postLogout = (req, res, next) => {
+exports.getLogout = (req, res, next) => {
     req.session.destroy(() => {
         res.redirect('/')
     })

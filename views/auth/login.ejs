@@ -3,23 +3,23 @@
 
 <body>
     <%- include('../includes/nav.ejs') %>
-    <main class="white-background">
+    <main class="bottom-padding non-transparent-background">
         <div class="header-image"></div>
         <section class="overlap-top">
             <p class="prompt">New to Genius Coding? <a href="/signup">Create an Account</a>.</p>
             <h2>Login</h2>
             <form action="/login" method="post">
                 <div class="input-container">
-                    <input type="text" name="email" id="email">
+                    <input type="text" name="email" id="email" value="<%= previous?.email %>" required>
                     <label for="email">Email</label>
                 </div>
                 <div class="input-container">
-                    <input type="password" name="password" id="password">
+                    <input type="password" name="password" id="password" required>
                     <label for="password">Password</label>
                 </div>
                 <input type="hidden" name="_csrf" value="<%= csrfToken %>">
                 <input type="submit" value="Login">
-                <a href="/forgot-password">Forgot password?</a>
+                <a href="/forgot-password" class="forgot-password">Forgot password?</a>
             </form>
             <!-- Add external logins? -->
         </section>

@@ -64,6 +64,6 @@ router
                     return true
                 }) 
         ], authController.postSignUp)
-    .post('/logout', authController.postLogout)
+    .get('/logout', authController.getLogout)
 
 module.exports = router
