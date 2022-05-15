@@ -1,0 +1,33 @@
+@use 'variables' as *;
+
+header {
+    padding: 0 1rem;
+    background-color: $primary-color;
+    grid-template-columns: 260px auto;
+    align-items: center;
+    justify-items: end;
+    position: sticky;
+    display: grid;
+    height: 60px;
+    z-index: 99;
+    top: 0;
+}
+.nav-list {
+    list-style: none;
+    padding-left: 0;
+    display: flex;
+    margin: 0;
+}
+.nav-list-item-link {
+    padding: 0.75rem 1rem;
+    color: $secondary-color;
+    font-family: $heading-font;
+    text-decoration: none;
+}
+.nav-list-item-link.active {
+    background-color: rgba(255,255,255,0.2);
+}
+.nav-list-item-link:hover {
+    color: $primary-color;
+    background-color: $secondary-color;
+}

@@ -1,0 +1,88 @@
+@use 'variables' as *;
+
+.home-grid {
+    display: grid;
+
+    * { border-radius: 10px; }
+
+    .profile-hero {
+        grid-column: 1 / -1;
+        width: 100%;
+        display: grid;
+        grid-template-columns: 100px auto;
+        background-image: url('/images/profile-backgrounds/bg-03.png');
+        @include box-shadow;
+        column-gap: 1.5rem;
+        padding: 1.5rem;
+
+        @media screen and (max-width: 1000px) {
+            border-radius: 0;
+        }
+
+        .profile-image {
+            background-color: $primary-color;
+            background-image: url('/images/profile-images/pi-00-md.png');
+            // background-image: url('/images/profile-images/pi-2.svg');
+            border: solid 2px $secondary-color;
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: cover;
+            width: 100px; height: 100px;
+            border-radius: 50%;
+        }
+        .user-info {
+            background-color: rgba($primary-color, 0.75);
+            padding: 0.5rem;
+            color: white;
+
+            .name {
+                margin: 0 0 0.5rem;
+                text-align: left;
+            }
+            .bio {
+                margin: 0;
+            }
+        }
+    }
+    .widgets {
+        display: grid;
+        row-gap: 1.5rem;
+        grid-template-columns: 2fr 1fr;
+        column-gap: 1.5rem;
+        padding: 1.5rem;
+
+        @media screen and (max-width: 918px) {
+            grid-template-columns: 1fr;
+        }
+
+        .user-courses {
+            width: 100%;
+            background-color: $other-color;
+            @include box-shadow;
+            overflow: auto hidden;
+            margin: 0;
+            
+            h2 {
+                position: sticky;
+                left: 0;
+            }
+            .course-card-container {
+                padding: 0 1rem 1rem;
+                width: max-content;
+                column-gap: 1.5rem;
+                min-width: 100%;
+                display: flex;
+            }
+            &::-webkit-scrollbar-track {
+                border-radius: 10px;
+            }
+        }
+        .user-widget {
+            justify-self: start;
+            background-color: $other-color;
+            @include box-shadow;
+            width: 100%;
+            margin: 0;
+        }
+    }
+}

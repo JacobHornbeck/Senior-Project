@@ -1,0 +1,21 @@
+@import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@300&family=Gafata&family=Play:wght@700&family=Play:wght@300&family=Press+Start+2P&display=swap');
+
+$primary-color: #676767;
+$secondary-color: #FFFF64;
+$accent1-color: #10D15A;
+$accent2-color: #202020;
+$other-color: #FEFEFE;
+$card-color: #F0F0F0;
+$heading-font: 'Play', arial bold, sans-serif;
+$paragraph-font: 'Gafata', arial, sans-serif;
+$code-font: 'Fira Code', monospace;
+
+$color-html: #E34E24;
+$color-css: #1173BC;
+$color-cpp: #00A0FD;
+$color-python: #4A98C8;
+// $color-javascript: ;
+
+@mixin box-shadow($x: 2px, $y: 2px, $blur: 8px, $col: $accent2-color) {
+    box-shadow: $x $y $blur $col;
+}

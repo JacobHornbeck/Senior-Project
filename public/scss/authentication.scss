@@ -1,0 +1,194 @@
+@use 'variables' as *;
+
+.non-transparent-background {
+    box-shadow: 2px 2px 10px $primary-color;
+    background-color: $other-color;
+    padding-bottom: 50px;
+    border-radius: 10px;
+    margin-bottom: 40px;
+    position: relative;
+    margin-top: 30px;
+    overflow: hidden;
+    padding-top: 0;
+
+    @media screen and (max-width: 1000px) {
+        border-radius: 0;
+        margin: 0;
+    }
+}
+.header-image, .other-header-image {
+    width: 100%;
+    height: 200px;
+    background-image: url("/images/site-images/login-header-photo.jpg");
+    background-attachment: local;
+    background-position: center;
+    background-size: cover;
+}
+.other-header-image {
+    background-image: url("/images/site-images/account-background.jpg");
+    & + .big-title {
+        text-shadow: 2px 2px 8px $accent2-color;
+        color: $other-color;
+        letter-spacing: 3px;
+        position: absolute;
+        text-align: center;
+        font-size: 3.5rem;
+        width: 100%;
+        top: calc(100px - 3rem/2);
+        margin: 0;
+    }
+}
+.overlap-top {
+    max-width: 500px;
+    min-height: 200px;
+    margin: -100px auto 0;
+    background-color: $other-color;
+    border: solid 1px $accent2-color;
+    padding-top: 0 !important;
+    padding: 1rem;
+    width: 95%;
+    h2 {
+        text-align: left;
+    }
+    & > p {
+        font-family: $heading-font;
+    }
+    & > form {
+        position: relative;
+        width: 100%;
+    }
+}
+.input-container {
+    position: relative;
+    margin-top: 30px;
+    width: 100%;
+    label:not(.input-help) {
+        padding: 0 4px;
+        position: absolute;
+        top: calc(50% - 0.5em);
+        left: 10px;
+        transition: top 0.3s, left 0.3s;
+        font-family: $heading-font;
+        background-color: $other-color;
+    }
+    input:focus ~ label:not(.input-help),
+    input:valid ~ label:not(.input-help) {
+        top: -0.6em; left: 5px;
+    }
+    input:focus ~ label.input-help {
+        display: block;
+    }
+}
+input {
+    width: 100%;
+    display: block;
+    padding: 0.5rem;
+    border: solid 1px $accent2-color;
+    font-family: Arial, Helvetica, sans-serif;
+}
+input[type="submit"], form button.btn, a.btn {
+    background-color: $accent1-color;
+    font-family: $heading-font;
+    text-decoration: none;
+    color: $other-color;
+    width: max-content;
+    font-size: 1.1rem;
+    margin-top: 20px;
+    padding: 0.7rem;
+    display: block;
+    border: none;
+    &:hover {
+        cursor: pointer;
+    }
+    &.danger {
+        background-color: darken($color-html, 5);
+        transform: scale(0.9);
+    }
+}
+.input-help {
+    display: none;
+    padding: 10px 0 0 10px;
+    font-weight: bold;
+    ul {
+        margin-top: 5px;
+        li {
+            &.meets-requirements {
+                color: forestgreen;
+                list-style-type: '✓  ';
+            }
+            &.needs-work {
+                color: tomato;
+                list-style-type: 'X  ';
+            }
+        }
+    }
+}
+.forgot-password {
+    font-family: $heading-font;
+    position: absolute;
+    bottom: 25px;
+    right: 0;
+}
+/* .or {
+    width: 100%;
+    margin-top: 40px;
+    position: relative;
+    margin-bottom: 30px;
+    div {
+        left: 0;
+        height: 1px;
+        width: 100%;
+        top: calc(50%);
+        position: absolute;
+        background-color: $accent2-color;
+    }
+    p {
+        width: 8rem;
+        margin: 0 auto;
+        text-align: center; 
+        position: relative;
+        font-family: $heading-font;
+        background-color: $other-color;
+    }
+}
+.external-logins {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-gap: 10px;
+    .login-with {
+        border: none;
+        display: grid;
+        grid-gap: 5px;
+        border-radius: 0;
+        align-items: center;
+        justify-items: center;
+        padding: 0.4rem 0.2rem;
+        grid-template-columns: 2rem auto;
+        background-color: $accent1-color;
+        &:hover {
+            cursor: pointer;
+        }
+        &:nth-of-type(3) img {
+            background-color: #575352;
+            height: 1.1rem;
+            width: 1.1rem;
+            padding: 0.2rem;
+            border-radius: 2px;
+        }
+        img {
+            height: 1.5rem;
+        }
+        span {
+            font-family: Arial, Helvetica, sans-serif;
+            color: $other-color;
+            font-weight: bold;
+            text-align: left;
+            display: block;
+            width: 100%;
+        }
+    }
+} */
+#email-fp, #email-ca {
+    font-family: $heading-font;
+    color: $primary-color;
+}

@@ -1,0 +1,137 @@
+@use 'variables' as *;
+
+.input-container {
+    .valid {
+        display: none;
+        
+        & > div {
+            position: absolute;
+            border-radius: 12%;
+            transition: all 0.1s;
+            width: calc(50% - 9px);
+            height: calc(50% - 9px);
+            transform: rotate(45deg);
+        }
+        .green {
+            z-index: 2;
+            top: 9px; left: 9px;
+            background-color: $accent1-color;
+        }
+        .yellow {
+            z-index: 1;
+            top: 9px; left: 16px;
+            background-color: $secondary-color;
+        }
+        .gray {
+            z-index: 1;
+            top: 16px; left: 9px;
+            background-color: $primary-color;
+        }
+        .blue {
+            z-index: 2;
+            top: 16px; left: 16px;
+            background-color: #2B22E3;
+        }
+
+        &.loading {
+            .green {
+                z-index: 2;
+                top: 9px; left: 9px;
+                background-color: $accent1-color;
+                animation: gear-clockwise 0.5s infinite;
+            }
+            .yellow {
+                z-index: 1;
+                top: 9px; left: 16px;
+                background-color: $secondary-color;
+                animation: gear-counterclockwise 0.5s infinite;
+            }
+            .gray {
+                z-index: 1;
+                top: 16px; left: 9px;
+                background-color: $primary-color;
+                animation: gear-counterclockwise 0.5s infinite;
+            }
+            .blue {
+                z-index: 2;
+                top: 16px; left: 16px;
+                background-color: #2B22E3;
+                animation: gear-clockwise 0.5s infinite;
+            }
+        }
+        
+        
+        &.true {
+            transform: rotate(360deg);
+            transition: transform 0.5s;
+
+            & > div {
+                transition: all 0.5s;
+                transform: scale(1.1) rotate(45deg);
+            }
+            .green {
+                z-index: 2;
+                top: 13px; left: 15px;
+                background-color: $accent1-color;
+            }
+            .yellow {
+                z-index: 1;
+                top: 13px; left: 5px;
+                background-color: $accent1-color;
+            }
+            .gray {
+                z-index: 1;
+                top: 8px; left: 20px;
+                background-color: $accent1-color;
+            }
+            .blue {
+                z-index: 2;
+                top: 18px; left: 10px;
+                background-color: $accent1-color;
+            }
+        }
+        
+        
+        &.false {
+            transform: rotate(360deg);
+            transition: transform 0.5s;
+
+            & > div {
+                transition: all 0.5s;
+            }
+            .green {
+                z-index: 2;
+                top: 16px; left: 16px;
+                background-color: #FF1A00;
+                transform: rotate(45deg) scale(1.5,0.8);
+            }
+            .yellow {
+                z-index: 1;
+                top: 16px; left: 9px;
+                background-color: #FF1A00;
+                transform: rotate(45deg) scale(0.8,1.5);
+            }
+            .gray {
+                z-index: 1;
+                top: 9px; left: 16px;
+                background-color: #FF1A00;
+                transform: rotate(45deg) scale(0.8,1.5);
+            }
+            .blue {
+                z-index: 2;
+                top: 9px; left: 9px;
+                background-color: #FF1A00;
+                transform: rotate(45deg) scale(1.5,0.8);
+            }
+        }
+    }
+    input:focus ~ .valid,
+    input:valid ~ .valid {
+        position: absolute;
+        top: 0; right: 0;
+        display: block;
+        height: 32px;
+        width: 32px;
+    }
+}
+

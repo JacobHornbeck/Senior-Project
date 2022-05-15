@@ -3,7 +3,7 @@
 
 <body>
     <%- include('../includes/nav.ejs') %>
-    <main class="bottom-padding non-transparent-background">
+    <main class="non-transparent-background">
         <div class="header-image"></div>
         <section class="overlap-top">
             <p class="prompt">New to Genius Coding? <a href="/signup">Create an Account</a>.</p>
@@ -17,7 +17,7 @@
                     <input type="password" name="password" id="password" required>
                     <label for="password">Password</label>
                 </div>
-                <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                <%- include('../includes/csrf-token.ejs') %>
                 <input type="submit" value="Login">
                 <a href="/forgot-password" class="forgot-password">Forgot password?</a>
             </form>

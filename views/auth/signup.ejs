@@ -3,18 +3,18 @@
 
 <body>
     <%- include('../includes/nav.ejs') %>
-    <main class="bottom-padding non-transparent-background">
+    <main class="non-transparent-background">
         <div class="header-image"></div>
         <section class="overlap-top">
             <p class="prompt">Already have an account? <a href="/login">Login now</a>.</p>
             <h2>Create Account</h2>
             <form action="/signup" method="post">
                 <div class="input-container">
-                    <input type="text" name="email" id="email" required>
+                    <input type="text" name="email" id="email" value="<%= previous?.email %>" required>
                     <label for="email">Email</label>
                 </div>
                 <div class="input-container">
-                    <input type="text" name="username" id="username" required>
+                    <input type="text" name="username" id="username" value="<%= previous?.username %>" onkeydown="CheckValue(this)" oninput="LoadPerCharacter(true, this)" required>
                     <label for="username">Username</label>
                     <div class="valid">
                         <div class="green"></div>
@@ -22,21 +22,37 @@
                         <div class="gray"></div>
                         <div class="blue"></div>
                     </div>
+                    <label class="input-help">
+                        Creating a username
+                        <ul>
+                            <li id="username-rule-1" class="needs-work">Must be 4 characters or longer</li>
+                            <li id="username-rule-2" class="needs-work">Must be only letters and numbers</li>
+                            <li id="username-rule-3" class="needs-work">Must start with a letter</li>
+                        </ul>
+                    </label>
                 </div>
                 <div class="input-container">
-                    <input type="text" name="firstname" id="firstname" required>
+                    <input type="text" name="firstname" id="firstname" value="<%= previous?.firstname %>" required>
                     <label for="firstname">First Name</label>
                 </div>
                 <div class="input-container">
-                    <input type="text" name="lastname" id="lastname" required>
+                    <input type="text" name="lastname" id="lastname" value="<%= previous?.lastname %>" required>
                     <label for="lastname">Last Name</label>
                 </div>
                 <div class="input-container">
                     <input type="password" name="password" id="password" required>
                     <label for="password">Password</label>
+                    <label class="input-help">
+                        Creating a password
+                        <ul>
+                            <li id="password-rule-1" class="needs-work">Must be longer than 8 characters</li>
+                            <li id="password-rule-2" class="meets-requirements">Cannot be longer than 100 characters</li>
+                            <li id="password-rule-3" class="needs-work">Must be only letters, numbers, "-", and "_"</li>
+                        </ul>
+                    </label>
                 </div>
                 <div class="input-container">
-                    <input type="password" name="confirm-password" id="confirm-password" required>
+                    <input type="password" name="confirm-password" id="confirm-password" onkeydown="CheckValue(this)" oninput="LoadPerCharacter(true, this)" required>
                     <label for="confirm-password">Confirm Password</label>
                     <div class="valid">
                         <div class="green"></div>
@@ -45,7 +61,7 @@
                         <div class="blue"></div>
                     </div>
                 </div>
-                <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                <%- include('../includes/csrf-token.ejs') %>
                 <input type="submit" value="Create Account">
             </form>
             <!-- Add external sign ups? -->

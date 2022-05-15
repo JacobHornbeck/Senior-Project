@@ -10,6 +10,7 @@ const MongoDBStore = require("connect-mongodb-session")(session)
 const app = express();
 // const adminRoutes = require("./routes/admin")
 // const shopRoutes = require("./routes/shop")
+const legalRoutes = require("./routes/legal")
 const authRoutes = require("./routes/auth")
 const errorController = require("./controllers/error")
 const User = require("./models/user")
@@ -107,12 +108,50 @@ app.set('view engine', 'ejs')
             })
     })
     //    .use(routes)
+    .use('/legal', legalRoutes)
     .use(authRoutes)
     .get('/500', errorController.get500)
     .get('/', (req, res, next) => {
-        res.render('homepage', {
-            pageTitle: 'Home'
-        })
+        if (req.session.isLoggedIn) {
+            User.findById(req.session.user._id)
+                .then(user => {
+                    res.render('homepage', {
+                        pageTitle: 'Home',
+                        user: {
+                            firstname: user.firstName,
+                            lastname: user.lastName,
+                            email: user.email
+                        },
+                        courseCards: [
+                            {
+                                imgs: ['html','css'],
+                                title: 'Build Your Website',
+                                type: 'course',
+                                thingId: 'abc123'
+                            },
+                            {
+                                imgs: ['python'],
+                                title: 'Python File Read/Write',
+                                type: 'tutorial',
+                                thingId: 'def456'
+                            },
+                            {
+                                imgs: ['cpp'],
+                                title: 'Solid C++',
+                                type: 'course',
+                                thingId: 'ghi789'
+                            }
+                        ],
+                        projectCards: [],
+                    })
+                })
+        }
+        else {
+            res.render('homepage', {
+                pageTitle: 'Home',
+                cards: [],
+            })
+        }
     })
     .use(errorController.get404)
     .use((error, req, res, next) => {

@@ -1,0 +1,50 @@
+<main>
+    <div class="home-grid">
+        <div class="profile-hero">
+            <div class="profile-image"></div>
+            <section class="user-info">
+                <h2 class="name"><%= user.firstname %> <%= user.lastname %></h2>
+                <p class="bio">
+                    <% if (user.bio) { %>
+                        <%= user.bio %>
+                    <% } else { %>
+                        Click to add a bio
+                    <% } %>
+                </p>
+            </section>
+        </div>
+        <div class="widgets">
+            <section class="user-courses">
+                <h2>Continue Learning</h2>
+                <div class="course-card-container">
+                    <% for (let card of courseCards) { %>
+                        <div class="card">
+                            <div class="image-holder">
+                                <% for (let imgName of card.imgs) { %>
+                                    <div class="<%= imgName %>"></div>
+                                <% } %>
+                            </div>
+                            <div class="card-content">
+                                <h3><%- card.title %></h3>
+                                <div class="btn-group">
+                                    <a href="/<%= card.type %>/<%= card.thingId %>" class="btn">Continue</a>
+                                    <form action="/remove-card" method="post">
+                                        <%- include('../includes/csrf-token.ejs') %>
+                                        <input type="hidden" name="type" value="<%= card.type %>">
+                                        <input type="hidden" name="id" value="<%= card.thingId %>">
+                                        <input type="hidden" name="userEmail" value="<%= user.email %>">
+                                        <input type="submit" value="Remove" class="btn danger">
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    <% } %>
+                </div>
+            </section>
+            <section class="user-widget">
+                <h2>User Widget</h2>
+                <p>This is a template</p>
+            </section>
+        </div>
+    </div>
+</main>

@@ -1,0 +1,59 @@
+@use 'variables' as *;
+
+.logo-name {
+    width: 330px;
+    display: grid;
+    justify-self: start;
+    grid-template-columns: 80px auto;
+    justify-items: center;
+    align-items: center;
+}
+.logo-name a {
+    display: block;
+    justify-self: start;
+    text-decoration: none;
+    margin: 0.5rem 0;
+}
+.logo-name h1 {
+    margin: 0;
+    font-size: 1.5rem;
+    color: $other-color;
+    padding-left: 5px;
+    width: auto;
+}
+.logo-name .logo {
+    position: relative;
+    height: 60px;
+    width: 60px;
+}
+.logo > div {
+    position: absolute;
+    width: calc(50% - 10px);
+    height: calc(50% - 10px);
+    transform: rotate(45deg);
+    border-radius: 12%;
+}
+.logo .green {
+    z-index: 2;
+    top: 9px; left: 9px;
+    background-color: $accent1-color;
+    box-shadow: 0 0 2px $other-color;
+}
+.logo .yellow {
+    z-index: 1;
+    top: 9px; right: 9px;
+    background-color: $secondary-color;
+    box-shadow: 0 0 2px $other-color;
+}
+.logo .gray {
+    z-index: 1;
+    bottom: 9px; left: 9px;
+    background-color: $primary-color;
+    box-shadow: 0 0 2px $other-color;
+}
+.logo .blue {
+    z-index: 2;
+    bottom: 9px; right: 9px;
+    background-color: #2B22E3;
+    box-shadow: 0 0 2px $other-color;
+}

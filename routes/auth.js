@@ -7,8 +7,9 @@ const User = require("../models/user")
 router
     .get('/login', authController.getLogin)
     .get('/signup', authController.getSignUp)
+    .get('/logout', authController.getLogout)
     .get('/forgot-password', authController.getForgot)
-    .get('/confirm-email/:confirm-code', authController.getEmailConfirmation)
+    .get('/confirm-email/:confirmation', authController.getEmailConfirmation)
     .post('/login', [
             body('email')
                 .isEmail()
@@ -16,7 +17,7 @@ router
                 .normalizeEmail(),
             body('password')
                 .isLength({min: 8})
-                .withMessage('Passwords are at least 8 characters')
+                .withMessage('Passwords must be at least 8 characters')
                 .trim(),
         ], authController.postLogin)
     .post('/signup', [
@@ -34,8 +35,9 @@ router
                 .isAlphanumeric()
                 .withMessage('Usernames can only be letters and numbers!')
                 .isLength({min: 4})
+                .withMessage('Username must be 4 characters or more')
                 .custom((value) => {
-                    return  User.findOne({username: value})
+                    return  User.findOne({username: value.toLowerCase()})
                                 .then((userDoc) => {
                                     if (userDoc)
                                         return Promise.reject('That username is already used, please choose another one.')
@@ -52,8 +54,8 @@ router
                 .isLength({min: 2})
                 .withMessage('Lastname must be at least 2 letters'),
             body('password')
-                .isLength({min: 8})
-                .withMessage('Password must be at least 8 characters long!')
+                .isLength({min: 8, max: 100})
+                .withMessage('Password must be between 8 and 100 characters long!')
                 .trim(),
             body('confirm-password')
                 .trim()
@@ -64,6 +66,6 @@ router
                     return true
                 }) 
         ], authController.postSignUp)
-    .get('/logout', authController.getLogout)
+    .post('/username-validity', authController.usernameTaken)
 
 module.exports = router

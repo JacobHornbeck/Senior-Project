@@ -1,11 +1,5 @@
-# Do not commit all node modules
 node_modules/
-
-# Do not commit status_reports folder
 status_reports/
-
-# Do not commit environment file
 .env
-
-# Do not commit project proposal document
 project-proposal.txt
+.vscode/

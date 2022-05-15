@@ -1,0 +1,15 @@
+.centerContent {
+    width: 100%;
+    min-height: 100px;
+    justify-content: center;
+    height: calc(100vh - 112px - 60px - 2rem);
+    align-items: center;
+    display: flex;
+}
+.centeredPart {
+    width: max-content;
+    height: max-content;
+    flex-direction: column;
+    align-items: center;
+    display: flex;
+}

@@ -18,13 +18,17 @@ const userSchema = new Schema({
         type: String,
         required: false
     },
-    profileURL: {
+    profileBackground: {
         type: String,
         required: false
     },
     email: {
         type: String,
         required: true
+    },
+    emailConfirmed: {
+        type: Boolean,
+        required: false
     },
     password: {
         type: String,

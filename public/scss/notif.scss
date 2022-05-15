@@ -1,0 +1,70 @@
+@use 'variables' as *;
+
+.notif {
+    top: 80px;
+    display: grid;
+    width: max-content;
+    padding: 0.5rem 1rem;
+    box-shadow: inset 0 0 5px $accent2-color, 2px 2px 8px $accent2-color;
+    grid-template-columns: 2em auto 2em;
+    background-color: $primary-color;
+    transform: translate(-50%, 0);
+    max-width: calc(90% - 2rem);
+    animation: notif-in 1s;
+    grid-column-gap: 10px;
+    align-items: center;
+    border-radius: 5px;
+    position: fixed;
+    z-index: 900;
+    left: 50%;
+    letter-spacing: 1px;
+}
+.notif > *:not(.close):hover {
+    cursor: default;
+}
+.notif.success {
+    box-shadow: inset 0 0 5px forestgreen, 2px 2px 8px $accent2-color;
+    background-color: lightgreen;
+}
+.notif.error {
+    box-shadow: inset 0 0 5px red, 2px 2px 8px $accent2-color;
+    background-color: tomato;
+}
+.notif .close {
+    box-sizing: initial;
+    padding: 0.3rem 0.35rem 0.4rem 0.45rem;
+    line-height: 16px;
+    font-size: 1.74rem;
+    border-radius: 20px;
+    color: black;
+    height: 16px;
+    width: 16px;
+}
+.notif .close:hover {
+    cursor: pointer;
+    background-color: red;
+    color: white;
+}
+.notif img {
+    width: 2em;
+}
+@keyframes notif-in {
+    from {
+        transform: translate(-50%, -25px) scale(0.75);
+        opacity: 0;
+    }
+    to {
+        transform: translate(-50%, 0) scale(1);
+        opacity: 1;
+    }
+}
+@keyframes notif-out {
+    from {
+        transform: translate(-50%, 0) scale(1);
+        opacity: 1;
+    }
+    to {
+        transform: translate(-50%, -25px) scale(0.75);
+        opacity: 0;
+    }
+}
