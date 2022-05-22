@@ -34,6 +34,10 @@ const userSchema = new Schema({
         type: String,
         required: true
     },
+    editorTheme: {
+        type: String,
+        required: false
+    },
     resetToken: String,
     resetTokenExpiration: Date
 })
