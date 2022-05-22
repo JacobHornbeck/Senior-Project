@@ -4,17 +4,36 @@
 <body>
     <%- include('../includes/nav.ejs') %>
     <main>
-        <section class="credits-flex">
+        <article>
             <h1>Image Credits</h1>
-            <% for (let credit of credits) {
-                let author = credit.author;
-                let source = credit.source; %>
-                <div class="credit">
-                    <img src="<%= credit.imagePath %>" alt="image by <%= author.name %>" class="credit-image">
-                    <span>Image from <a target="_blank" href="<%= source.link %>"><%= source.name %></a><br>Made by <a target="_blank" href="<%= author.link %>"><%= author.name %></a></span>
-                </div>
-            <% } %>
-        </section>
+            <p>This is a list of all the images that are used or will be used in the future. Click the image to go to the image. Click the "from" link to go the the host website. Click the "by" link to go to the authors page.</p>
+            <hr>
+            <section class="credits-flex">
+                <h2>Card Images</h2>
+                <% for (let credit of cardCredits) {
+                    let author = credit.author;
+                    let image = credit.image;
+                    let source = credit.source; %>
+                    <div class="credit">
+                        <a target="_blank" href="<%= image.remotePath %>"><img src="<%= image.localPath %>" alt="image by <%= author.name %>" class="credit-image"></a>
+                        <span>From <a target="_blank" href="<%= source.link %>"><%= source.name %></a><br>By <a target="_blank" href="<%= author.link %>"><%= author.name %></a></span>
+                    </div>
+                <% } %>
+            </section>
+            <hr>
+            <section class="credits-flex">
+                <h2>Profile Background Images</h2>
+                <% for (let credit of bgCredits) {
+                    let author = credit.author;
+                    let image = credit.image;
+                    let source = credit.source; %>
+                    <div class="credit">
+                        <a target="_blank" href="<%= image.remotePath %>"><img src="<%= image.localPath %>" alt="image by <%= author.name %>" class="credit-image"></a>
+                        <span>From <a target="_blank" href="<%= source.link %>"><%= source.name %></a><br>By <a target="_blank" href="<%= author.link %>"><%= author.name %></a></span>
+                    </div>
+                <% } %>
+            </section>
+        </article>
     </main>
 
 <%- include('../includes/end.ejs') %>

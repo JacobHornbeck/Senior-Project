@@ -8,7 +8,14 @@ h1, h2, h3, h4, h5, h6 {
     font-family: $heading-font;
 }
 pre, code, .code {
+    padding: 0.75rem;
     font-family: $code-font;
+    background-color: gray;
+    overflow-x: auto;
+
+    span {
+        font-family: inherit;
+    }
 }
 header, footer {
     box-shadow: 0 0 10px $accent2-color;

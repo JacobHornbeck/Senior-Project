@@ -1,3 +1,15 @@
+hljs.configure({
+    cssSelector: 'pre',
+    languages: [
+        'javascript',
+        'html',
+        'css',
+        'python'
+    ]
+});
+hljs.highlightAll();
+
+
 /* Code to interact with notification */
 document.querySelector('span.close')?.addEventListener('click', (e) => {
     let notif = e.target.parentElement

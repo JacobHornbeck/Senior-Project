@@ -10,8 +10,9 @@ const MongoDBStore = require("connect-mongodb-session")(session)
 const app = express();
 // const adminRoutes = require("./routes/admin")
 // const shopRoutes = require("./routes/shop")
-const legalRoutes = require("./routes/legal")
 const authRoutes = require("./routes/auth")
+const learnRoutes = require("./routes/learn")
+const legalRoutes = require("./routes/legal")
 const errorController = require("./controllers/error")
 const User = require("./models/user")
 const csrf = require("csurf")
@@ -83,11 +84,13 @@ app.set('view engine', 'ejs')
         if (req.session.isLoggedIn) {
             res.locals.links = [
                 { 'href': '/', 'text': 'Home' },
+                { 'href': '/learn', 'text': 'Start Learning'},
                 { 'href': '/logout', 'text': 'Logout' },
             ]
         } else {
             res.locals.links = [
                 { 'href': '/', 'text': 'Home' },
+                { 'href': '/learn', 'text': 'Start Learning'},
                 { 'href': '/login', 'text': 'Login' },
                 { 'href': '/signup', 'text': 'Sign Up' },
             ]
@@ -109,6 +112,7 @@ app.set('view engine', 'ejs')
     })
     //    .use(routes)
     .use('/legal', legalRoutes)
+    .use(learnRoutes)
     .use(authRoutes)
     .get('/500', errorController.get500)
     .get('/', (req, res, next) => {
