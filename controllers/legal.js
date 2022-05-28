@@ -5,6 +5,7 @@ exports.getPrivacyPolicy = (req, res, next) => {
 }
 
 exports.getCredits = (req, res, next) => {
+    /* Array of course/tutorial card header images */
     const cardCredits = [
         {
             image: {
@@ -161,6 +162,8 @@ exports.getCredits = (req, res, next) => {
             }
         },
     ]
+
+    /* Array of profile background images */
     const bgCredits = [
         {
             image: {
@@ -529,7 +532,7 @@ exports.getCredits = (req, res, next) => {
         {
             image: {
                 localPath: '/images/profile-backgrounds/bg-27.jpg',
-                remotePath: ''
+                remotePath: 'https://www.vecteezy.com/vector-art/2381151-shapes-abstract-colorful-background'
             },
             source: {
                 name: 'Vecteezy',
