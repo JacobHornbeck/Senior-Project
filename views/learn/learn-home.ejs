@@ -4,7 +4,19 @@
 <body>
     <%- include('../includes/nav.ejs') %>
     <main>
-        <pre>let test = "this is a test";</pre>
+        <div class="mission-statement">
+            <div class="inside">
+                <h2>Our Mission</h2>
+                <p>The mission of Genius Coding is to provide coding (and someday computer) education simply to allow everyone the opportunity and the ability to learn coding for free from anywhere.</p>
+            </div>
+        </div>
+
+        <div class="great-idea">
+            <h2>Got a Great Idea?</h2>
+            <p>If you have a great idea for a tutorial or a new course, please send us your suggestion <a href="suggest-or-request-form.html" onclick="OpenLink(this)">here</a>.</p>
+        </div>
+
+        <div class="ace-editor"></div>
     </main>
 
 <%- include('../includes/end.ejs') %>

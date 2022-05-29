@@ -76,7 +76,7 @@ app.set('view engine', 'ejs')
     .use((req, res, next) => {
         res.locals.isAuthenticated = req.session.isLoggedIn
         res.locals.csrfToken = req.csrfToken()
-        res.locals.editorTheme = 'atom-one-dark-reasonable'
+        res.locals.editorTheme = 'stackoverflow-dark'
         let temp1 = req.flash('message')
         res.locals.message = temp1.length > 0 ? temp1[0] : undefined
         let temp2 = req.flash('previous')
@@ -102,7 +102,7 @@ app.set('view engine', 'ejs')
         if (!req.session.user) return next()
         User.findById(req.session.user._id)
             .then((user) => {
-                res.locals.editorTheme = user.editorTheme || 'atom-one-dark-reasonable'
+                res.locals.editorTheme = user.editorTheme || 'stackoverflow-dark'
                 req.user = user
                 next()
             })

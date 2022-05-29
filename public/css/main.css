@@ -1,5 +1,5 @@
 @charset "UTF-8";
-@import url("https://fonts.googleapis.com/css2?family=Fira+Code:wght@300&family=Gafata&family=Play:wght@700&family=Play:wght@300&family=Press+Start+2P&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Gafata&family=Play:wght@700&family=Play:wght@300&family=Press+Start+2P&display=swap");
 * {
   font-family: "Gafata", arial, sans-serif;
   box-sizing: border-box;
@@ -9,14 +9,50 @@ h1, h2, h3, h4, h5, h6 {
   font-family: "Play", arial bold, sans-serif;
 }
 
+.ace_editor {
+  min-height: 300px;
+}
+.ace_editor * {
+  font-family: monospace;
+}
+
 pre, code, .code {
   padding: 0.75rem;
-  font-family: "Fira Code", monospace;
-  background-color: gray;
+  font-family: monospace;
   overflow-x: auto;
 }
 pre span, code span, .code span {
   font-family: inherit;
+}
+
+code {
+  background-color: gray;
+  border-radius: 5px;
+}
+
+pre {
+  max-width: 90%;
+  margin: 1rem auto;
+  background-color: #333;
+  line-height: 1.3rem;
+  font-size: 1rem;
+}
+pre.line-numbers {
+  counter-reset: linecounter;
+  tab-size: 4;
+}
+pre.line-numbers span.line {
+  counter-increment: linecounter;
+}
+pre.line-numbers span.line::before {
+  content: counter(linecounter);
+  border-right: 1px solid #ccc;
+  display: inline-block;
+  padding-right: 7px;
+  margin-right: 7px;
+  text-align: right;
+  font-size: 1rem;
+  width: 30px;
 }
 
 header, footer {
@@ -43,7 +79,7 @@ main {
   min-height: calc(100vh - 112px - 60px);
   max-width: 960px;
   margin: 0 auto;
-  padding: 2rem 0 1rem;
+  padding: 1.5rem 0 1rem;
 }
 main article, main .credits-flex {
   padding: 1.5rem;
@@ -839,6 +875,50 @@ section:not(.account-container) h2 {
   display: block;
   height: 32px;
   width: 32px;
+}
+
+.mission-statement {
+  width: 100%;
+  padding: 5px 0 30px;
+  background-image: url("/images/site-images/mission-photo.jpg");
+  box-shadow: 2px 2px 8px #202020;
+  background-attachment: local;
+  background-position: center;
+  background-size: cover;
+  border-radius: 10px;
+}
+.mission-statement .inside {
+  width: 50%;
+  margin: 0 auto;
+  min-width: 300px;
+  text-align: center;
+  color: #FEFEFE;
+}
+.mission-statement .inside h2, .mission-statement .inside p {
+  text-shadow: 0 0 3px #FEFEFE;
+}
+.mission-statement .inside h2 {
+  font-size: 2rem;
+  color: #FEFEFE;
+}
+
+.great-idea {
+  width: 50%;
+  min-width: 250px;
+  border-radius: 10px;
+  margin: 50px auto 0;
+  padding: 0.7rem 1rem 1.3rem;
+  border: solid 1px #202020;
+  background-color: rgba(255, 255, 255, 0.3);
+  box-shadow: 2px 2px 10px #676767;
+}
+.great-idea h2 {
+  text-align: center;
+  color: #202020;
+}
+.great-idea p {
+  font-size: 0.9rem;
+  text-align: center;
 }
 
 .card {

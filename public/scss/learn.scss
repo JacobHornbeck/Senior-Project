@@ -1,0 +1,49 @@
+@use 'variables' as *;
+
+.mission-statement {
+    width: 100%;
+    padding: 5px 0 30px;
+    background-image: url("/images/site-images/mission-photo.jpg");
+    @include box-shadow;
+    background-attachment: local;
+    background-position: center;
+    background-size: cover;
+    border-radius: 10px;
+    // margin-top: 10px;
+
+    .inside {
+        width: 50%;
+        margin: 0 auto;
+        min-width: 300px;
+        text-align: center;
+        color: $other-color;
+
+        h2, p {
+            text-shadow: 0 0 3px $other-color;
+        }
+        h2 {
+            font-size: 2rem;
+            color: $other-color;
+        }
+    }
+}
+
+.great-idea {
+    width: 50%;
+    min-width: 250px;
+    border-radius: 10px;
+    margin: 50px auto 0;
+    padding: 0.7rem 1rem 1.3rem;
+    border: solid 1px $accent2-color;
+    background-color: rgba(255,255,255,0.3);
+    box-shadow: 2px 2px 10px $primary-color;
+
+    h2 {
+        text-align: center;
+        color: $accent2-color;
+    }
+    p {
+        font-size: 0.9rem;
+        text-align: center;
+    }
+}

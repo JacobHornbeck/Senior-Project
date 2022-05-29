@@ -7,14 +7,48 @@
 h1, h2, h3, h4, h5, h6 {
     font-family: $heading-font;
 }
+.ace_editor {
+    min-height: 300px;
+    * { font-family: $code-font; }
+}
 pre, code, .code {
     padding: 0.75rem;
     font-family: $code-font;
-    background-color: gray;
     overflow-x: auto;
-
+    
     span {
         font-family: inherit;
+    }
+}
+code {
+    background-color: gray;
+    border-radius: 5px;
+}
+pre {
+    max-width: 90%;
+    margin: 1rem auto;
+    background-color: #333;
+    line-height: 1.3rem;
+    font-size: 1rem;
+
+    &.line-numbers {
+        counter-reset: linecounter;
+        tab-size: 4;
+
+        span.line {
+            counter-increment: linecounter;
+            
+            &::before {
+                content: counter(linecounter);
+                border-right: 1px solid #ccc;
+                display: inline-block;
+                padding-right: 7px;
+                margin-right: 7px;
+                text-align: right;
+                font-size: 1rem;
+                width: 30px;
+            }
+        }
     }
 }
 header, footer {
@@ -37,7 +71,7 @@ main {
     min-height: calc(100vh - 112px - 60px);
     max-width: 960px;
     margin: 0 auto;
-    padding: 2rem 0 1rem;
+    padding: 1.5rem 0 1rem;
 
     article, .credits-flex {
         padding: 1.5rem;

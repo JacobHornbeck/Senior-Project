@@ -10,6 +10,40 @@ hljs.configure({
 hljs.highlightAll();
 
 
+ace.require('ace/ext/language_tools')
+Array.from(document.querySelectorAll('.ace-editor')).forEach((el) => {
+    let editor = ace.edit(el)
+        editor.setOptions({
+            mode: "ace/mode/html",
+            enableBasicAutocompletion: true,
+            enableLiveAutocompletion: true,
+        })
+        editor.setBehavioursEnabled(true);
+        editor.setTheme("ace/theme/monokai")
+})
+
+
+function addLineClass(pre) {
+    var lines = pre.innerHTML.split("\n"); // can use innerHTML also
+    while (pre.childNodes.length > 0) {
+        pre.removeChild(pre.childNodes[0]);
+    }
+    for (var i = 0; i < lines.length; i++) {
+        var span = document.createElement("span");
+        span.className = "line";
+        span.innerHTML = lines[i]; // can use innerHTML also
+        pre.appendChild(span);
+        pre.appendChild(document.createTextNode("\n"));
+    }
+}
+setTimeout(() => {
+    var pres = document.getElementsByTagName("pre");
+    for (var i = 0; i < pres.length; i++) {
+        addLineClass(pres[i]);
+    }
+}, 100);
+
+
 /* Code to interact with notification */
 document.querySelector('span.close')?.addEventListener('click', (e) => {
     let notif = e.target.parentElement
