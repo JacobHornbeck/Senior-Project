@@ -10,6 +10,9 @@ router
     .get('/logout', authController.getLogout)
     .get('/forgot-password', authController.getForgot)
     .get('/confirm-email/:confirmation', authController.getEmailConfirmation)
+    .get('/request-my-data', (req, res, next) => {
+        // Do stuff here
+    })
     .post('/login', [
             body('email')
                 .isEmail()
@@ -67,5 +70,8 @@ router
                 }) 
         ], authController.postSignUp)
     .post('/username-validity', authController.usernameTaken)
+    .post('/request-my-data', (req, res, next) => {
+        // Do stuff here
+    })
 
 module.exports = router

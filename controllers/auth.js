@@ -15,7 +15,8 @@ const transporter = nodemailer.createTransport(sendgridTransport({
 exports.getLogin = (req, res, next) => {
     res.render('auth/login', {
         pageTitle: 'Login',
-        isAuthenticated: false
+        isAuthenticated: false,
+        queryParams: req.query.redirectTo ? "?redirectTo=" + encodeURIComponent(req.query.redirectTo) : "",
     })
 }
 
@@ -99,7 +100,7 @@ exports.postLogin = (req, res, next) => {
                         req.session.user = user
                         return req.session.save(err => {
                             if (err) console.log(err)
-                            res.redirect('/')
+                            res.redirect(req.query.redirectTo ? req.query.redirectTo : '/')
                         })
                     }
                     req.flash('message', {

@@ -7,10 +7,6 @@
 h1, h2, h3, h4, h5, h6 {
     font-family: $heading-font;
 }
-.ace_editor {
-    min-height: 300px;
-    * { font-family: $code-font; }
-}
 pre, code, .code {
     padding: 0.75rem;
     font-family: $code-font;
@@ -50,6 +46,13 @@ pre {
             }
         }
     }
+}
+.ace-editor {
+    margin: 1rem auto;
+    width: 90%;
+    font-size: 0.9rem;
+    min-height: 400px;
+    * { font-family: $code-font; }
 }
 header, footer {
     box-shadow: 0 0 10px $accent2-color;

@@ -1,0 +1,89 @@
+@use 'variables' as *;
+
+.forum {
+    margin: 1.5rem auto;
+    width: 95%;
+    background-color: $other-color;
+    padding: 1rem;
+    border-radius: 10px;
+    @include box-shadow;
+
+    h3 {
+        margin-top: 0;
+    }
+    p {
+        margin-bottom: 0;
+    }
+
+    .message {
+        display: grid;
+        grid-template-rows: 1.5rem auto;
+        grid-template-columns: 40px auto;
+        border: 1px solid $primary-color;
+        border-radius: 10px;
+        margin: 1rem 0.5rem;
+        padding: 0.75rem;
+
+        h4, p {
+            margin: 0;
+        }
+        h4 {
+            grid-row: 1;
+        }
+        p {
+            grid-row: 2;
+        }
+        span.date {
+            font-weight: normal;
+            font-size: 0.9rem;
+            transform: translate(2px,-2px);
+            display: inline-block;
+        }
+        .votes {
+            display: grid;
+            grid-template-rows: 16px 22px 18px;
+            grid-column: 1;
+            grid-row: 1 / span 2;
+            justify-items: center;
+            align-items: center;
+
+            button.up {
+                width: 0;
+                height: 0;
+                padding: 0;
+                background: none;
+                border: solid 0.6rem transparent;
+                border-bottom-color: $primary-color;
+                margin-bottom: 5px;
+
+                &.activated {
+                    border-bottom-color: $accent1-color;
+                }
+                &:hover {
+                    border-bottom-color: lighten($primary-color, 25);
+                }
+            }
+            .numVotes {
+                text-align: center;
+                font-weight: bold;
+            }
+            button.flag {
+                border: none;
+                width: 0.7rem;
+                background-image: linear-gradient($primary-color 55%, $other-color 55%);
+                border-left: 2px solid $primary-color;
+                height: 0.85rem;
+                padding: 0;
+
+                &.activated {
+                    background-image: linear-gradient($color-html 55%, $other-color 55%);
+                    border-left-color: $color-html;
+                }
+                &:hover {
+                    background-image: linear-gradient(lighten($primary-color, 25) 55%, $other-color 55%);
+                    border-left-color: lighten($primary-color, 25);
+                }
+            }
+        }
+    }
+}

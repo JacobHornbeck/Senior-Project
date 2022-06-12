@@ -1,10 +1,29 @@
+const singleCommentLangs = [
+    'batchfile',
+    'clojure',
+    'cobol',
+    'erlang',
+    'fortran',
+    'haskell',
+    'lisp',
+    'matlab',
+    'python',
+    'ruby',
+    'sass',
+]
+const supportedLanguages = [
+    'html',
+]
+const editorStart = {
+    "html": "<!DOCTYPE html>\n<html>\n    <head>\n        <meta charset=\"utf-8\">\n        <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n        <title>New Project</title>\n        <style>\n            \n        </style>\n    </head>\n    <body>\n        \n    </body>\n</html>"
+}
+
 hljs.configure({
     cssSelector: 'pre',
     languages: [
         'javascript',
         'html',
-        'css',
-        'python'
+        'css'
     ]
 });
 hljs.highlightAll();
@@ -12,14 +31,29 @@ hljs.highlightAll();
 
 ace.require('ace/ext/language_tools')
 Array.from(document.querySelectorAll('.ace-editor')).forEach((el) => {
-    let editor = ace.edit(el)
-        editor.setOptions({
-            mode: "ace/mode/html",
+    const editorLanguage = el.getAttribute('data-language').toLowerCase();
+    const editor = ace.edit(el);
+    editor.setOptions({
+        theme: "ace/theme/monokai",
+            mode: `ace/mode/${editorLanguage}`,
             enableBasicAutocompletion: true,
             enableLiveAutocompletion: true,
-        })
-        editor.setBehavioursEnabled(true);
-        editor.setTheme("ace/theme/monokai")
+        enableSnippets: true,
+        });
+        if (!editor.getValue().length > 0) {
+            if (editorStart[editorLanguage]) editor.setValue(editorStart[editorLanguage], -1);
+            if (!supportedLanguages.includes(editorLanguage)) {
+                editor.setValue(' You can play around with this language, but as of\n' +
+                    'right now, you cannot run the code you write. ', 0);
+
+                setTimeout(() => {
+                    if (!singleCommentLangs.includes(editorLanguage))
+                        editor.toggleBlockComment();
+                    else
+                        editor.toggleCommentLines();
+                }, 250);
+            }
+        }
 })
 
 
@@ -148,8 +182,14 @@ function LoadPerCharacter(tr, elem) {
 
 Array.from(document.querySelectorAll('.valid')).forEach(el => {
     let inputEl = el.parentElement.querySelector('input')
-    if (inputEl.value.length > 0) {
+    if (inputEl.value.length >= 0) {
         LoadPerCharacter(true, inputEl)
+        inputEl.addEventListener('input', () => {
+            LoadPerCharacter(true, inputEl)
+        })
+        inputEl.addEventListener('keydown', () => {
+            CheckValue(inputEl)
+        })
     }
 })
 
@@ -191,4 +231,24 @@ function AdjustImage() {
 if (document.querySelector('main.scrolling-images')) {
     AdjustImage()
     document.body.onscroll = AdjustImage
+}
+
+const sideBySideLayoutButton = document.querySelector('button.side-by-side')
+const stackedLayoutButton = document.querySelector('button.stacked')
+
+if (sideBySideLayoutButton && stackedLayoutButton) {
+    sideBySideLayoutButton.addEventListener('click', () => {
+        const playground = document.querySelector('.code-playground')
+        if (playground.classList[1] == "stacked") {
+            playground.classList.remove("stacked")
+            playground.classList.add("side-by-side")
+        }
+    })
+    stackedLayoutButton.addEventListener('click', () => {
+        const playground = document.querySelector('.code-playground')
+        if (playground.classList[1] == "side-by-side") {
+            playground.classList.remove("side-by-side")
+            playground.classList.add("stacked")
+        }
+    })
 }

@@ -1,0 +1,27 @@
+<%- include('../../includes/head.ejs') %>
+</head>
+
+<body>
+    <%- include('../../includes/nav.ejs') %>
+    <main>
+        <div class="code-playground side-by-side">
+            <h2 class="project-title">New Project</h2>
+            <div class="layout-options">
+                <h3>Layout:</h3>
+                <button class="side-by-side">
+                    <div></div>
+                    <div></div>
+                </button>
+                <button class="stacked">
+                    <div></div>
+                    <div></div>
+                </button>
+            </div>
+            <div class="ace-editor" data-language="<%= programmingLanguage %>"><%= projectCode %></div>
+            <div class="live-demo"></div>
+        </div>
+
+        <%- include('../../includes/forum.ejs') %>
+    </main>
+
+<%- include('../../includes/end.ejs') %>

@@ -33,6 +33,16 @@
                     </div>
                 <% } %>
             </section>
+            <hr>
+            <section class="credits-flex">
+                <h2>Other Used Software</h2>
+                <% for (let credit of otherCredits) {
+                    let source = credit.source; %>
+                    <div class="credit">
+                        <span><br>From <a target="_blank" href="<%= source.link %>"><%= source.name %></a></span>
+                    </div>
+                <% } %>
+            </section>
         </article>
     </main>
 

@@ -65,21 +65,34 @@
     label:not(.input-help) {
         padding: 0 4px;
         position: absolute;
-        top: calc(50% - 0.5em);
+        top: calc(33px / 2 - 0.6em);
         left: 10px;
         transition: top 0.3s, left 0.3s;
         font-family: $heading-font;
         background-color: $other-color;
+        pointer-events: none;
+    }
+    textarea {
+        resize: vertical;
+        height: 66px;
+    }
+    select {
+        height: 33px;
     }
     input:focus ~ label:not(.input-help),
-    input:valid ~ label:not(.input-help) {
+    input:valid ~ label:not(.input-help),
+    select:valid ~ label:not(.input-help),
+    textarea:focus ~ label:not(.input-help),
+    textarea:valid ~ label:not(.input-help) {
         top: -0.6em; left: 5px;
     }
-    input:focus ~ label.input-help {
+    input:focus ~ label.input-help,
+    select:focus ~ label.input-help,
+    textarea:focus ~ label.input-help {
         display: block;
     }
 }
-input {
+input, select, textarea {
     width: 100%;
     display: block;
     padding: 0.5rem;

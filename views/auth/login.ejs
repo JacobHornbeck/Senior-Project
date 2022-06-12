@@ -3,26 +3,28 @@
 
 <body>
     <%- include('../includes/nav.ejs') %>
-    <main class="non-transparent-background">
-        <div class="header-image"></div>
-        <section class="overlap-top">
-            <p class="prompt">New to Genius Coding? <a href="/signup">Create an Account</a>.</p>
-            <h2>Login</h2>
-            <form action="/login" method="post">
-                <div class="input-container">
-                    <input type="text" name="email" id="email" value="<%= previous?.email %>" required>
-                    <label for="email">Email</label>
-                </div>
-                <div class="input-container">
-                    <input type="password" name="password" id="password" required>
-                    <label for="password">Password</label>
-                </div>
-                <%- include('../includes/csrf-token.ejs') %>
-                <input type="submit" value="Login">
-                <a href="/forgot-password" class="forgot-password">Forgot password?</a>
-            </form>
-            <!-- Add external logins? -->
-        </section>
+    <main>
+        <div class="non-transparent-background">
+            <div class="header-image"></div>
+            <section class="overlap-top">
+                <p class="prompt">New to Genius Coding? <a href="/signup">Create an Account</a>.</p>
+                <h2>Login</h2>
+                <form action="/login<%= queryParams %>" method="post">
+                    <div class="input-container">
+                        <input type="text" name="email" id="email" value="<%= previous?.email %>" required>
+                        <label for="email">Email</label>
+                    </div>
+                    <div class="input-container">
+                        <input type="password" name="password" id="password" required>
+                        <label for="password">Password</label>
+                    </div>
+                    <%- include('../includes/csrf-token.ejs') %>
+                    <input type="submit" value="Login">
+                    <a href="/forgot-password" class="forgot-password">Forgot password?</a>
+                </form>
+                <!-- Add external logins? -->
+            </section>
+        </div>
     </main>
 
 <%- include('../includes/end.ejs') %>

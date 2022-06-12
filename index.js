@@ -8,12 +8,12 @@ const session = require("express-session")
 const MongoDBStore = require("connect-mongodb-session")(session)
 
 const app = express();
-// const adminRoutes = require("./routes/admin")
-// const shopRoutes = require("./routes/shop")
 const authRoutes = require("./routes/auth")
 const learnRoutes = require("./routes/learn")
 const legalRoutes = require("./routes/legal")
+const forumRoutes = require("./routes/forum")
 const errorController = require("./controllers/error")
+
 const User = require("./models/user")
 const csrf = require("csurf")
 const flash = require("connect-flash")
@@ -85,13 +85,15 @@ app.set('view engine', 'ejs')
         if (req.session.isLoggedIn) {
             res.locals.links = [
                 { 'href': '/', 'text': 'Home' },
-                { 'href': '/learn', 'text': 'Start Learning'},
+                { 'href': '/learn', 'text': 'Learn' },
+                { 'href': '/code/new', 'text': 'Playground' },
                 { 'href': '/logout', 'text': 'Logout' },
             ]
         } else {
             res.locals.links = [
                 { 'href': '/', 'text': 'Home' },
-                { 'href': '/learn', 'text': 'Start Learning'},
+                { 'href': '/learn', 'text': 'Learn' },
+                { 'href': '/code/new', 'text': 'Playground' },
                 { 'href': '/login', 'text': 'Login' },
                 { 'href': '/signup', 'text': 'Sign Up' },
             ]
@@ -103,6 +105,7 @@ app.set('view engine', 'ejs')
         User.findById(req.session.user._id)
             .then((user) => {
                 res.locals.editorTheme = user.editorTheme || 'stackoverflow-dark'
+                res.locals.username = user.username
                 req.user = user
                 next()
             })
@@ -116,6 +119,7 @@ app.set('view engine', 'ejs')
     .use('/legal', legalRoutes)
     .use(learnRoutes)
     .use(authRoutes)
+    .use(forumRoutes)
     .get('/500', errorController.get500)
     .get('/', (req, res, next) => {
         if (req.session.isLoggedIn) {

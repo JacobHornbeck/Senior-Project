@@ -1,0 +1,41 @@
+<section class="forum">
+    <h3>Comments & Questions</h3>
+    <% if (isAuthenticated) { %>
+        <form action="/post-message" method="post">
+            <div class="input-container">
+                <textarea name="message-content" id="message-content" required><%= previous?.messageContent %></textarea>
+                <label for="message-content" class="form-label">Enter Message</label>
+            </div>
+            <div class="input-container">
+                <select name="message-type" id="message-type" required>
+                    <option value=""></option>
+                    <option value="comment" <%= previous?.messageType ? (previous?.messageType == 'comment' ? 'selected' : '') : '' %>>Comment</option>
+                    <option value="question" <%= previous?.messageType ? (previous?.messageType == 'question' ? 'selected' : '') : '' %>>Question</option>
+                </select>
+                <label for="message-type" class="form-label">Select Type</label>
+            </div>
+            <input type="hidden" name="urlFrom" value="<%= previous ? previous.urlFrom : path %>">
+            <input type="hidden" name="username" value="<%= username %>">
+            <%- include('csrf-token.ejs') %>
+            <input type="submit" value="Post">
+        </form>
+    <% } else { %>
+        <p>Please <a href='/login?redirectTo=<%= encodeURIComponent(path) %>'>login</a> or <a href='/signup'>signup</a> to post a question or comment!</p>
+    <% } %>
+    <hr>
+    <% if (messages.length > 0) { %>
+        <% for (let message of messages) { %>
+            <section class="message <%= message.type %>">
+                <div class="votes">
+                    <button class="up"></button>
+                    <span class="numVotes"><%= message.votes || 0 %></span>
+                    <button class="flag"></button>
+                </div>
+                <h4><%= message.userId.firstName + " " + message.userId.lastName %> <span class="date"><%= message.sendDate.toDateString() %></span></h4>
+                <p><%= message.content %></p>
+            </section>
+        <% } %>
+    <% } else { %>
+        <p>No comment or questions. Be the first to post!</p>
+    <% } %>
+</section>
