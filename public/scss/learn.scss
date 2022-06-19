@@ -119,6 +119,12 @@
         background-color: $other-color;
     }
 
+    .playground-footer {
+        background-color: lighten($primary-color, 20);
+        grid-column: 1 / -1;
+        width: 100%;
+    }
+
     &.side-by-side {
         .ace-editor {
             grid-column: 1;

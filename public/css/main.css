@@ -1116,6 +1116,11 @@ section:not(.account-container) h2 {
   border: solid 1px #676767;
   background-color: #FEFEFE;
 }
+.code-playground .playground-footer {
+  background-color: #9a9a9a;
+  grid-column: 1/-1;
+  width: 100%;
+}
 .code-playground.side-by-side .ace-editor {
   grid-column: 1;
 }
