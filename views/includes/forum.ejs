@@ -22,17 +22,23 @@
     <% } else { %>
         <p>Please <a href='/login?redirectTo=<%= encodeURIComponent(path) %>'>login</a> or <a href='/signup'>signup</a> to post a question or comment!</p>
     <% } %>
-    <hr>
+    <hr id="messages">
     <% if (messages.length > 0) { %>
         <% for (let message of messages) { %>
-            <section class="message <%= message.type %>">
+            <section class="message <%= message.type %>" id="cg-<%= message._id %>">
                 <div class="votes">
-                    <button class="up"></button>
+                    <button onclick="vote('<%= message._id %>','up')" class="up"></button>
                     <span class="numVotes"><%= message.votes || 0 %></span>
-                    <button class="flag"></button>
+                    <button onclick="vote('<%= message._id %>','down')" class="down"></button>
                 </div>
                 <h4><%= message.userId.firstName + " " + message.userId.lastName %> <span class="date"><%= message.sendDate.toDateString() %></span></h4>
                 <p><%= message.content %></p>
+                <div class="replyTo">
+                    <% if (message.type === 'question') { %>
+                        <a href="javascript: openAnswerForm('cg-<%= message._id %>')" class="addAnswer">Answer</a>
+                    <% } %>
+                    <a href="javascript: openCommentOnForm('cg-<%= message._id %>')" class="commentOn">Comment</a>
+                </div>
             </section>
         <% } %>
     <% } else { %>

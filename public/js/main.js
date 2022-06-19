@@ -30,8 +30,8 @@ hljs.highlightAll();
 
 
 ace.require('ace/ext/language_tools')
-Array.from(document.querySelectorAll('.ace-editor')).forEach((el) => {
-    const editorLanguage = el.getAttribute('data-language').toLowerCase();
+$('.ace-editor').each((i,el) => {
+    const editorLanguage = $(el).data('language').toLowerCase();
     const editor = ace.edit(el);
     editor.setOptions({
         theme: "ace/theme/monokai",
@@ -45,7 +45,7 @@ Array.from(document.querySelectorAll('.ace-editor')).forEach((el) => {
             if (!supportedLanguages.includes(editorLanguage)) {
                 editor.setValue(' You can play around with this language, but as of\n' +
                     'right now, you cannot run the code you write. ', 0);
-
+    
                 setTimeout(() => {
                     if (!singleCommentLangs.includes(editorLanguage))
                         editor.toggleBlockComment();
@@ -71,7 +71,7 @@ function addLineClass(pre) {
     }
 }
 setTimeout(() => {
-    var pres = document.getElementsByTagName("pre");
+    var pres = $('pre');
     for (var i = 0; i < pres.length; i++) {
         addLineClass(pres[i]);
     }
@@ -79,18 +79,18 @@ setTimeout(() => {
 
 
 /* Code to interact with notification */
-document.querySelector('span.close')?.addEventListener('click', (e) => {
-    let notif = e.target.parentElement
-    notif.style.animation = "notif-out 0.5s"
+$('span.close')?.on('click', (e) => {
+    let notif = $(e.target.parentElement)
+    notif.css('animation', 'notif-out 0.5s')
     setTimeout(() => {
         notif.remove()
     }, 500);
 })
 setTimeout(() => {
-    let notif = document.querySelector('span.close')
-    if (notif) {
-        notif = notif.parentElement
-        notif.style.animation = "notif-out 0.5s"
+    let notif = $('span.close')
+    if (notif[0]) {
+        notif = notif.parent()
+        notif.css('animation','notif-out 0.5s')
         setTimeout(() => {
             notif.remove()
         }, 500);
@@ -113,60 +113,61 @@ function CheckValue(elem) {
 }
 
 function LoadPerCharacter(tr, elem) {
-    if (elem) {
+    elem = $(elem)
+    if (elem.length > 0) {
         started = true
-        elemLater = elem.parentElement.getElementsByClassName('valid')[0]
-        elemLater.className = 'valid loading'
-        elemLater.title = 'Checking username'
+        elemLater = elem.parent().find('.valid')
+        elemLater.attr('class', 'valid loading')
+        elemLater.attr('title', 'Checking username')
         laterElem = elem
     }
     else {
-        elemLater.className = 'valid loading'
-        elemLater.title = 'Checking username'
+        elemLater.attr('class', 'valid loading')
+        elemLater.attr('title', 'Checking username')
     }
     if (checkNow) {
-        if (laterElem.id == 'username' && laterElem.value.length >= 4 && /^[a-z0-9]{4,100}$/i.test(laterElem.value)) {
-            let data = new FormData()
-            data.append('_csrf', document.querySelector('input[name="_csrf"]').value)
-            data.append('username', elemLater.parentElement.querySelector('input').value)
-            fetch('/username-validity/', { method: "POST", body: data })
+        if (laterElem.attr('id') == 'username' && laterElem.val().length >= 4 && /^[a-z0-9]{4,100}$/i.test(laterElem.val())) {
+            fetch(`/username-validity?username=${elemLater.parent().find('input').val()}`)
                 .then((response) => {
+                    console.log(response)
                     return response.json()
                 })
                 .then((username) => {
+                    console.log(username)
                     if (username.taken) {
-                        elemLater.title = 'That username is taken... choose another'
-                        elemLater.className = 'valid false'
+                        elemLater.attr('title', 'That username is taken... choose another')
+                        elemLater.attr('class', 'valid false')
                     }
                     else {
-                        elemLater.title = 'That username is available'
-                        elemLater.className = 'valid true'
+                        elemLater.attr('title', 'That username is available')
+                        elemLater.attr('class', 'valid true')
                     }
                 })
                 .catch(e => {
-                    elemLater.title = 'Couldn\'t check username, please try again later'
-                    elemLater.className = 'valid false'
+                    console.log(e)
+                    elemLater.attr('title', 'Couldn\'t check username, please try again later')
+                    elemLater.attr('class', 'valid false')
                 })
         }
-        else if (laterElem.id == 'confirm-password' && laterElem.value.length > 0) {
-            let oPass = document.getElementById('password')
-            if (oPass.value == laterElem.value) {
-                elemLater.className = 'valid true'
-                elemLater.title = 'The passwords match'
+        else if (laterElem.id == 'confirm-password' && laterElem.val().length > 0) {
+            let oPass = $('#password')
+            if (oPass.val() == laterElem.val()) {
+                elemLater.attr('class', 'valid true')
+                elemLater.attr('title', 'The passwords match')
             }
             else {
-                elemLater.className = 'valid false'
-                elemLater.title = 'The passwords don\'t match'
+                elemLater.attr('class', 'valid false')
+                elemLater.attr('title', 'The passwords don\'t match')
             }
         }
         else {
-            elemLater.className = 'valid false'
+            elemLater.attr('class', 'valid false')
             switch (laterElem.id) {
                 case 'username':
-                    elemLater.title = 'Invalid username'
+                    elemLater.attr('title', 'Invalid username')
                     break;
                 default:
-                    elemLater.title = 'Invalid value'
+                    elemLater.attr('title', 'Invalid value')
             }
         }
         checkNow = false
@@ -180,17 +181,16 @@ function LoadPerCharacter(tr, elem) {
     }
 }
 
-Array.from(document.querySelectorAll('.valid')).forEach(el => {
-    let inputEl = el.parentElement.querySelector('input')
-    if (inputEl.value.length >= 0) {
+$('.valid').each((i,el) => {
+    let inputEl = $(el).parent().find('input')
+    checkNow = true
+    LoadPerCharacter(false, inputEl)
+    inputEl.on('input', () => {
         LoadPerCharacter(true, inputEl)
-        inputEl.addEventListener('input', () => {
-            LoadPerCharacter(true, inputEl)
-        })
-        inputEl.addEventListener('keydown', () => {
-            CheckValue(inputEl)
-        })
-    }
+    })
+    inputEl.on('keydown', () => {
+        CheckValue(inputEl)
+    })
 })
 
 
@@ -204,12 +204,10 @@ const inputHelpRules = {
 }
 
 function updateInputHelpList(elem) {
-    let inputEl = elem.parentElement.querySelector('input')
-    let ruleList = Array.from(inputEl.parentElement.querySelectorAll('.input-help ul li'))
-    for (let i in ruleList) {
-        let ruleItem = ruleList[i]
-        ruleItem.className = (inputHelpRules[ruleItem.id].test(inputEl.value)) ? 'meets-requirements' : 'needs-work'
-    }
+    let inputEl = $(elem).parent().find('input')
+    inputEl.parent().find('.input-help ul li').each((i, ruleItem) => {
+        ruleItem.className = (inputHelpRules[ruleItem.id].test(inputEl.val())) ? 'meets-requirements' : 'needs-work'
+    })
 }
 
 Array.from(document.querySelectorAll('.input-help')).forEach(el => {

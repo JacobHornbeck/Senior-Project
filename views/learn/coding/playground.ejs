@@ -4,7 +4,7 @@
 <body>
     <%- include('../../includes/nav.ejs') %>
     <main>
-        <div class="code-playground">
+        <div class="code-playground side-by-side">
             <h2 class="project-title">New Project</h2>
             <div class="layout-options">
                 <h3>Layout:</h3>
@@ -19,6 +19,9 @@
             </div>
             <div class="ace-editor" data-language="<%= programmingLanguage %>"></div>
             <div class="live-demo"></div>
+            <div class="playground-footer">
+                <button class="save btn">Save</button>
+            </div>
         </div>
     </main>
 

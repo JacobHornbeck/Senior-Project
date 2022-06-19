@@ -69,7 +69,7 @@ router
                     return true
                 }) 
         ], authController.postSignUp)
-    .post('/username-validity', authController.usernameTaken)
+    .get('/username-validity', authController.usernameTaken)
     .post('/request-my-data', (req, res, next) => {
         // Do stuff here
     })

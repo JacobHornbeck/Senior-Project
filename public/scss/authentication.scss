@@ -99,7 +99,7 @@ input, select, textarea {
     border: solid 1px $accent2-color;
     font-family: Arial, Helvetica, sans-serif;
 }
-input[type="submit"], form button.btn, a.btn {
+input[type="submit"], button.btn, a.btn {
     background-color: $accent1-color;
     font-family: $heading-font;
     text-decoration: none;

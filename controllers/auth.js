@@ -97,7 +97,9 @@ exports.postLogin = (req, res, next) => {
                             return res.redirect('/login')
                         }
                         req.session.isLoggedIn = true
-                        req.session.user = user
+                        let publicUser = JSON.parse(JSON.stringify(user))
+                        delete publicUser.password
+                        req.session.user = publicUser
                         return req.session.save(err => {
                             if (err) console.log(err)
                             res.redirect(req.query.redirectTo ? req.query.redirectTo : '/')
@@ -169,7 +171,7 @@ exports.postSignUp = (req, res, next) => {
 }
 
 exports.usernameTaken = (req, res, next) => {
-    User.findOne({ username: req.body.username.toLowerCase() })
+    User.findOne({ username: req.query.username.toLowerCase() })
         .then(user => {
             if (user) return res.json({ "taken": true })
             else return res.json({ "taken": false })

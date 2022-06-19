@@ -53,9 +53,6 @@ app.set('view engine', 'ejs')
     .use(bodyParser.urlencoded({
         extended: false
     }))
-    .use(multer({
-        fileStorage
-    }).single('image'))
     .use(express.static(path.join(__dirname, 'public')))
     .use(cors(corsOptions))
     .use(session({
@@ -106,7 +103,9 @@ app.set('view engine', 'ejs')
             .then((user) => {
                 res.locals.editorTheme = user.editorTheme || 'stackoverflow-dark'
                 res.locals.username = user.username
-                req.user = user
+                let publicUser = JSON.parse(JSON.stringify(user))
+                delete publicUser.password
+                req.user = publicUser
                 next()
             })
             .catch(err => {

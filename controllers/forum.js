@@ -1,5 +1,6 @@
 const { validationResult } = require("express-validator")
 const Message = require("../models/message")
+const Vote = require("../models/vote")
 const User = require("../models/user")
 
 exports.postMessage = (req, res, next) => {
@@ -18,9 +19,7 @@ exports.postMessage = (req, res, next) => {
         return res.redirect(urlFrom)
     }
 
-    User.findOne({
-            username: req.body.username.toLowerCase()
-        })
+    User.findOne({ username: req.body.username.toLowerCase() })
         .then(userDoc => {
             if (!userDoc) {
                 req.flash('message', {
@@ -44,4 +43,62 @@ exports.postMessage = (req, res, next) => {
             res.redirect(urlFrom)
         })
         .catch(err => console.log(err))
+}
+
+exports.postVote = (req, res, next) => {
+    const errors = validationResult(req)
+    if (!errors.isEmpty()) return res.status(400).json(errors.array()[0].msg)
+    return Message
+        .findById(req.body.messageId)
+        .then((message) => {
+            if (message.userId.toString() == req.user._id.toString())
+                return res.status(400).json('You cannot vote on your own post!')
+            else {
+                return Vote
+                    .findOne({ userId: req.user._id.toString(), messageId: message._id.toString() })
+                    .then((vote) => {
+                        if (vote) {
+                            if (vote.direction == req.body.direction) {
+                                if (vote.direction == 'up') message.votes--
+                                else if (vote.direction == 'down') message.votes++
+                                else return res.status(500).json('Something didn\'t work out, please try again')
+
+                                message.save()
+                                vote.remove()
+                                return res.json({ message: 'removed', votes: message.votes })
+                            }
+                            else {
+                                if (req.body.direction == 'up') message.votes+=2
+                                else if (req.body.direction == 'down') message.votes-=2
+                                message.save()
+                                vote.direction = (vote.direction == 'up' ? 'down' : 'up')
+                                vote.save()
+                                return res.json({ message: 'changed', votes: message.votes })
+                            }
+                        }
+                        else {
+                            let messageVote = new Vote({
+                                messageId: message._id,
+                                userId: req.user._id,
+                                direction: req.body.direction
+                            })
+                            if (req.body.direction == 'down') message.votes--
+                            else if (req.body.direction == 'up') message.votes++
+                            else return res.status(500).json('Something didn\'t work out, please try again')
+
+                            message.save()
+                            messageVote.save()
+                            return res.json({ message: 'added', votes: message.votes })
+                        }
+                    })
+                    .catch(e => {
+                        console.log(e)
+                        return res.status(500).json('Something didn\'t work out, please try again')
+                    })
+            }
+        })
+        .catch(e => {
+            console.log(e)
+            return res.status(500).json('Something didn\'t work out, please try again')
+        })
 }

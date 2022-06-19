@@ -10,7 +10,7 @@
     background-color: $primary-color;
     transform: translate(-50%, 0);
     max-width: calc(90% - 2rem);
-    animation: notif-in 1s;
+    animation: notif-in 0.5s;
     grid-column-gap: 10px;
     align-items: center;
     border-radius: 5px;

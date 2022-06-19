@@ -43,27 +43,22 @@ exports.getNewPlayground = (req, res, next) => {
 }
 
 exports.getUserProject = (req, res, next) => {
-    Message.find({ type: "comment" })
-        .populate({ path: 'userId', select: ['firstName', 'lastName'] })
-        .then((messages) => {
-            /* messages = messages.map((message) => {
-                let dt = message.sendDate
-                message.datePosted = `${months[dt.getMonth()]} ${dt.getDate()} ${dt.getFullYear()}`
-                return message
-            }) */
-            
-            res.render('learn/coding/project', {
-                pageTitle: 'Project',
-                projectCode: `let tempVar = 'This is a test';
+    Message.find({ connectedMessage: undefined })
+           .populate({ path: 'userId', select: ['firstName', 'lastName'] })
+           .sort({ "type": -1, "votes": -1, "sendDate": -1 })
+           .then((messages) => {
+                res.render('learn/coding/project', {
+                    pageTitle: 'Project',
+                    projectCode: `let tempVar = 'This is a test';
 
 function something() {
     console.log("Hello World!");
     document.body.innerHTML = tempVar;
 }`,
-                programmingLanguage: 'JavaScript',
-                messages: messages
+                    programmingLanguage: 'JavaScript',
+                    messages: messages
+                })
             })
-        })
 }
 
 exports.getCodePlayground = (req, res, next) => {
