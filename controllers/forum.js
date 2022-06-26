@@ -48,6 +48,7 @@ exports.postMessage = (req, res, next) => {
 exports.postVote = (req, res, next) => {
     const errors = validationResult(req)
     if (!errors.isEmpty()) return res.status(400).json(errors.array()[0].msg)
+
     return Message
         .findById(req.body.messageId)
         .then((message) => {

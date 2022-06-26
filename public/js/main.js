@@ -30,31 +30,51 @@ hljs.highlightAll();
 
 
 ace.require('ace/ext/language_tools')
-$('.ace-editor').each((i,el) => {
-    const editorLanguage = $(el).data('language').toLowerCase();
-    const editor = ace.edit(el);
+const aceEditorElement = $('.ace-editor')[0]
+if (aceEditorElement) {
+    const editorLanguage = $(aceEditorElement).data('language').toLowerCase();
+    const editor = ace.edit(aceEditorElement);
     editor.setOptions({
         theme: "ace/theme/monokai",
-            mode: `ace/mode/${editorLanguage}`,
-            enableBasicAutocompletion: true,
-            enableLiveAutocompletion: true,
+        mode: `ace/mode/${editorLanguage}`,
+        enableBasicAutocompletion: true,
+        enableLiveAutocompletion: true,
         enableSnippets: true,
-        });
-        if (!editor.getValue().length > 0) {
-            if (editorStart[editorLanguage]) editor.setValue(editorStart[editorLanguage], -1);
-            if (!supportedLanguages.includes(editorLanguage)) {
-                editor.setValue(' You can play around with this language, but as of\n' +
-                    'right now, you cannot run the code you write. ', 0);
-    
-                setTimeout(() => {
-                    if (!singleCommentLangs.includes(editorLanguage))
-                        editor.toggleBlockComment();
-                    else
-                        editor.toggleCommentLines();
-                }, 250);
-            }
+    });
+    if (!editor.getValue().length > 0) {
+        if (editorStart[editorLanguage]) editor.setValue(editorStart[editorLanguage], -1);
+        else if (!supportedLanguages.includes(editorLanguage)) {
+            editor.setValue(' You can play around with this language, but as of\n' +
+                'right now, you cannot run the code you write. ', 0);
+
+            setTimeout(() => {
+                if (!singleCommentLangs.includes(editorLanguage))
+                    editor.toggleBlockComment();
+                else
+                    editor.toggleCommentLines();
+            }, 250);
         }
-})
+    }
+    $('.btn.save').on('click', () => {
+        $.ajax({
+            url: '/user/save/project',
+            type: 'POST',
+            data: {
+                "_csrf": $('input[name="_csrf"]').val(),
+                "project-code": editor.getValue(),
+                "project-language": editor.getOptions().mode.toString().replace(/(ace)\/(mode)\/(.+)/,'$3'),
+                "project-title": "New Project"
+            },
+            success: (data) => {
+                window.open(data.projectUrl, '_self')
+            },
+            error: (jXHR) => {
+                console.log(jXHR.responseText)
+                createMessage(jXHR.responseText)
+            }
+        })
+    })
+}
 
 
 function addLineClass(pre) {
@@ -71,10 +91,9 @@ function addLineClass(pre) {
     }
 }
 setTimeout(() => {
-    var pres = $('pre');
-    for (var i = 0; i < pres.length; i++) {
-        addLineClass(pres[i]);
-    }
+    $('pre').each((i, el) => {
+        addLineClass(el)
+    })
 }, 100);
 
 
@@ -129,11 +148,9 @@ function LoadPerCharacter(tr, elem) {
         if (laterElem.attr('id') == 'username' && laterElem.val().length >= 4 && /^[a-z0-9]{4,100}$/i.test(laterElem.val())) {
             fetch(`/username-validity?username=${elemLater.parent().find('input').val()}`)
                 .then((response) => {
-                    console.log(response)
                     return response.json()
                 })
                 .then((username) => {
-                    console.log(username)
                     if (username.taken) {
                         elemLater.attr('title', 'That username is taken... choose another')
                         elemLater.attr('class', 'valid false')
@@ -210,9 +227,9 @@ function updateInputHelpList(elem) {
     })
 }
 
-Array.from(document.querySelectorAll('.input-help')).forEach(el => {
-    let inputEl = el.parentElement.querySelector('input')
-        inputEl.addEventListener('input', () => {
+$('.input-help').each((i, el) => {
+    let inputEl = $(el).parent().find('input')
+        inputEl.on('input', () => {
             updateInputHelpList(inputEl)
         })
 })
@@ -220,33 +237,33 @@ Array.from(document.querySelectorAll('.input-help')).forEach(el => {
 
 /* Scrolling Images */
 function AdjustImage() {
-    let img1 = document.querySelector(".hero-image")
-        img1.style.backgroundPosition = `0 calc(100% + ${(window.scrollY/2)}px)`
-    let img2 = document.querySelector(".last-call")
-        img2.style.backgroundPosition = `0 ${(-document.body.scrollHeight/2 + 100 + window.scrollY/2)}px`
+    let img1 = $(".hero-image")
+        img1.css('backgroundPosition', `0 calc(100% + ${(window.scrollY/2)}px)`)
+    let img2 = $(".last-call")
+        img2.css('backgroundPosition' `0 ${(-document.body.scrollHeight/2 + 100 + window.scrollY/2)}px`)
 }
 
-if (document.querySelector('main.scrolling-images')) {
+if ($('main.scrolling-images').length > 0) {
     AdjustImage()
     document.body.onscroll = AdjustImage
 }
 
-const sideBySideLayoutButton = document.querySelector('button.side-by-side')
-const stackedLayoutButton = document.querySelector('button.stacked')
+const sideBySideLayoutButton = $('button.side-by-side')
+const stackedLayoutButton = $('button.stacked')
 
-if (sideBySideLayoutButton && stackedLayoutButton) {
-    sideBySideLayoutButton.addEventListener('click', () => {
-        const playground = document.querySelector('.code-playground')
-        if (playground.classList[1] == "stacked") {
-            playground.classList.remove("stacked")
-            playground.classList.add("side-by-side")
+if (sideBySideLayoutButton.length > 0 && stackedLayoutButton.length > 0) {
+    sideBySideLayoutButton.on('click', () => {
+        let playground = $('.code-playground')
+        if (playground.hasClass("stacked")) {
+            playground.removeClass("stacked")
+            playground.addClass("side-by-side")
         }
     })
-    stackedLayoutButton.addEventListener('click', () => {
-        const playground = document.querySelector('.code-playground')
-        if (playground.classList[1] == "side-by-side") {
-            playground.classList.remove("side-by-side")
-            playground.classList.add("stacked")
+    stackedLayoutButton.on('click', () => {
+        let playground = $('.code-playground')
+        if (playground.hasClass("side-by-side")) {
+            playground.removeClass("side-by-side")
+            playground.addClass("stacked")
         }
     })
 }

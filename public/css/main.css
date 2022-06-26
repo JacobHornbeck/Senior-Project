@@ -1052,7 +1052,6 @@ section:not(.account-container) h2 {
   grid-template-columns: 1fr 400px;
   grid-template-rows: 3rem;
   align-items: center;
-  row-gap: 0.5rem;
 }
 .code-playground h2, .code-playground h3 {
   margin: 0;
@@ -1065,7 +1064,7 @@ section:not(.account-container) h2 {
   align-items: center;
   justify-content: center;
   column-gap: 0.5rem;
-  padding-top: 10px;
+  padding: 10px 0 1rem;
 }
 .code-playground .layout-options button {
   row-gap: 3px;
@@ -1110,16 +1109,39 @@ section:not(.account-container) h2 {
   width: 100%;
   margin: 0;
 }
+.code-playground .ace-editor .ace_print-margin {
+  display: none;
+}
 .code-playground .live-demo {
   width: 100%;
   height: 400px;
   border: solid 1px #676767;
+  border-bottom: none;
   background-color: #FEFEFE;
+}
+.code-playground .live-demo iframe {
+  border: none;
+  height: 100%;
+  width: 100%;
+  background-color: #e7e7e7;
 }
 .code-playground .playground-footer {
   background-color: #9a9a9a;
   grid-column: 1/-1;
   width: 100%;
+  display: grid;
+  grid-template-columns: auto 200px;
+  padding: 0.5rem;
+  border: solid 1px #676767;
+}
+.code-playground .playground-footer .action-buttons {
+  grid-column: 2;
+  justify-self: end;
+  display: flex;
+  column-gap: 0.5rem;
+}
+.code-playground .playground-footer .action-buttons * {
+  margin: 0;
 }
 .code-playground.side-by-side .ace-editor {
   grid-column: 1;
@@ -1127,14 +1149,24 @@ section:not(.account-container) h2 {
 .code-playground.side-by-side .live-demo {
   grid-column: 2;
 }
-.code-playground.side-by-side .layout-options button.side-by-side {
-  background-color: rgba(255, 255, 255, 0.5);
+@media screen and (min-width: 951px) {
+  .code-playground.side-by-side .layout-options button.side-by-side {
+    background-color: rgba(255, 255, 255, 0.5);
+  }
 }
 .code-playground.stacked .ace-editor, .code-playground.stacked .live-demo {
   grid-column: 1/-1;
 }
 .code-playground.stacked .layout-options button.stacked {
   background-color: rgba(255, 255, 255, 0.5);
+}
+@media screen and (max-width: 950px) {
+  .code-playground .ace-editor, .code-playground .live-demo {
+    grid-column: 1/-1 !important;
+  }
+  .code-playground .layout-options button.stacked {
+    background-color: rgba(255, 255, 255, 0.5) !important;
+  }
 }
 @media screen and (max-width: 1000px) {
   .code-playground {

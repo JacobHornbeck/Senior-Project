@@ -1,7 +1,7 @@
 let newMessageTimeout = null
 function createMessage(content, type='error') {
     if (newMessageTimeout) {
-        let notif = $($('span.close')[0]).parent().remove()
+        $($('span.close')[0]).parent().remove()
         clearInterval(newMessageTimeout)
     }
     $(`<div class="notif ${type}">

@@ -27,9 +27,9 @@
         <% for (let message of messages) { %>
             <section class="message <%= message.type %>" id="cg-<%= message._id %>">
                 <div class="votes">
-                    <button onclick="vote('<%= message._id %>','up')" class="up"></button>
+                    <button onclick="vote('<%= message._id %>','up')" class="up <%= message.activatedUp ? 'activated' : '' %>"></button>
                     <span class="numVotes"><%= message.votes || 0 %></span>
-                    <button onclick="vote('<%= message._id %>','down')" class="down"></button>
+                    <button onclick="vote('<%= message._id %>','down')" class="down <%= message.activatedDown ? 'activated' : '' %>"></button>
                 </div>
                 <h4><%= message.userId.firstName + " " + message.userId.lastName %> <span class="date"><%= message.sendDate.toDateString() %></span></h4>
                 <p><%= message.content %></p>

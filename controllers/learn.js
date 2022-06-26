@@ -1,20 +1,6 @@
 const languages = require('../data/available-ace-editor-languages')
 const Message = require('../models/message')
-
-const months = [
-    'January',
-    'February',
-    'March',
-    'April',
-    'May',
-    'June',
-    'July',
-    'August',
-    'September',
-    'October',
-    'November',
-    'December'
-]
+const Vote = require('../models/vote')
 
 exports.getLearnHome = (req, res, next) => {
     res.render('learn/learn-home', {
@@ -43,21 +29,38 @@ exports.getNewPlayground = (req, res, next) => {
 }
 
 exports.getUserProject = (req, res, next) => {
+    
     Message.find({ connectedMessage: undefined })
            .populate({ path: 'userId', select: ['firstName', 'lastName'] })
            .sort({ "type": -1, "votes": -1, "sendDate": -1 })
            .then((messages) => {
-                res.render('learn/coding/project', {
-                    pageTitle: 'Project',
-                    projectCode: `let tempVar = 'This is a test';
-
+                Vote.find({ userId: req.user._id })
+                    .then((votes) => {
+                        let mappedMessages = messages.map((message) => {
+                            message = {
+                                ...message._doc,
+                                activatedUp: (votes.filter((vote) => {
+                                    return (vote.messageId.toString() == message._id.toString() && vote.direction == 'up')
+                                }).length > 0),
+                                activatedDown: (votes.filter((vote) => {
+                                    return (vote.messageId.toString() == message._id.toString() && vote.direction == 'down')
+                                }).length > 0)
+                            }
+                            return message
+                        })
+                        
+                        res.render('learn/coding/project', {
+                            pageTitle: 'Project',
+                            projectCode: `let tempVar = 'This is a test';
+    
 function something() {
     console.log("Hello World!");
     document.body.innerHTML = tempVar;
 }`,
-                    programmingLanguage: 'JavaScript',
-                    messages: messages
-                })
+                            programmingLanguage: 'JavaScript',
+                            messages: mappedMessages
+                        })
+                    })
             })
 }
 
@@ -75,4 +78,8 @@ exports.getCodePlayground = (req, res, next) => {
         pageTitle: 'Code Playground',
         programmingLanguage: requestedLanguage
     })
+}
+
+exports.postSaveProject = (req, res, next) => {
+    
 }

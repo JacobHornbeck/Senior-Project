@@ -18,10 +18,16 @@
                 </button>
             </div>
             <div class="ace-editor" data-language="<%= programmingLanguage %>"></div>
-            <div class="live-demo"></div>
-            <div class="playground-footer">
-                <button class="save btn">Save</button>
+            <div class="live-demo">
+                <iframe src=""></iframe>
             </div>
+            <div class="playground-footer">
+                <div class="action-buttons">
+                    <button class="run btn">Run</button>
+                    <button class="save btn">Save</button>
+                </div>
+            </div>
+            <%- include('../../includes/csrf-token.ejs') %>
         </div>
     </main>
 

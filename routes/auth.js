@@ -1,15 +1,15 @@
 const express = require("express")
 const router = express.Router()
-const authController = require("../controllers/auth.js")
 const { body } = require("express-validator")
+const controller = require("../controllers/auth.js")
 const User = require("../models/user")
 
 router
-    .get('/login', authController.getLogin)
-    .get('/signup', authController.getSignUp)
-    .get('/logout', authController.getLogout)
-    .get('/forgot-password', authController.getForgot)
-    .get('/confirm-email/:confirmation', authController.getEmailConfirmation)
+    .get('/login', controller.getLogin)
+    .get('/signup', controller.getSignUp)
+    .get('/logout', controller.getLogout)
+    .get('/forgot-password', controller.getForgot)
+    .get('/confirm-email/:confirmation', controller.getEmailConfirmation)
     .get('/request-my-data', (req, res, next) => {
         // Do stuff here
     })
@@ -22,7 +22,7 @@ router
                 .isLength({min: 8})
                 .withMessage('Passwords must be at least 8 characters')
                 .trim(),
-        ], authController.postLogin)
+        ], controller.postLogin)
     .post('/signup', [
             body('email')
                 .isEmail()
@@ -68,8 +68,8 @@ router
                     
                     return true
                 }) 
-        ], authController.postSignUp)
-    .get('/username-validity', authController.usernameTaken)
+        ], controller.postSignUp)
+    .get('/username-validity', controller.usernameTaken)
     .post('/request-my-data', (req, res, next) => {
         // Do stuff here
     })
