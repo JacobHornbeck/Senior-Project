@@ -65,6 +65,14 @@ const projectSchema = new Schema({
     title: {
         type: String,
         required: true
+    },
+    saveDate: {
+        type: Date,
+        required: true
+    },
+    editDate: {
+        type: Date,
+        required: false
     }
 })
 

@@ -1,3 +1,8 @@
+const getBlobURL = (code, type) => {
+    const blob = new Blob([code], { type })
+    return URL.createObjectURL(blob)
+}
+
 const singleCommentLangs = [
     'batchfile',
     'clojure',
@@ -66,13 +71,46 @@ if (aceEditorElement) {
                 "project-title": "New Project"
             },
             success: (data) => {
+                console.log("Saved. Redirecting...")
                 window.open(data.projectUrl, '_self')
             },
             error: (jXHR) => {
-                console.log(jXHR.responseText)
-                createMessage(jXHR.responseText)
+                if (jXHR.responseJSON.status) {
+                    createMessage(jXHR.responseJSON.message)
+                }
             }
         })
+    })
+    $('.btn.run').on('click', (e) => {
+        let codeTimeout
+        const currentEditorLanguage = editor.getOptions().mode.toString().replace(/(ace)\/(mode)\/(.+)/,'$3')
+        if (currentEditorLanguage == "html") {
+            let previousCode = editor.getValue()
+            const run = (event, delay = true) => {
+                const keyCodes = [8,9,13,48,49,50,51,52,53,54,55,56,57,65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80,81,82,83,84,85,86,87,88,89,90,97,98,99,100,101,102,103,104,105,106,107,109,110,111,186,187,188,189,190,191,192,219,220,221,222]
+                if (delay && keyCodes.includes(event.keyCode)) {
+                    if (previousCode != editor.getValue()) {
+                        clearTimeout(codeTimeout)
+                        codeTimeout = setTimeout(() => {
+                            $('.live-demo iframe').attr('src', getBlobURL(editor.getValue(), 'text/html'))
+                        }, 500);
+                        previousCode = editor.getValue();
+                    }
+                }
+                else if (!delay) {
+                    $('.live-demo iframe').attr('src', getBlobURL(editor.getValue(), 'text/html'))
+                }
+            }
+
+            $('.ace_editor textarea').off('keyup', run)
+            $('.ace_editor textarea').on('keyup', run)
+            run({keyCode: 48}, false)
+
+            $(e.target).text("Reload")
+        }
+        else {
+            alert("We are sorry, this language does not have running support!")
+        }
     })
 }
 
