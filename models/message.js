@@ -37,10 +37,20 @@ const messageSchema = new Schema({
         required: false,
         ref: 'Message'
     },
-    // connectedContent: {
-    //     type: Schema.Types.ObjectId,
-    //     required: true
-    // }
+    connectedContent: {
+        type: Schema.Types.ObjectId,
+        required: true
+    },
+    connectedContentType: {
+        type: String,
+        required: true,
+        enum: [
+            'project',
+            'article',
+            'reference',
+            'tutorial'
+        ]
+    }
 })
 
 module.exports = mongoose.model('Message', messageSchema)

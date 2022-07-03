@@ -19,3 +19,8 @@ $color-python: #4A98C8;
 @mixin box-shadow($x: 2px, $y: 2px, $blur: 8px, $col: $accent2-color) {
     box-shadow: $x $y $blur $col;
 }
+@mixin ellipses() {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}

@@ -14,9 +14,21 @@ const userSchema = new Schema({
         type: String,
         required: true
     },
+    displayName: {
+        type: String,
+        default: () => {
+            return this.firstName + " " + this.lastName
+        },
+        required: false
+    },
     bio: {
         type: String,
         required: false
+    },
+    profileAvatar: {
+        type: String,
+        required: false,
+        default: '00'
     },
     profileBackground: {
         type: String,

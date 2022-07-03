@@ -7,36 +7,52 @@ exports.postMessage = (req, res, next) => {
     const urlFrom = req.body.urlFrom
     const errors = validationResult(req)
     if (!errors.isEmpty()) {
+        console.log("\nValidation errors: "+errors.array().map(err => `${err.param} (${err.value}): ${err.msg}`))
         req.flash('message', {
             content: errors.array()[0].msg,
             type: 'error'
         })
-        req.flash('previous', {
-            messageType: req.body['message-type'],
-            messageContent: req.body['message-content'],
-            urlFrom: urlFrom
-        })
+        if (req.body['connectedMessage'] == '') {
+            req.flash('previous', {
+                messageType: req.body['message-type'],
+                messageContent: req.body['message-content'],
+                urlFrom: urlFrom
+            })
+        }
         return res.redirect(urlFrom)
     }
 
-    User.findOne({ username: req.body.username.toLowerCase() })
+    User.findById(req.user._id)
         .then(userDoc => {
             if (!userDoc) {
                 req.flash('message', {
-                    content: 'User doesn\'t exist with that username',
+                    content: 'Cannot find that user!',
                     type: 'error'
                 })
                 return res.redirect(urlFrom)
             }
-
-            Message.findOne({})
-            const message = new Message({
-                userId: userDoc._id,
-                sendDate: new Date(),
-                content: req.body['message-content'],
-                type: req.body['message-type'],
-                // connectedContent: ,
-            })
+            let message
+            if (req.body['connectedMessage']) {
+                message = new Message({
+                    userId: userDoc._id,
+                    sendDate: new Date(),
+                    content: req.body['message-content'],
+                    type: req.body['message-type'],
+                    connectedContent: req.body['connectedContent'],
+                    connectedContentType: req.body['connectedContentType'],
+                    connectedMessage: req.body['connectedMessage']
+                })
+            }
+            else {
+                message = new Message({
+                    userId: userDoc._id,
+                    sendDate: new Date(),
+                    content: req.body['message-content'],
+                    type: req.body['message-type'],
+                    connectedContent: req.body['connectedContent'],
+                    connectedContentType: req.body['connectedContentType']
+                })
+            }
             return message.save()
         })
         .then(() => {

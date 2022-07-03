@@ -1,8 +1,8 @@
+/* Helper Functions and Global Variables */
 const getBlobURL = (code, type) => {
     const blob = new Blob([code], { type })
     return URL.createObjectURL(blob)
 }
-
 const singleCommentLangs = [
     'batchfile',
     'clojure',
@@ -22,7 +22,14 @@ const supportedLanguages = [
 const editorStart = {
     "html": "<!DOCTYPE html>\n<html>\n    <head>\n        <meta charset=\"utf-8\">\n        <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n        <title>New Project</title>\n        <style>\n            \n        </style>\n    </head>\n    <body>\n        \n    </body>\n</html>"
 }
+/* Helper Functions and Global Variables */
 
+
+
+
+
+
+/* Syntax Highlighting */
 hljs.configure({
     cssSelector: 'pre',
     languages: [
@@ -32,8 +39,14 @@ hljs.configure({
     ]
 });
 hljs.highlightAll();
+/* Syntax Highlighting */
 
 
+
+
+
+
+/* Ace Editor Setup and Operations */
 ace.require('ace/ext/language_tools')
 const aceEditorElement = $('.ace-editor')[0]
 if (aceEditorElement) {
@@ -61,6 +74,8 @@ if (aceEditorElement) {
         }
     }
     $('.btn.save').on('click', () => {
+        let originalText = $('.btn.save').text()
+        $('.btn.save').text("Saving...").attr('disabled', 'true')
         $.ajax({
             url: '/user/save/project',
             type: 'POST',
@@ -68,11 +83,19 @@ if (aceEditorElement) {
                 "_csrf": $('input[name="_csrf"]').val(),
                 "project-code": editor.getValue(),
                 "project-language": editor.getOptions().mode.toString().replace(/(ace)\/(mode)\/(.+)/,'$3'),
-                "project-title": "New Project"
+                "project-title": "New Project",
+                "project-id": $('.code-playground').data('project-id')
             },
             success: (data) => {
-                console.log("Saved. Redirecting...")
-                window.open(data.projectUrl, '_self')
+                if (data.status == "success") {
+                    window.open(data.projectUrl, '_self')
+                }
+                else if (data.status == "saved") {
+                    $('.btn.save').text("Saved")
+                    setTimeout(() => {
+                        $('.btn.save').text(originalText).removeAttr('disabled')
+                    }, 5000);
+                }
             },
             error: (jXHR) => {
                 if (jXHR.responseJSON.status) {
@@ -113,8 +136,14 @@ if (aceEditorElement) {
         }
     })
 }
+/* Ace Editor Setup and Operations */
 
 
+
+
+
+
+/* Add lines and line number to pre blocks */
 function addLineClass(pre) {
     var lines = pre.innerHTML.split("\n"); // can use innerHTML also
     while (pre.childNodes.length > 0) {
@@ -133,6 +162,11 @@ setTimeout(() => {
         addLineClass(el)
     })
 }, 100);
+/* Add lines and line number to pre blocks */
+
+
+
+
 
 
 /* Code to interact with notification */
@@ -153,6 +187,10 @@ setTimeout(() => {
         }, 500);
     }
 }, 10000);
+/* Code to interact with notification */
+
+
+
 
 
 
@@ -161,18 +199,15 @@ var checkNow = false
 var elemLater = null
 var laterElem = null
 var timeoutSe = null
-var started = false
 
 function CheckValue(elem) {
     if (window.event.keyCode === 8) {
         LoadPerCharacter(true, elem)
     }
 }
-
 function LoadPerCharacter(tr, elem) {
     elem = $(elem)
     if (elem.length > 0) {
-        started = true
         elemLater = elem.parent().find('.valid')
         elemLater.attr('class', 'valid loading')
         elemLater.attr('title', 'Checking username')
@@ -247,8 +282,14 @@ $('.valid').each((i,el) => {
         CheckValue(inputEl)
     })
 })
+/* Code to automate validation animation */
 
 
+
+
+
+
+/* Input Helps */
 const inputHelpRules = {
     "username-rule-1": /^[\S]{4,100}$/i,
     "username-rule-2": /^[a-z0-9]+$/i,
@@ -257,20 +298,23 @@ const inputHelpRules = {
     "password-rule-2": /^.{0,100}$/,
     "password-rule-3": /^[a-z0-9\_\-]+$/i,
 }
-
 function updateInputHelpList(elem) {
     let inputEl = $(elem).parent().find('input')
     inputEl.parent().find('.input-help ul li').each((i, ruleItem) => {
         ruleItem.className = (inputHelpRules[ruleItem.id].test(inputEl.val())) ? 'meets-requirements' : 'needs-work'
     })
 }
-
 $('.input-help').each((i, el) => {
     let inputEl = $(el).parent().find('input')
         inputEl.on('input', () => {
             updateInputHelpList(inputEl)
         })
 })
+/* Input Helps */
+
+
+
+
 
 
 /* Scrolling Images */
@@ -280,12 +324,18 @@ function AdjustImage() {
     let img2 = $(".last-call")
         img2.css('backgroundPosition' `0 ${(-document.body.scrollHeight/2 + 100 + window.scrollY/2)}px`)
 }
-
 if ($('main.scrolling-images').length > 0) {
     AdjustImage()
     document.body.onscroll = AdjustImage
 }
+/* Scrolling Images */
 
+
+
+
+
+
+/* Editor Layout */
 const sideBySideLayoutButton = $('button.side-by-side')
 const stackedLayoutButton = $('button.stacked')
 
@@ -305,3 +355,13 @@ if (sideBySideLayoutButton.length > 0 && stackedLayoutButton.length > 0) {
         }
     })
 }
+/* Editor Layout */
+
+
+
+
+
+
+/* Forum Functions */
+
+/* Forum Functions */

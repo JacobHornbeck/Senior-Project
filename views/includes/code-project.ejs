@@ -1,4 +1,4 @@
-<div class="code-playground side-by-side">
+<div class="code-playground side-by-side" data-project-id="<%= projectId %>">
     <h2 class="project-title">New Project</h2>
     <div class="layout-options">
         <h3>Layout:</h3>
@@ -18,8 +18,17 @@
     <div class="playground-footer">
         <div class="action-buttons">
             <button class="run btn">Run</button>
-            <button class="save btn">Save</button>
+            <button class="save btn"><%= isOwn ? 'Save' : 'Save As' %></button>
         </div>
     </div>
     <%- include('./csrf-token.ejs') %>
+    <% if (projectId.toString().length > 0) { %>
+        <div class="project-info">
+            <div class="user-info">
+                <img src="/images/profile-images/pi-<%= user.profileImg %>-sm.png" alt="<%= user.displayName %>'s avatar" class="profile-pic">
+                <h4 class="user-name"><%= user.displayName %></h4>
+                <a href="/user/profile/<%= user.username %>" class="view-profile">View Profile</a>
+            </div>
+        </div>
+    <% } %>
 </div>

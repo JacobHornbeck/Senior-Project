@@ -1,3 +1,4 @@
+/* Message Display Function */
 let newMessageTimeout = null
 function createMessage(content, type='error') {
     if (newMessageTimeout) {
@@ -28,7 +29,11 @@ function createMessage(content, type='error') {
         }
     }, 10000);
 }
+/* Message Display Function */
 
+
+
+/* Forum Voting Frontend System */
 function vote(message, direction) {
     if (!message || !direction) return false;
     if (direction === 'down') { alert("When voting down on a post, please make sure to comment and let them know the reason, to help them fix it") }
@@ -55,3 +60,19 @@ function vote(message, direction) {
         }
     })
 }
+/* Forum Voting Frontend System */
+
+
+
+/* Forum Commenting System */
+function openCommentOnForm(id) {
+    const comments = $(`#${id} .comments`)
+    if (comments.hasClass('open'))
+        comments.removeClass('open')
+    else
+        comments.addClass('open')
+}
+function openAnswerForm(id) {
+
+}
+/* Forum Commenting System */

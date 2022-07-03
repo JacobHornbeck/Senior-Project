@@ -60,7 +60,7 @@
 }
 .input-container {
     position: relative;
-    margin-top: 30px;
+    margin-top: 1rem;
     width: 100%;
     label:not(.input-help) {
         padding: 0 4px;
@@ -116,6 +116,13 @@ input[type="submit"], button.btn, a.btn {
     &.danger {
         background-color: darken($color-html, 5);
         transform: scale(0.9);
+    }
+    &:disabled {
+        opacity: 0.8;
+
+        &:hover {
+            cursor: not-allowed;
+        }
     }
 }
 .input-help {
