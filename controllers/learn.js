@@ -5,6 +5,12 @@ const Message = require('../models/message')
 const Project = require('../models/project')
 const Vote = require('../models/vote')
 
+/* List of sections in the course
+What is HTML?
+Basic HTML tags
+...
+*/
+
 exports.getLearnHome = (req, res, next) => {
     res.render('learn/learn-home', {
         pageTitle: 'Learning Homepage',
