@@ -3,6 +3,7 @@ const router = express.Router()
 const { body } = require("express-validator")
 const controller = require("../controllers/auth.js")
 const User = require("../models/user")
+const isAuthenticated = require('../middleware/is-auth')
 
 router
     .get('/login', controller.getLogin)
@@ -10,6 +11,7 @@ router
     .get('/logout', controller.getLogout)
     .get('/forgot-password', controller.getForgot)
     .get('/confirm-email/:confirmation', controller.getEmailConfirmation)
+    .get('/user/account-settings', isAuthenticated, controller.getAccountSettings)
     .get('/request-my-data', (req, res, next) => {
         // Do stuff here
     })
@@ -27,6 +29,7 @@ router
             body('email')
                 .isEmail()
                 .withMessage('Invalid Email Address')
+                .normalizeEmail()
                 .custom((value) => {
                     return  User.findOne({email: value})
                                 .then((userDoc) => {
@@ -69,9 +72,10 @@ router
                     return true
                 }) 
         ], controller.postSignUp)
-    .get('/username-validity', controller.usernameTaken)
+    .post('/user/update-settings', controller.postUpdateSettings)
     .post('/request-my-data', (req, res, next) => {
         // Do stuff here
     })
+    .get('/username-validity', controller.usernameTaken)
 
 module.exports = router

@@ -13,8 +13,10 @@
         <ul class="nav-list">
             <% if (links.length > 0) { %>
                 <% links.forEach((link) => { %>
-                    <li class="nav-list-item">
-                        <a class="nav-list-item-link <%= (link.href === '/' ? (link.href === path ? 'active' : '') : (path.includes(link.href) ? 'active' : '')) %>" data-temp="<%= path %>" href="<%= link.href %>"><%= link.text %></a>
+                    <li class="nav-list-item" <%- link.class ? `title='${link.title}'` : '' %>>
+                        <a class="nav-list-item-link <%= link.class ? 'with-material' : '' %> <%= (link.href === '/' ? (link.href === path ? 'active' : '') : (path.includes(link.href) ? 'active' : '')) %>" data-temp="<%= path %>" href="<%= link.href %>">
+                            <%- link.class ? `<span class="${link.class}">${link.text}</span>` : link.text %><%- link.class ? `<span class="link-message">${link.title}</span>` : '' %>
+                        </a>
                     </li>
                 <% }) %>
             <% } %>
@@ -22,9 +24,9 @@
     </nav>
 </header>
 <% if (message) { %>
-    <div class="notif <%= message?.type %>">
-        <img src="/images/site-images/notif-<%= message?.type %>.png" alt="<%= message?.type %> notification icon">
-        <span><%- message?.content %></span>
+    <div class="notif <%= message.type %>">
+        <img src="/images/site-images/notif-<%= message.type %>.png" alt="<%= message.type %> notification icon">
+        <span><%- message.content %></span>
         <span class="close">×</span>
     </div>
 <% } %>

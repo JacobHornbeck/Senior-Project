@@ -9,8 +9,8 @@
         grid-column: 1 / -1;
         width: 100%;
         display: grid;
+        background-color: $accent2-color;
         grid-template-columns: 100px auto;
-        background-image: url('/images/profile-backgrounds/bg-03.png');
         @include box-shadow;
         column-gap: 1.5rem;
         padding: 1.5rem;
@@ -21,8 +21,6 @@
 
         .profile-image {
             background-color: $primary-color;
-            background-image: url('/images/profile-images/pi-00-md.png');
-            // background-image: url('/images/profile-images/pi-2.svg');
             border: solid 2px $secondary-color;
             background-repeat: no-repeat;
             background-position: center;

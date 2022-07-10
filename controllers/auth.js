@@ -40,6 +40,26 @@ exports.getForgot = (req, res, next) => {
     })
 }
 
+exports.getAccountSettings = (req, res, next) => {
+    User.findById(req.user._id)
+        .then(user => {
+            if (!user) {
+                req.flash('message', {
+                    content:  'Finding user failed, make sure you are logged in',
+                    type:     'error'
+                })
+                return res.redirect('/')
+            }
+            let {password, ...loadedUser} = user._doc
+
+            res.render('auth/account-settings', {
+                pageTitle: 'Account Settings',
+                user: loadedUser,
+                domainUrl: (req.hostname == 'localhost' ? 'http' : 'https') + '://' + req.headers.host
+            })
+        })
+}
+
 exports.getEmailConfirmation = (req, res, next) => {
     const token = req.params.confirmation
     jwt.verify(token, 'the most secret jwt security token secret', (err, decoded) => {
@@ -167,6 +187,106 @@ exports.postSignUp = (req, res, next) => {
                 type:     'success'
             })
             res.redirect('/')
+        })
+}
+
+exports.postUpdateSettings = (req, res, next) => {
+    const showLineNumbers = req.body.showLineNumbers ? req.body.showLineNumbers : false
+
+    const errors = validationResult(req)
+    if (!errors.isEmpty()) {
+        req.flash('message', {
+            content:  errors.array()[0].msg,
+            type:     'error'
+        })
+        req.flash('previous', {
+            email: req.body.email,
+            firstname: req.body.firstname,
+            lastname: req.body.lastname,
+            displayName: req.body.displayName,
+            bio: req.body.bio,
+            profileAvatar: req.body.profileAvatar,
+            profileBackground: req.body.profileBackground,
+            editorTheme: req.body.editorTheme,
+            editorLayout: req.body.editorLayout,
+            codeTheme: req.body.codeTheme,
+            showLineNumbers: showLineNumbers
+        })
+        return res.redirect('/user/account-settings')
+    }
+
+    // console.log(req.body)
+
+    // return res.redirect('/user/account-settings')
+    User.findById(req.user._id)
+        .then(user => {
+            let redirectTo = ""
+            if (!user) {
+                req.flash('message', {
+                    content:  'Finding user failed, make sure you are logged in',
+                    type:     'error'
+                })
+                return res.redirect('/')
+            }
+            let {password, ...loadedUser} = user._doc
+            if (loadedUser.username != req.body.username) {
+                req.flash('message', {
+                    content:  'You cannot change your username!',
+                    type:     'error'
+                })
+                req.flash('previous', {
+                    email: req.body.email,
+                    firstname: req.body.firstname,
+                    lastname: req.body.lastname,
+                    displayName: req.body.displayName,
+                    bio: req.body.bio,
+                    profileAvatar: req.body.profileAvatar,
+                    profileBackground: req.body.profileBackground,
+                    editorTheme: req.body.editorTheme,
+                    editorLayout: req.body.editorLayout,
+                    codeTheme: req.body.codeTheme,
+                    showLineNumbers: showLineNumbers
+                })
+                return res.redirect('/user/account-settings')
+            }
+
+            // Update User Settings
+            if (req.body.email != loadedUser.email) {
+                loadedUser.email = req.body.email
+                loadedUser.emailConfirmed = false
+                req.session.destroy()
+                redirectTo = '/'
+            }
+            loadedUser.firstname = req.body.firstname
+            loadedUser.lastname = req.body.lastname
+            loadedUser.displayName = req.body.displayName
+            loadedUser.bio = req.body.bio
+            loadedUser.profileAvatar = req.body.profileAvatar
+            loadedUser.profileBackground = req.body.profileBackground
+            loadedUser.editorTheme = req.body.editorTheme
+            loadedUser.editorLayout = req.body.editorLayout
+            loadedUser.codeTheme = req.body.codeTheme
+            loadedUser.showLineNumbers = showLineNumbers
+
+            if (redirectTo.length > 0)
+                return res.redirect(redirectTo)
+            return res.redirect('/user/account-settings')
+        })
+        .catch(err => {
+            req.flash('message', {
+                content:  'Something didn\'t work out, please try again',
+                type:     'error'
+            })
+            req.flash('previous', {
+                email: req.body.email,
+                firstname: req.body.firstname,
+                lastname: req.body.lastname,
+                displayName: req.body.displayName,
+                bio: req.body.bio,
+                profileAvatar: req.body.profileAvatar,
+                profileBackground: req.body.profileBackground
+            })
+            return res.redirect('/user/account-settings')
         })
 }
 

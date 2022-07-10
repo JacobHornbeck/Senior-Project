@@ -5,6 +5,10 @@
   box-sizing: border-box;
 }
 
+.material-symbols-outlined {
+  font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 48;
+}
+
 h1, h2, h3, h4, h5, h6 {
   font-family: "Play", arial bold, sans-serif;
 }
@@ -100,6 +104,42 @@ main article h1, main .credits-flex h1 {
 
 img {
   max-width: 100%;
+}
+
+input[type=checkbox] {
+  appearance: none;
+  -webkit-appearance: none;
+  position: relative;
+  height: 1.25rem;
+  width: 1.25rem;
+}
+input[type=checkbox]::before {
+  content: "";
+  position: absolute;
+  box-sizing: border-box;
+  border: 3px solid #10D15A;
+  border-radius: 5px;
+  height: 1.25rem;
+  width: 1.25rem;
+  background-image: linear-gradient(-20deg, #10D15A 33%, transparent 70%);
+  background-size: 1.25rem 3.75rem;
+  background-position-x: 0px;
+  background-position-y: 0px;
+  transition: background-position-y 0.3s;
+}
+input[type=checkbox]::after {
+  content: "";
+  border: none;
+  position: absolute;
+  height: 1.25rem;
+  box-sizing: border-box;
+  width: 0.8125rem;
+  border-right: 4px solid #FEFEFE;
+  border-bottom: 4px solid #FEFEFE;
+  transform: translate(25%, -10%) scale(0.6) rotate(40deg);
+}
+input[type=checkbox]:checked::before {
+  background-position-y: -42px;
 }
 
 ::selection {
@@ -240,6 +280,7 @@ img {
 }
 .input-container input:focus ~ label:not(.input-help),
 .input-container input:valid ~ label:not(.input-help),
+.input-container input:read-only ~ label:not(.input-help),
 .input-container select:valid ~ label:not(.input-help),
 .input-container textarea:focus ~ label:not(.input-help),
 .input-container textarea:valid ~ label:not(.input-help) {
@@ -252,7 +293,7 @@ img {
   display: block;
 }
 
-input, select, textarea {
+input:not([type=checkbox]), select, textarea {
   width: 100%;
   display: block;
   padding: 0.5rem;
@@ -485,7 +526,8 @@ header {
   top: 0;
 }
 
-.nav-list {
+.nav-list, .nav-list-item {
+  align-items: center;
   list-style: none;
   padding-left: 0;
   display: flex;
@@ -497,6 +539,25 @@ header {
   color: #FFFF64;
   font-family: "Play", arial bold, sans-serif;
   text-decoration: none;
+}
+.nav-list-item-link.with-material {
+  align-items: center;
+  grid-template-columns: 24px auto;
+  box-sizing: content-box;
+  column-gap: 0.5rem;
+  overflow: hidden;
+  padding: 0.5rem;
+  display: grid;
+  width: 24px;
+}
+.nav-list-item-link.with-material .link-message {
+  font-family: "Play", arial bold, sans-serif;
+  display: inline-block;
+  width: max-content;
+}
+
+.nav-list-item-link.with-material:hover {
+  width: 100%;
 }
 
 .nav-list-item-link.active {
@@ -684,8 +745,8 @@ section:not(.account-container) h2 {
   grid-column: 1/-1;
   width: 100%;
   display: grid;
+  background-color: #202020;
   grid-template-columns: 100px auto;
-  background-image: url("/images/profile-backgrounds/bg-03.png");
   box-shadow: 2px 2px 8px #202020;
   column-gap: 1.5rem;
   padding: 1.5rem;
@@ -697,7 +758,6 @@ section:not(.account-container) h2 {
 }
 .home-grid .profile-hero .profile-image {
   background-color: #676767;
-  background-image: url("/images/profile-images/pi-00-md.png");
   border: solid 2px #FFFF64;
   background-repeat: no-repeat;
   background-position: center;
@@ -757,6 +817,65 @@ section:not(.account-container) h2 {
   box-shadow: 2px 2px 8px #202020;
   width: 100%;
   margin: 0;
+}
+
+.no-margin-bottom {
+  padding-bottom: 0;
+}
+
+.settings-update-form {
+  padding: 1.5rem;
+  max-width: 500px;
+}
+.settings-update-form h2 {
+  margin: 0;
+}
+.settings-update-form fieldset {
+  border-radius: 10px;
+  padding: 0 0.75rem 0.75rem;
+  border: 1px solid #202020;
+  margin-top: 1rem;
+}
+.settings-update-form fieldset .input-container {
+  grid-column: 1;
+}
+.settings-update-form fieldset .input-container .avatar-preview {
+  border-radius: 50%;
+  border: 3px solid #FFFF64;
+  margin: 1rem 0.5rem 0.25rem;
+  border-radius: 50%;
+  height: 128px;
+  width: 128px;
+}
+.settings-update-form fieldset .input-container .background-preview {
+  background-color: #202020;
+  object-position: top left;
+  margin: 1rem 0 0.25rem;
+  object-fit: cover;
+  overflow: hidden;
+  height: 100px;
+  width: 100%;
+}
+.settings-update-form fieldset legend {
+  padding: 0 0.5rem;
+  font-family: "Play", arial bold, sans-serif;
+  border-bottom: 1px solid #202020;
+  border-radius: 10px;
+}
+
+.container-label input {
+  display: inline-block;
+  margin: 0;
+}
+
+.container-label {
+  column-gap: 0.4rem;
+  margin: 1rem 0 1.5rem 0.25rem;
+  grid-template-columns: 1.25rem auto;
+  align-items: center;
+  font-weight: bold;
+  display: block;
+  display: grid;
 }
 
 .input-container .valid {
@@ -1511,7 +1630,6 @@ section:not(.account-container) h2 {
   background-color: #FEFEFE;
   box-shadow: 2px 2px 8px #202020;
   border-radius: 10px;
-  width: max-content;
   overflow: hidden;
   height: 80px;
   width: 270px;
@@ -1533,6 +1651,26 @@ section:not(.account-container) h2 {
   font-size: 1.2rem;
   padding: 0 1rem;
   width: 100%;
+}
+.credits-flex .small-credit {
+  display: flex;
+  box-shadow: 2px 2px 8px #202020;
+  justify-content: center;
+  background-color: #FEFEFE;
+  text-decoration: none;
+  padding: 1rem 1.75rem;
+  border-radius: 10px;
+  align-items: center;
+  width: max-content;
+  column-gap: 0.25rem;
+  color: #202020;
+}
+.credits-flex .small-credit span {
+  font-size: 1.2rem;
+}
+.credits-flex .small-credit img {
+  height: 15px;
+  width: 15px;
 }
 
 .privacy-policy {

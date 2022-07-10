@@ -51,7 +51,7 @@ exports.getUserProject = (req, res, next) => {
                     return res.redirect('/')
                 }
 
-                Message.find({ connectedContent: userProject._id, connectedContentType: 'project' })
+                Message.find({ connectedContent: userProject._id.toString(), connectedContentType: 'project' })
                        .populate({ path: 'userId', select: ['displayName'] })
                        .sort({ "type": -1, "votes": -1, "sendDate": -1 })
                        .then((messages) => {
@@ -65,6 +65,9 @@ exports.getUserProject = (req, res, next) => {
                                             if (otherMessages[i].connectedMessage.toString() == message._id.toString())
                                                 connectedComments.push(otherMessages[i])
                                         }
+                                        connectedComments.sort((a, b) => {
+                                            return a.sendDate - b.sendDate
+                                        })
 
                                         message = {
                                             ...message._doc,
@@ -115,6 +118,7 @@ exports.getCodePlayground = (req, res, next) => {
         programmingLanguage: requestedLanguage,
         projectCode: '',
         projectId: '',
+        isOwn: false
     })
 }
 

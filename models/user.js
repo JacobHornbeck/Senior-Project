@@ -1,6 +1,9 @@
 const mongoose = require('mongoose')
 const Schema = mongoose.Schema
 
+const editorThemes = require('../data/editorThemes')
+const codeThemes = require('../data/codeThemes')
+
 const userSchema = new Schema({
     username: {
         type: String,
@@ -32,7 +35,8 @@ const userSchema = new Schema({
     },
     profileBackground: {
         type: String,
-        required: false
+        required: false,
+        default: '01'
     },
     email: {
         type: String,
@@ -48,8 +52,31 @@ const userSchema = new Schema({
     },
     editorTheme: {
         type: String,
-        required: false
+        required: false,
+        default: 'monokai',
+        enum: editorThemes
     },
+    editorLayout: {
+        type: String,
+        required: false,
+        default: 'side-by-side',
+        enum: [
+            'side-by-side',
+            'stacked'
+        ]
+    },
+    codeTheme: {
+        type: String,
+        required: false,
+        default: 'github-dark',
+        enum: codeThemes
+    },
+    showLineNumbers: {
+        type: Boolean,
+        required: false,
+        default: false
+    },
+
     resetToken: String,
     resetTokenExpiration: Date
 })

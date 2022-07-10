@@ -12,7 +12,8 @@ header {
     z-index: 99;
     top: 0;
 }
-.nav-list {
+.nav-list, .nav-list-item {
+    align-items: center;
     list-style: none;
     padding-left: 0;
     display: flex;
@@ -23,6 +24,26 @@ header {
     color: $secondary-color;
     font-family: $heading-font;
     text-decoration: none;
+
+    &.with-material {
+        align-items: center;
+        grid-template-columns: 24px auto;
+        box-sizing: content-box;
+        column-gap: 0.5rem;
+        overflow: hidden;
+        padding: 0.5rem;
+        display: grid;
+        width: 24px;
+
+        .link-message {
+            font-family: $heading-font;
+            display: inline-block;
+            width: max-content;
+        }
+    }
+}
+.nav-list-item-link.with-material:hover {
+    width: 100%;
 }
 .nav-list-item-link.active {
     background-color: rgba(255,255,255,0.2);

@@ -6,6 +6,8 @@ const bodyParser = require("body-parser")
 const mongoose = require("mongoose")
 const session = require("express-session")
 const MongoDBStore = require("connect-mongodb-session")(session)
+const flash = require("connect-flash")
+const csrf = require("csurf")
 
 const app = express();
 const authRoutes = require("./routes/auth")
@@ -15,9 +17,6 @@ const forumRoutes = require("./routes/forum")
 const errorController = require("./controllers/error")
 
 const User = require("./models/user")
-const csrf = require("csurf")
-const flash = require("connect-flash")
-const multer = require("multer")
 
 const PORT = process.env.PORT
 const MONGODB_URL = process.env.MONGODB_URL
@@ -28,18 +27,9 @@ const store = new MongoDBStore({
 const csrfProtection = csrf()
 
 const corsOptions = {
-    origin: "https://genius-coding.herokuapp.com/",
+    origin: process.env.NODE_ENV == 'development' ? `http://localhost:${process.env.PORT}/` : "https://genius-coding.herokuapp.com/",
     optionSuccessStatus: 200
 }
-
-const fileStorage = multer.diskStorage({
-    destination: (req, file, cb) => {
-        cb(null, 'product-images')
-    },
-    filename: (req, file, cb) => {
-        cb(null, file.originalname)
-    }
-})
 
 const options = {
     useUnifiedTopology: true,
@@ -63,7 +53,6 @@ app.set('view engine', 'ejs')
     }))
     .use(csrfProtection)
     .use(flash())
-    // force HTTPS
     .use((req, res, next) => {
         if (!req.secure && req.get('x-forwarded-proto') !== 'https' && process.env.NODE_ENV !== "development") {
             return res.redirect('https://' + req.get('host') + req.url);
@@ -81,18 +70,57 @@ app.set('view engine', 'ejs')
         res.locals.path = req.url
         if (req.session.isLoggedIn) {
             res.locals.links = [
-                { 'href': '/', 'text': 'Home' },
-                { 'href': '/learn', 'text': 'Learn' },
-                { 'href': '/code/new', 'text': 'Playground' },
-                { 'href': '/logout', 'text': 'Logout' },
+                { 
+                    'href': '/',
+                    'text': 'Home'
+                },
+                { 
+                    'href': '/learn',
+                    'text': 'Learn'
+                },
+                { 
+                    'href': '/code/new',
+                    'text': 'Playground'
+                },
+                { 
+                    'href': '/user/account-settings',
+                    'text': 'settings',
+                    'class': 'material-symbols-outlined',
+                    'title': 'Account Settings'
+                },
+                { 
+                    'href': '/logout',
+                    'text': 'logout',
+                    'class': 'material-symbols-outlined',
+                    'title': 'Logout'
+                },
             ]
         } else {
             res.locals.links = [
-                { 'href': '/', 'text': 'Home' },
-                { 'href': '/learn', 'text': 'Learn' },
-                { 'href': '/code/new', 'text': 'Playground' },
-                { 'href': '/login', 'text': 'Login' },
-                { 'href': '/signup', 'text': 'Sign Up' },
+                { 
+                    'href': '/',
+                    'text': 'Home'
+                },
+                { 
+                    'href': '/learn',
+                    'text': 'Learn'
+                },
+                { 
+                    'href': '/code/new',
+                    'text': 'Playground'
+                },
+                { 
+                    'href': '/login',
+                    'text': 'login',
+                    'class': 'material-symbols-outlined',
+                    'title': 'Login'
+                },
+                { 
+                    'href': '/signup',
+                    'text': 'manage_accounts',
+                    'class': 'material-symbols-outlined',
+                    'title': 'Signup'
+                },
             ]
         }
         next()
@@ -124,13 +152,11 @@ app.set('view engine', 'ejs')
         if (req.session.isLoggedIn) {
             User.findById(req.session.user._id)
                 .then(user => {
+                    let {password, ...loadedUser} = user._doc
+
                     res.render('homepage', {
                         pageTitle: 'Home',
-                        user: {
-                            firstname: user.firstName,
-                            lastname: user.lastName,
-                            email: user.email
-                        },
+                        user: loadedUser,
                         courseCards: [
                             {
                                 imgs: ['html','css'],

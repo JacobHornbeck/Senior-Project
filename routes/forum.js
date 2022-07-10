@@ -36,7 +36,6 @@ router
                     throw new Error('Invalid message type!')
             }),
         body('connectedContentType')
-            .isString()
             .custom(value => {
                 const types = [
                     'project',
@@ -50,32 +49,35 @@ router
                     throw new Error('Invalid content type!')
             }),
         body('connectedContent')
-            .isString()
             .custom((value, {req}) => {
                 switch (req.body.connectedContentType) {
                     case "project":
-                        Project.findById(value)
-                               .then(project => {
-                                    if (!project) return Promise.reject('Project doesn\'t exist')
-                                })
+                        return Project
+                            .findById(value)
+                            .then(project => {
+                                if (!project) return Promise.reject('Project doesn\'t exist')
+                            })
                     break;
                     /* case "article":
-                        Article.findById(value)
-                               .then(article => {
-                                    if (!article) return Promise.reject('Article doesn\'t exist')
-                                })
+                        return Article
+                            .findById(value)
+                            .then(article => {
+                                if (!article) return Promise.reject('Article doesn\'t exist')
+                            })
                     break;
                     case "tutorial":
-                        Tutorial.findById(value)
-                               .then(tutorial => {
-                                    if (!tutorial) return Promise.reject('Tutorial doesn\'t exist')
-                                })
+                        return Tutorial
+                            .findById(value)
+                            .then(tutorial => {
+                                if (!tutorial) return Promise.reject('Tutorial doesn\'t exist')
+                            })
                     break;
                     case "reference":
-                        Reference.findById(value)
-                               .then(reference => {
-                                    if (!reference) return Promise.reject('Reference doesn\'t exist')
-                                })
+                        return Reference
+                            .findById(value)
+                            .then(reference => {
+                                if (!reference) return Promise.reject('Reference doesn\'t exist')
+                            })
                     break; */
                 }
             })

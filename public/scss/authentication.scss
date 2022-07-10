@@ -81,6 +81,7 @@
     }
     input:focus ~ label:not(.input-help),
     input:valid ~ label:not(.input-help),
+    input:read-only ~ label:not(.input-help),
     select:valid ~ label:not(.input-help),
     textarea:focus ~ label:not(.input-help),
     textarea:valid ~ label:not(.input-help) {
@@ -92,7 +93,7 @@
         display: block;
     }
 }
-input, select, textarea {
+input:not([type="checkbox"]), select, textarea {
     width: 100%;
     display: block;
     padding: 0.5rem;

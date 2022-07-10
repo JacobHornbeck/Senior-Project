@@ -1,0 +1,72 @@
+<%- include('../includes/head.ejs') %>
+</head>
+
+<body>
+    <%- include('../includes/nav.ejs') %>
+    <main class="non-transparent-background no-margin-bottom">
+        <div class="other-header-image"></div>
+        <form action="/user/update-settings" class="settings-update-form" method="post">
+            <h2>Welcome, <%= user.firstName + " " + user.lastName %></h2>
+
+            <fieldset>
+                <legend>User Info</legend>
+                <div class="input-container">
+                    <input type="text" name="username" id="username" readonly value="<%= user.username %>">
+                    <label for="username" class="form-label">Username</label>
+                </div>
+                <div class="input-container">
+                    <input type="text" name="email" id="email" required value="<%= previous ? previous.email : user.email %>">
+                    <label for="email" class="form-label">Email</label>
+                </div>
+                <div class="input-container">
+                    <input type="text" name="firstname" id="firstname" required value="<%= previous ? previous.firstName : user.firstName %>">
+                    <label for="firstname" class="form-label">First name</label>
+                </div>
+                <div class="input-container">
+                    <input type="text" name="lastname" id="lastname" required value="<%= previous ? previous.lastName : user.lastName %>">
+                    <label for="lastname" class="form-label">Last name</label>
+                </div>
+            </fieldset>
+            <fieldset>
+                <legend>User Profile</legend>
+                <div class="input-container">
+                    <input type="text" name="displayName" id="displayName" required value="<%= previous ? previous.displayName : user.displayName %>">
+                    <label for="displayName" class="form-label">Display Name</label>
+                </div>
+                <div class="input-container">
+                    <textarea name="bio" id="bio"><%= previous ? previous.bio : (user.bio ? user.bio : '') %></textarea>
+                    <label for="bio" class="form-label">Bio</label>
+                </div>
+                <div class="input-container">
+                    <input oninput="loadPreviewImage(this)" type="number" name="profileAvatar" id="profileAvatar" min="1" max="30" required value="<%= previous ? previous.profileAvatar : user.profileAvatar %>">
+                    <label for="profileAvatar" class="form-label">Profile Avatar</label>
+                    <img class="avatar-preview" src="<%= domainUrl %>/images/profile-images/pi-<%= previous ? previous.profileAvatar : user.profileAvatar %>.png" alt="profile avatar">
+                </div>
+                <div class="input-container">
+                    <input oninput="loadPreviewImage(this)" type="number" name="profileBackground" id="profileBackground" min="1" max="33" required value="<%= previous ? previous.profileBackground : user.profileBackground %>">
+                    <label for="profileBackground" class="form-label">Profile Background</label>
+                    <img class="background-preview" src="<%= domainUrl %>/images/profile-backgrounds/bg-<%= previous ? previous.profileBackground : user.profileBackground %>.png" alt="profile background">
+                </div>
+            </fieldset>
+            <fieldset>
+                <legend>Editor & Code Example Settings</legend>
+                <div class="input-container">
+                    <input type="text" name="codeTheme" id="codeTheme" required value="<%= user.codeTheme %>">
+                    <label for="codeTheme" class="form-label">Code Example Theme</label>
+                </div>
+                <label class="container-label" for="showLineNumbers"><input type="checkbox" name="showLineNumbers" id="showLineNumbers" onchange="this.value = this.checked" value="false">Show line numbers on code examples</label>
+                <div class="input-container">
+                    <input type="text" name="editorTheme" id="editorTheme" required value="<%= user.editorTheme %>">
+                    <label for="editorTheme" class="form-label">Code Editor Theme</label>
+                </div>
+                <div class="input-container">
+                    <input type="text" name="editorLayout" id="editorLayout" required value="<%= user.editorLayout %>">
+                    <label for="editorLayout" class="form-label">Code Editor Layout</label>
+                </div>
+            </fieldset>
+            <%- include('../includes/csrf-token.ejs') %>
+            <input type="submit" value="Update">
+        </form>
+    </main>
+
+<%- include('../includes/end.ejs') %>

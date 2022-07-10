@@ -11,8 +11,8 @@
             <section class="credits-flex">
                 <h2>Card Images</h2>
                 <% for (let credit of cardCredits) {
-                    let author = credit.author;
                     let image = credit.image;
+                    let author = credit.author;
                     let source = credit.source; %>
                     <div class="credit">
                         <a target="_blank" href="<%= image.remotePath %>"><img src="<%= image.localPath %>" alt="image by <%= author.name %>" class="credit-image"></a>
@@ -24,8 +24,8 @@
             <section class="credits-flex">
                 <h2>Profile Background Images</h2>
                 <% for (let credit of bgCredits) {
-                    let author = credit.author;
                     let image = credit.image;
+                    let author = credit.author;
                     let source = credit.source; %>
                     <div class="credit">
                         <a target="_blank" href="<%= image.remotePath %>"><img src="<%= image.localPath %>" alt="image by <%= author.name %>" class="credit-image"></a>
@@ -35,12 +35,49 @@
             </section>
             <hr>
             <section class="credits-flex">
-                <h2>Other Used Software</h2>
-                <% for (let credit of otherCredits) {
+                <h2>Profile Image Credits</h2>
+                <% for (let credit of profileCredits) {
+                    let image = credit.image;
+                    let author = credit.author;
                     let source = credit.source; %>
                     <div class="credit">
-                        <span><br>From <a target="_blank" href="<%= source.link %>"><%= source.name %></a></span>
+                        <a target="_blank" href="<%= image.remotePath %>"><img src="<%= image.localPath %>" alt="image by <%= author.name %>" class="credit-image"></a>
+                        <span>From <a target="_blank" href="<%= source.link %>"><%= source.name %></a><br>By <a target="_blank" href="<%= author.link %>"><%= author.name %></a></span>
                     </div>
+                <% } %>
+            </section>
+            <hr>
+            <section class="credits-flex">
+                <h2>Site Icon Credits</h2>
+                <% for (let credit of siteIconCredits) {
+                    let image = credit.image;
+                    let author = credit.author;
+                    let source = credit.source; %>
+                    <div class="credit">
+                        <a target="_blank" href="<%= image.remotePath %>"><img src="<%= image.localPath %>" alt="image by <%= author.name %>" class="credit-image"></a>
+                        <span>From <a target="_blank" href="<%= source.link %>"><%= source.name %></a><br>By <a target="_blank" href="<%= author.link %>"><%= author.name %></a></span>
+                    </div>
+                <% } %>
+            </section>
+            <hr>
+            <section class="credits-flex">
+                <h2>Site Image Credits</h2>
+                <% for (let credit of siteImageCredits) {
+                    let image = credit.image;
+                    let author = credit.author;
+                    let source = credit.source; %>
+                    <div class="credit">
+                        <a target="_blank" href="<%= image.remotePath %>"><img src="<%= image.localPath %>" alt="image by <%= author.name %>" class="credit-image"></a>
+                        <span>From <a target="_blank" href="<%= source.link %>"><%= source.name %></a><br>By <a target="_blank" href="<%= author.link %>"><%= author.name %></a></span>
+                    </div>
+                <% } %>
+            </section>
+            <hr>
+            <section class="credits-flex">
+                <h2>Used Libraries</h2>
+                <% for (let credit of otherCredits) {
+                    let source = credit.source; %>
+                    <a target="_blank" class="small-credit" href="<%= source.link %>"><span><%= source.name %></span><span class="material-symbols-outlined">open_in_new</span></a>
                 <% } %>
             </section>
         </article>

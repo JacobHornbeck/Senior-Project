@@ -76,3 +76,18 @@ function openAnswerForm(id) {
 
 }
 /* Forum Commenting System */
+
+
+
+/* User Account Settings */
+function loadPreviewImage(el) {
+    el = $(el)
+    if (el.val().length > 2)
+        return el.val('01')
+    if (el.val() < 10)
+        el.val('0'+el.val())
+
+    let imgEl = el.parent().find('img')
+        imgEl.attr('src', imgEl.attr('src').replace(/\-\d{2}/, '-'+el.val()))
+}
+/* User Account Settings */

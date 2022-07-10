@@ -322,7 +322,7 @@ function AdjustImage() {
     let img1 = $(".hero-image")
         img1.css('backgroundPosition', `0 calc(100% + ${(window.scrollY/2)}px)`)
     let img2 = $(".last-call")
-        img2.css('backgroundPosition' `0 ${(-document.body.scrollHeight/2 + 100 + window.scrollY/2)}px`)
+        img2.css('backgroundPosition', `0 ${(-document.body.scrollHeight/2 + 100 + window.scrollY/2)}px`)
 }
 if ($('main.scrolling-images').length > 0) {
     AdjustImage()

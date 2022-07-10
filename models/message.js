@@ -38,7 +38,7 @@ const messageSchema = new Schema({
         ref: 'Message'
     },
     connectedContent: {
-        type: Schema.Types.ObjectId,
+        type: String,
         required: true
     },
     connectedContentType: {

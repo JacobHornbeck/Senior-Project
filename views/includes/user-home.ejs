@@ -1,7 +1,7 @@
 <main>
     <div class="home-grid">
-        <div class="profile-hero">
-            <div class="profile-image"></div>
+        <div class="profile-hero" style="background-image: url('/images/profile-backgrounds/bg-<%= user.profileBackground %>.png');">
+            <div class="profile-image" style="background-image: url('/images/profile-images/pi-<%= user.profileAvatar %>.png');"></div>
             <section class="user-info">
                 <h2 class="name"><%= user.firstname %> <%= user.lastname %></h2>
                 <p class="bio">

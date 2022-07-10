@@ -24,7 +24,6 @@ $ci-dim: 80px;
         background-color: $other-color;
         @include box-shadow;
         border-radius: 10px;
-        width: max-content;
         overflow: hidden;
         height: $ci-dim;
         width: 270px;
@@ -40,12 +39,31 @@ $ci-dim: 80px;
             object-position: center;
         }
         span {
-            overflow: hidden;
-            white-space: nowrap;
-            text-overflow: ellipsis;
+            @include ellipses;
             font-size: 1.2rem;
             padding: 0 1rem;
             width: 100%;
+        }
+    }
+    .small-credit {
+        display: flex;
+        @include box-shadow;
+        justify-content: center;
+        background-color: $other-color;
+        text-decoration: none;
+        padding: 1rem 1.75rem;
+        border-radius: 10px;
+        align-items: center;
+        width: max-content;
+        column-gap: 0.25rem;
+        color: $accent2-color;
+
+        span {
+            font-size: 1.2rem;
+        }
+        img {
+            height: 15px;
+            width: 15px;
         }
     }
 }
