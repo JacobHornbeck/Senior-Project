@@ -62,36 +62,40 @@ app.set('view engine', 'ejs')
     .use((req, res, next) => {
         res.locals.isAuthenticated = req.session.isLoggedIn
         res.locals.csrfToken = req.csrfToken()
-        res.locals.editorTheme = 'stackoverflow-dark'
         let temp1 = req.flash('message')
         res.locals.message = temp1.length > 0 ? temp1[0] : undefined
         let temp2 = req.flash('previous')
         res.locals.previous = temp2.length > 0 ? temp2[0] : undefined
         res.locals.path = req.url
+        res.locals.codeTheme = 'monokai'
+        res.locals.editorTheme = 'github-dark'
+        res.locals.editorLayout = 'side-by-side'
+        res.locals.showLineNumbers = false
         if (req.session.isLoggedIn) {
             res.locals.links = [
                 { 
                     'href': '/',
-                    'text': 'Home'
+                    'text': 'home',
+                    'title': 'Home'
                 },
                 { 
                     'href': '/learn',
-                    'text': 'Learn'
+                    'text': 'school',
+                    'title': 'Learn'
                 },
                 { 
                     'href': '/code/new',
-                    'text': 'Playground'
+                    'text': 'play_circle',
+                    'title': 'Playground'
                 },
                 { 
                     'href': '/user/account-settings',
                     'text': 'settings',
-                    'class': 'material-symbols-outlined',
                     'title': 'Account Settings'
                 },
                 { 
                     'href': '/logout',
                     'text': 'logout',
-                    'class': 'material-symbols-outlined',
                     'title': 'Logout'
                 },
             ]
@@ -99,26 +103,27 @@ app.set('view engine', 'ejs')
             res.locals.links = [
                 { 
                     'href': '/',
-                    'text': 'Home'
+                    'text': 'home',
+                    'title': 'Home'
                 },
                 { 
                     'href': '/learn',
-                    'text': 'Learn'
+                    'text': 'school',
+                    'title': 'Learn'
                 },
                 { 
                     'href': '/code/new',
-                    'text': 'Playground'
+                    'text': 'play_circle',
+                    'title': 'Playground'
                 },
                 { 
                     'href': '/login',
                     'text': 'login',
-                    'class': 'material-symbols-outlined',
                     'title': 'Login'
                 },
                 { 
                     'href': '/signup',
                     'text': 'manage_accounts',
-                    'class': 'material-symbols-outlined',
                     'title': 'Signup'
                 },
             ]
@@ -129,8 +134,11 @@ app.set('view engine', 'ejs')
         if (!req.session.user) return next()
         User.findById(req.session.user._id)
             .then((user) => {
-                res.locals.editorTheme = user.editorTheme || 'stackoverflow-dark'
                 res.locals.username = user.username
+                res.locals.codeTheme = user.codeTheme
+                res.locals.editorTheme = user.editorTheme
+                res.locals.editorLayout = user.editorLayout
+                res.locals.showLineNumbers = user.showLineNumbers
                 let publicUser = JSON.parse(JSON.stringify(user))
                 delete publicUser.password
                 req.user = publicUser
@@ -151,12 +159,10 @@ app.set('view engine', 'ejs')
     .get('/', (req, res, next) => {
         if (req.session.isLoggedIn) {
             User.findById(req.session.user._id)
-                .then(user => {
-                    let {password, ...loadedUser} = user._doc
-
+                .then(async user => {
                     res.render('homepage', {
                         pageTitle: 'Home',
-                        user: loadedUser,
+                        user: user,
                         courseCards: [
                             {
                                 imgs: ['html','css'],
@@ -164,20 +170,8 @@ app.set('view engine', 'ejs')
                                 type: 'course',
                                 thingId: 'abc123'
                             },
-                            {
-                                imgs: ['python'],
-                                title: 'Python File Read/Write',
-                                type: 'tutorial',
-                                thingId: 'def456'
-                            },
-                            {
-                                imgs: ['cpp'],
-                                title: 'Solid C++',
-                                type: 'course',
-                                thingId: 'ghi789'
-                            }
                         ],
-                        projectCards: [],
+                        userProjects: await user.getProjects()
                     })
                 })
         }

@@ -51,9 +51,10 @@ ace.require('ace/ext/language_tools')
 const aceEditorElement = $('.ace-editor')[0]
 if (aceEditorElement) {
     const editorLanguage = $(aceEditorElement).data('language').toLowerCase();
+    const editorTheme = $(aceEditorElement).data('theme');
     const editor = ace.edit(aceEditorElement);
     editor.setOptions({
-        theme: "ace/theme/monokai",
+        theme: `ace/theme/${editorTheme}`,
         mode: `ace/mode/${editorLanguage}`,
         enableBasicAutocompletion: true,
         enableLiveAutocompletion: true,
@@ -74,8 +75,8 @@ if (aceEditorElement) {
         }
     }
     $('.btn.save').on('click', () => {
-        let originalText = $('.btn.save').text()
-        $('.btn.save').text("Saving...").attr('disabled', 'true')
+        let originalText = $('.btn.save').html()
+        $('.btn.save').html("<span class='material-symbols-outlined'>save</span>Saving...").attr('disabled', 'true')
         $.ajax({
             url: '/user/save/project',
             type: 'POST',
@@ -83,7 +84,7 @@ if (aceEditorElement) {
                 "_csrf": $('input[name="_csrf"]').val(),
                 "project-code": editor.getValue(),
                 "project-language": editor.getOptions().mode.toString().replace(/(ace)\/(mode)\/(.+)/,'$3'),
-                "project-title": "New Project",
+                "project-title": $('#projectTitle').text(),
                 "project-id": $('.code-playground').data('project-id')
             },
             success: (data) => {
@@ -91,9 +92,9 @@ if (aceEditorElement) {
                     window.open(data.projectUrl, '_self')
                 }
                 else if (data.status == "saved") {
-                    $('.btn.save').text("Saved")
+                    $('.btn.save').html("<span class='material-symbols-outlined'>save</span>Saved")
                     setTimeout(() => {
-                        $('.btn.save').text(originalText).removeAttr('disabled')
+                        $('.btn.save').html(originalText).removeAttr('disabled')
                     }, 5000);
                 }
             },
@@ -129,7 +130,11 @@ if (aceEditorElement) {
             $('.ace_editor textarea').on('keyup', run)
             run({keyCode: 48}, false)
 
-            $(e.target).text("Reload")
+            let button = e.target
+            if (button.localName != "button")
+                button = button.parentElement
+
+            $(e.target).html("<span class='material-symbols-outlined'>replay</span>Reload")
         }
         else {
             alert("We are sorry, this language does not have running support!")
@@ -356,12 +361,3 @@ if (sideBySideLayoutButton.length > 0 && stackedLayoutButton.length > 0) {
     })
 }
 /* Editor Layout */
-
-
-
-
-
-
-/* Forum Functions */
-
-/* Forum Functions */

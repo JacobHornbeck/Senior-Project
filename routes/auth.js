@@ -12,14 +12,12 @@ router
     .get('/forgot-password', controller.getForgot)
     .get('/confirm-email/:confirmation', controller.getEmailConfirmation)
     .get('/user/account-settings', isAuthenticated, controller.getAccountSettings)
-    .get('/request-my-data', (req, res, next) => {
-        // Do stuff here
-    })
+    .get('/request-my-data', isAuthenticated, controller.getRequestData)
     .post('/login', [
-            body('email')
-                .isEmail()
-                .withMessage('Invalid Email Address')
-                .normalizeEmail(),
+            body('username')
+                .isString()
+                .withMessage('Username must be a string!')
+                .trim(),
             body('password')
                 .isLength({min: 8})
                 .withMessage('Passwords must be at least 8 characters')
@@ -68,14 +66,11 @@ router
                 .custom((value, {req}) => {
                     if (value !== req.body.password)
                         throw new Error('Password don\'t match!')
-                    
                     return true
                 }) 
         ], controller.postSignUp)
     .post('/user/update-settings', controller.postUpdateSettings)
-    .post('/request-my-data', (req, res, next) => {
-        // Do stuff here
-    })
+    .post('/user/request-data', isAuthenticated, controller.postRequestData)
     .get('/username-validity', controller.usernameTaken)
 
 module.exports = router

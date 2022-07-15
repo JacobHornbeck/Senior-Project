@@ -818,6 +818,37 @@ section:not(.account-container) h2 {
   width: 100%;
   margin: 0;
 }
+.home-grid .widgets .user-widget .project-list {
+  padding: 0.25rem 1rem 0.5rem;
+  width: 100%;
+  overflow: hidden;
+}
+.home-grid .widgets .user-widget .project-list h4 {
+  margin: 0;
+  text-align: center;
+}
+.home-grid .widgets .user-widget .project-list a {
+  display: flex;
+  column-gap: 0.25rem;
+  align-items: center;
+  color: #676767;
+  box-shadow: 2px 2px 8px #202020;
+  padding: 0.5rem 0.75rem;
+  text-decoration: none;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  font-size: 1.2rem;
+  width: 100%;
+}
+.home-grid .widgets .user-widget .project-list a span {
+  font-size: 0.9rem;
+  font-family: "Play", arial bold, sans-serif;
+  color: #202020;
+}
+.home-grid .widgets .user-widget .project-list a + a {
+  margin-top: 0.75rem;
+}
 
 .no-margin-bottom {
   padding-bottom: 0;
@@ -862,6 +893,9 @@ section:not(.account-container) h2 {
   border-bottom: 1px solid #202020;
   border-radius: 10px;
 }
+.settings-update-form h3 {
+  margin-top: 0;
+}
 
 .container-label input {
   display: inline-block;
@@ -876,6 +910,10 @@ section:not(.account-container) h2 {
   font-weight: bold;
   display: block;
   display: grid;
+}
+
+input[type=submit].danger-button {
+  background-color: #E34E24;
 }
 
 .input-container .valid {
@@ -1041,10 +1079,17 @@ section:not(.account-container) h2 {
   margin: 1rem 0.5rem;
   padding: 0.75rem;
 }
-.forum .message.connected {
+.forum .message.connected.comment {
   grid-template-columns: auto;
   border: none;
   margin: 0;
+}
+.forum .message:not(.question) .answers {
+  display: none;
+}
+.forum .message.answer {
+  margin: 1rem 0.5rem 0;
+  border-color: rgba(103, 103, 103, 0.5);
 }
 .forum .message h4, .forum .message p {
   margin: 0;
@@ -1132,6 +1177,13 @@ section:not(.account-container) h2 {
   background-image: linear-gradient(#a7a7a7 55%, #FEFEFE 55%);
   border-left-color: #a7a7a7;
 }
+.forum .message .no-comments, .forum .message .no-answers {
+  padding: 0.5rem;
+}
+.forum .message button[type=submit] {
+  margin-top: 0.5rem;
+  padding: 0.25rem 0.75rem;
+}
 .forum .message .comments {
   grid-column: 2;
   border: 1px solid #676767;
@@ -1153,9 +1205,6 @@ section:not(.account-container) h2 {
   left: 2rem;
   top: -1rem;
 }
-.forum .message .comments .no-comments {
-  padding: 0.5rem;
-}
 .forum .message .comments .replyToForm {
   grid-column: 2;
   width: calc(100% - 1.5rem);
@@ -1164,12 +1213,28 @@ section:not(.account-container) h2 {
 .forum .message .comments .replyToForm .input-container {
   margin-top: 0.75rem;
 }
-.forum .message .comments .replyToForm input[type=submit] {
-  margin-top: 0.5rem;
-  padding: 0.25rem 0.75rem;
-}
-.forum .message.question .comments::before {
+.forum .message.question > .comments::before {
   left: 5.75rem;
+}
+.forum .message .answers {
+  grid-column: 2;
+}
+.forum .message .answers .answerForm {
+  display: none;
+  position: relative;
+}
+.forum .message .answers .answerForm::before {
+  content: "";
+  position: absolute;
+  border: 0.5rem solid transparent;
+  border-bottom-color: #676767;
+  height: 0;
+  width: 0;
+  left: 1.5em;
+  top: -1rem;
+}
+.forum .message .answers .answerForm.show {
+  display: block;
 }
 
 .mission-statement {
@@ -1195,6 +1260,250 @@ section:not(.account-container) h2 {
 .mission-statement .inside h2 {
   font-size: 2rem;
   color: #FEFEFE;
+}
+
+.offered {
+  display: flex;
+  grid-gap: 20px 10px;
+  align-items: center;
+  grid-auto-rows: 100px;
+  justify-content: space-around;
+  margin-top: 1rem;
+  flex-wrap: wrap;
+}
+.offered h2 {
+  width: 100%;
+  text-align: center;
+}
+.offered .course, .offered .tutorial, .offered .reference {
+  height: 100px;
+  overflow: hidden;
+  border-radius: 5px;
+  align-items: center;
+  background-color: #F1F1F1;
+  grid-template-rows: 50% 50%;
+  grid-template-columns: 100px auto;
+  box-shadow: 2px 2px 8px #202020;
+  position: relative;
+  display: grid;
+  width: 260px;
+}
+.offered .course a, .offered .tutorial a, .offered .reference a {
+  text-decoration: none;
+}
+.offered .course a > h3, .offered .tutorial a > h3, .offered .reference a > h3 {
+  padding-left: 10px;
+  grid-column: 2;
+  grid-row: 1;
+  margin: 0;
+}
+.offered .course a > h3:hover, .offered .tutorial a > h3:hover, .offered .reference a > h3:hover {
+  text-decoration: underline;
+}
+.offered .course .img-holder, .offered .tutorial .img-holder, .offered .reference .img-holder {
+  height: 100%;
+  grid-column: 1;
+  grid-row: 1/span 2;
+  transition: all 0.3s;
+  transform: translate(-2px, 1px) scale(1.1) rotate(-5deg);
+  box-shadow: 1px 1px 5px #676767;
+}
+.offered .course .img-holder div, .offered .tutorial .img-holder div, .offered .reference .img-holder div {
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+.offered .course .img-holder.java, .offered .tutorial .img-holder.java, .offered .reference .img-holder.java {
+  background-image: linear-gradient(#E76F00, #8C4201);
+}
+.offered .course .img-holder.java div, .offered .tutorial .img-holder.java div, .offered .reference .img-holder.java div {
+  background-size: 70%;
+}
+.offered .course .img-holder.pjs div, .offered .tutorial .img-holder.pjs div, .offered .reference .img-holder.pjs div {
+  background-size: 115%;
+}
+.offered .course:hover .img-holder, .offered .tutorial:hover .img-holder, .offered .reference:hover .img-holder {
+  transform: translate(-8px, 1px) scale(1.3) rotate(-8deg);
+}
+.offered .course .img-holder.two, .offered .tutorial .img-holder.two, .offered .reference .img-holder.two {
+  background-image: linear-gradient(#E34E24 50%, #1173BC 50%);
+}
+.offered .course .img-holder.two div, .offered .tutorial .img-holder.two div, .offered .reference .img-holder.two div {
+  width: 100%;
+  height: 50%;
+  background-position: center;
+  background-size: 75%;
+}
+.offered .course:not(.reference)::after, .offered .tutorial:not(.reference)::after, .offered .reference:not(.reference)::after {
+  font-size: 11px;
+  position: absolute;
+  background-color: #10D15A;
+  transform: translate(-50%) rotate(-45deg) translate(0, -30px);
+  transform-origin: center -50px;
+  border-radius: 0 0 50% 50%;
+  box-shadow: 2px 2px 8px #202020;
+  padding: 3px 20px;
+  top: 50%;
+  left: 0;
+}
+.offered .course::after {
+  content: "COURSE";
+}
+.offered .tutorial::after {
+  content: "TUTORIAL";
+}
+.offered .tags {
+  justify-self: end;
+  grid-column: 2;
+  grid-row: 2;
+}
+.offered .tags .tag {
+  display: inline-block;
+  margin-right: 5px;
+}
+.offered .tags .tag:not(div) {
+  cursor: pointer;
+}
+.offered .tags .tag:is(div) {
+  cursor: default;
+}
+.offered .tags .tag:hover {
+  color: #FEFEFE;
+}
+
+.noneT {
+  color: #676767;
+}
+
+.htmlT, .cssT {
+  font-family: "Play", arial bold, sans-serif;
+}
+
+.htmlT {
+  color: #E34E24;
+}
+
+.cssT {
+  color: #1173BC;
+}
+
+.cppT {
+  color: #0080CD;
+}
+
+.jsT {
+  color: #67A969;
+}
+
+.pjsT {
+  color: #012542;
+}
+
+.javaT {
+  color: #E76F00;
+}
+
+.pythonT {
+  color: #4A98C8;
+}
+
+.rubyT {
+  color: #F05336;
+}
+
+.jqT {
+  color: #3558A8;
+}
+
+.phpT {
+  color: #007AFF;
+}
+
+a.tag, div.tag {
+  background-color: rgba(255, 255, 255, 0);
+  border: solid 2px #10D15A;
+  font-family: "Play", arial bold, sans-serif;
+  color: #10D15A;
+  text-decoration: none;
+  border-radius: 5px;
+  margin-right: 5px;
+  padding: 4px;
+}
+
+a.tag:hover, div.tag:hover {
+  background-color: #10D15A;
+  color: #FEFEFE;
+  text-decoration: none;
+}
+
+.tag.html {
+  color: #E34E24;
+  border: solid 2px #E34E24;
+}
+
+.tag.css {
+  color: #1173BC;
+  border: solid 2px #1173BC;
+}
+
+.tag.cpp {
+  color: #0080CD;
+  border: solid 2px #0080CD;
+}
+
+.tag.javascript {
+  color: #67A969;
+  border: solid 2px #67A969;
+}
+
+.tag.pjs {
+  color: #012542;
+  border: solid 2px #012542;
+}
+
+.tag.java {
+  color: #E76F00;
+  border: solid 2px #E76F00;
+}
+
+.tag.python {
+  color: #4A98C8;
+  border: solid 2px #4A98C8;
+}
+
+.tag.ruby, .tag.jquery, .tag.php {
+  background-color: #10D15A;
+  color: #FEFEFE;
+}
+
+.tag.html:hover {
+  background-color: #E34E24;
+}
+
+.tag.css:hover {
+  background-color: #1173BC;
+}
+
+.tag.cpp:hover {
+  background-color: #0080CD;
+}
+
+.tag.javascript:hover {
+  background-color: #67A969;
+}
+
+.tag.pjs:hover {
+  background-color: #012542;
+}
+
+.tag.java:hover {
+  background-color: #E76F00;
+}
+
+.tag.python:hover {
+  background-color: #4A98C8;
 }
 
 .great-idea {
@@ -1226,7 +1535,33 @@ section:not(.account-container) h2 {
   margin: 0;
 }
 .code-playground .project-title {
+  width: max-content;
   margin-left: 1.5rem;
+  grid-template-columns: auto max-content;
+  align-items: center;
+  column-gap: 0.5rem;
+  display: grid;
+}
+.code-playground .project-title span {
+  width: 100%;
+  border: none;
+  outline: none;
+  font-size: 1.8rem;
+  background: none;
+  font-family: "Play", arial bold, sans-serif;
+  border-bottom: 2px solid transparent;
+  margin-bottom: 0.25rem;
+  padding: 0 0.5rem;
+}
+.code-playground .project-title span:focus {
+  border-bottom: 2px solid #202020;
+}
+.code-playground .project-title button {
+  font-weight: bold;
+  color: #676767;
+  background: none;
+  cursor: pointer;
+  border: none;
 }
 .code-playground .layout-options {
   display: flex;
@@ -1311,6 +1646,9 @@ section:not(.account-container) h2 {
 }
 .code-playground .playground-footer .action-buttons * {
   margin: 0;
+  display: flex;
+  column-gap: 0.25rem;
+  align-items: center;
 }
 .code-playground.side-by-side .ace-editor {
   grid-column: 1;
@@ -1369,6 +1707,7 @@ section:not(.account-container) h2 {
   grid-row: 1/-1;
   height: 64px;
   width: 64px;
+  border: 3px solid #FFFF64;
 }
 .code-playground .project-info .user-info .user-name {
   width: 100%;
@@ -1376,6 +1715,7 @@ section:not(.account-container) h2 {
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
+  display: block;
   grid-row: 1;
   margin: 0;
 }
@@ -1387,6 +1727,20 @@ section:not(.account-container) h2 {
   align-self: start;
   grid-column: 2;
   grid-row: 2;
+}
+.code-playground .project-info .project-details {
+  display: grid;
+  align-items: center;
+  justify-self: start;
+  box-sizing: content-box;
+  background-color: #FEFEFE;
+  grid-template-columns: max-content max-content;
+  box-shadow: 2px 2px 8px #202020;
+  grid-auto-rows: 1fr;
+  border-radius: 10px;
+  column-gap: 1rem;
+  padding: 1rem;
+  width: 264px;
 }
 
 .language-list {
@@ -1409,6 +1763,36 @@ section:not(.account-container) h2 {
 }
 .language-list a:hover {
   background-color: rgba(103, 103, 103, 0.8);
+}
+
+button.withSymbol {
+  display: flex;
+  column-gap: 0.25rem;
+  align-items: center;
+}
+
+.padded-container {
+  padding: 1rem;
+}
+.padded-container h2 {
+  text-align: left !important;
+}
+
+.course-article {
+  display: block;
+  padding: 0.5rem;
+  border: 1px solid #676767;
+  text-decoration: none;
+}
+.course-article:hover {
+  text-decoration: underline;
+}
+.course-article:first-of-type {
+  margin-top: 0.5rem;
+  border-radius: 10px 10px 0 0;
+}
+.course-article:last-of-type {
+  border-radius: 0 0 10px 10px;
 }
 
 .card {

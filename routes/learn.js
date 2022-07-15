@@ -7,7 +7,8 @@ const availableLanguages = require('../data/available-ace-editor-languages').sup
 
 router
     .get('/learn', controller.getLearnHome)
-    .get('/course/:courseCode', controller.getCourse)
+    .get('/course/:courseId', controller.getCourse)
+    .get('/article/:articleId', controller.getCourseArticle)
     .get('/code/new', controller.getNewPlayground)
     .get('/code/new/:type', controller.getCodePlayground)
     .get('/code/project/:projectId', controller.getUserProject)

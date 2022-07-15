@@ -3,6 +3,7 @@ const Schema = mongoose.Schema
 
 const editorThemes = require('../data/editorThemes')
 const codeThemes = require('../data/codeThemes')
+const Project = require('./project')
 
 const userSchema = new Schema({
     username: {
@@ -19,8 +20,8 @@ const userSchema = new Schema({
     },
     displayName: {
         type: String,
-        default: () => {
-            return this.firstName + " " + this.lastName
+        default: function() {
+            return this.firstName + ' ' + this.lastName
         },
         required: false
     },
@@ -76,9 +77,17 @@ const userSchema = new Schema({
         required: false,
         default: false
     },
-
+    completedCourseSections: [{
+        type: Schema.Types.ObjectId,
+        required: false,
+        ref: 'Article'
+    }],
     resetToken: String,
     resetTokenExpiration: Date
 })
+
+userSchema.methods.getProjects = async function() {
+    return await Project.find({ userId: this._id })
+}
 
 module.exports = mongoose.model('User', userSchema)

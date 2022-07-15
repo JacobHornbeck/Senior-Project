@@ -3,14 +3,13 @@ const { validationResult } = require("express-validator")
 const User = require('../models/user')
 const jwt = require("jsonwebtoken")
 
-const nodemailer = require('nodemailer')
-const sendgridTransport = require('nodemailer-sendgrid-transport')
-
-const transporter = nodemailer.createTransport(sendgridTransport({
-    auth: {
-        api_key: process.env.mailerAPI
-    }
-}))
+const {
+    AccountCreated,
+    AccountUpdated,
+    EmailChanged,
+    NewEmailConfirmation,
+    RequestData
+} = require('../data/nodeMailer')
 
 exports.getLogin = (req, res, next) => {
     res.render('auth/login', {
@@ -91,12 +90,12 @@ exports.postLogin = (req, res, next) => {
             type:     'error'
         })
         req.flash('previous', {
-            email: req.body.email
+            username: req.body.username
         })
         return res.redirect('/login')
     }
 
-    User.findOne({email: req.body.email.toLowerCase()})
+    User.findOne({ username: req.body.username.toLowerCase() })
         .then(user => {
             if (!user) {
                 req.flash('message', {
@@ -110,6 +109,19 @@ exports.postLogin = (req, res, next) => {
                 .then((passwordsMatch) => {
                     if (passwordsMatch) {
                         if (!user.emailConfirmed) {
+                            AccountCreated(
+                                user.email,
+                                req.body.firstname + " " + req.body.lastname,
+                                ((process.env.NODE_ENV === 'development') ?
+                                    ('http://localhost:'+process.env.PORT) :
+                                    ('https://genius-coding.herokuapp.com')) + '/confirm-email/' + emailConfirmationToken)
+                                .catch(err => {
+                                    req.flash('message', {
+                                        content:  'Couldn\'t send confirmation email, please contact support',
+                                        type:     'error'
+                                    })
+                                    res.redirect('/login')
+                                })
                             req.flash('message', {
                                 content:  'Please confirm your email',
                                 type:     'error'
@@ -131,9 +143,21 @@ exports.postLogin = (req, res, next) => {
                     })
                     res.redirect('/login')
                 })
-                .catch(err => console.log(err))
+                .catch(err => {
+                    req.flash('message', {
+                        content:  'Something went wrong, please try again',
+                        type:     'error'
+                    })
+                    res.redirect('/')
+                })
         })
-        .catch(err => console.log(err))
+        .catch(err => {
+            req.flash('message', {
+                content:  'Something went wrong, please try again',
+                type:     'error'
+            })
+            res.redirect('/')
+        })
 }
 
 exports.postSignUp = (req, res, next) => {
@@ -169,18 +193,20 @@ exports.postSignUp = (req, res, next) => {
                 { data: req.body.email },
                 'the most secret jwt security token secret',
                 { expiresIn: '12h' })
-            transporter.sendMail({
-                to: req.body.email,
-                from: 'Account Management<Jacob.Hornbeck@outlook.com>',
-                subject: 'Account Creation Successful!',
-                html: `<section>
-                    <h1 style="text-align: center;">Successful!</h1>
-                    <p style="text-align: center;">${req.body.firstname} ${req.body.lastname}, you successfully signed up for an account!</p>
-                    <p style="text-align: center;">You must <a href="${(process.env.NODE_ENV === 'development') ? ('http://localhost:'+process.env.PORT) : ('https://genius-coding.herokuapp.com')}/confirm-email/${emailConfirmationToken}">confirm your email</a> before you can login.<br>
-                                                   This link will expire in 12 hours.</p>
-                </section>`
-            })
-            .catch(err => console.log(err))
+            
+            AccountCreated(
+                req.body.email,
+                req.body.firstname + " " + req.body.lastname,
+                ((process.env.NODE_ENV === 'development') ?
+                    ('http://localhost:'+process.env.PORT) :
+                    ('https://genius-coding.herokuapp.com')) + '/confirm-email/' + emailConfirmationToken)
+                .catch(err => {
+                    req.flash('message', {
+                        content:  'Couldn\'t send confirmation email, please contact support',
+                        type:     'error'
+                    })
+                    res.redirect('/')
+                })
 
             req.flash('message', {
                 content:  'Account created! Please confirm your email address',
@@ -192,6 +218,8 @@ exports.postSignUp = (req, res, next) => {
 
 exports.postUpdateSettings = (req, res, next) => {
     const showLineNumbers = req.body.showLineNumbers ? req.body.showLineNumbers : false
+    let previousEmail = ''
+    let emailChanged = false
 
     const errors = validationResult(req)
     if (!errors.isEmpty()) {
@@ -215,9 +243,6 @@ exports.postUpdateSettings = (req, res, next) => {
         return res.redirect('/user/account-settings')
     }
 
-    // console.log(req.body)
-
-    // return res.redirect('/user/account-settings')
     User.findById(req.user._id)
         .then(user => {
             let redirectTo = ""
@@ -228,8 +253,7 @@ exports.postUpdateSettings = (req, res, next) => {
                 })
                 return res.redirect('/')
             }
-            let {password, ...loadedUser} = user._doc
-            if (loadedUser.username != req.body.username) {
+            if (user.username != req.body.username) {
                 req.flash('message', {
                     content:  'You cannot change your username!',
                     type:     'error'
@@ -249,28 +273,78 @@ exports.postUpdateSettings = (req, res, next) => {
                 })
                 return res.redirect('/user/account-settings')
             }
+            previousEmail = user.email
 
             // Update User Settings
-            if (req.body.email != loadedUser.email) {
-                loadedUser.email = req.body.email
-                loadedUser.emailConfirmed = false
+            if (req.body.email != user.email) {
+                user.email = req.body.email.toLowerCase()
+                user.emailConfirmed = false
                 req.session.destroy()
+                emailChanged = true
                 redirectTo = '/'
             }
-            loadedUser.firstname = req.body.firstname
-            loadedUser.lastname = req.body.lastname
-            loadedUser.displayName = req.body.displayName
-            loadedUser.bio = req.body.bio
-            loadedUser.profileAvatar = req.body.profileAvatar
-            loadedUser.profileBackground = req.body.profileBackground
-            loadedUser.editorTheme = req.body.editorTheme
-            loadedUser.editorLayout = req.body.editorLayout
-            loadedUser.codeTheme = req.body.codeTheme
-            loadedUser.showLineNumbers = showLineNumbers
+            user.firstname = req.body.firstname
+            user.lastname = req.body.lastname
+            user.displayName = req.body.displayName
+            user.bio = req.body.bio
+            user.profileAvatar = req.body.profileAvatar
+            user.profileBackground = req.body.profileBackground
+            user.editorTheme = req.body.editorTheme
+            user.editorLayout = req.body.editorLayout
+            user.codeTheme = req.body.codeTheme
+            user.showLineNumbers = showLineNumbers
 
-            if (redirectTo.length > 0)
-                return res.redirect(redirectTo)
-            return res.redirect('/user/account-settings')
+            return user.save()
+                .then(() => {
+                    if (emailChanged) {
+                        const emailConfirmationToken = jwt.sign(
+                            { data: req.body.email },
+                            'the most secret jwt security token secret',
+                            { expiresIn: '12h' })
+                        EmailChanged(
+                            previousEmail,
+                            user.firstName + ' ' + user.lastName,
+                            req.body.email).catch(err => {
+                                req.flash('message', {
+                                    content:  'Couldn\'t send confirmation email, please contact support',
+                                    type:     'error'
+                                })
+                                res.redirect('/user/account-settings')
+                            })
+                        NewEmailConfirmation(
+                            req.body.email,
+                            user.firstName + ' ' + user.lastName,
+                            ((process.env.NODE_ENV === 'development') ?
+                                ('http://localhost:'+process.env.PORT) :
+                                ('https://genius-coding.herokuapp.com')) + '/confirm-email/' + emailConfirmationToken)
+                                .catch(err => {
+                                    req.flash('message', {
+                                        content:  'Couldn\'t send confirmation email, please contact support',
+                                        type:     'error'
+                                    })
+                                    res.redirect('/user/account-settings')
+                                })
+                        req.flash('message', {
+                            content:  'Email changed, please confirm new email',
+                            type:     'success'
+                        })
+                    }
+                    AccountUpdated(
+                        previousEmail,
+                        user.firstName + ' ' + user.lastName)
+                        .catch(err => {
+                            req.flash('message', {
+                                content:  'Couldn\'t send confirmation email, please contact support',
+                                type:     'error'
+                            })
+                            res.redirect('/user/account-settings')
+                        })
+
+                    if (redirectTo.length > 0)
+                        return res.redirect(redirectTo)
+                    return res.redirect('/user/account-settings')
+                })
+
         })
         .catch(err => {
             req.flash('message', {
@@ -284,7 +358,11 @@ exports.postUpdateSettings = (req, res, next) => {
                 displayName: req.body.displayName,
                 bio: req.body.bio,
                 profileAvatar: req.body.profileAvatar,
-                profileBackground: req.body.profileBackground
+                profileBackground: req.body.profileBackground,
+                editorTheme: req.body.editorTheme,
+                editorLayout: req.body.editorLayout,
+                codeTheme: req.body.codeTheme,
+                showLineNumbers: showLineNumbers
             })
             return res.redirect('/user/account-settings')
         })
@@ -296,5 +374,52 @@ exports.usernameTaken = (req, res, next) => {
             if (user) return res.json({ "taken": true })
             else return res.json({ "taken": false })
         })
-        .catch(err => console.log(err))
+        .catch(err => {
+            res.status(500).json({ "taken": true, "error": "Something went wrong" })
+        })
+}
+
+
+exports.getRequestData = async (req, res, next) => {
+    let user = await User.findById(req.user._id)
+        user = user._doc
+    delete user.password
+    res.render('legal/request-my-data', {
+        pageTitle: 'Request Your Data',
+        user: user
+    })
+}
+
+exports.postRequestData = (req, res, next) => {
+    User.findById(req.user._id)
+        .then(user => {
+            let dataList = `
+                <ul>
+                    <li>FirstName: ${user.firstName}</li>
+                    <li>LastName: ${user.lastName}</li>
+                    <li>Email: ${user.email}</li>
+                    <li>DisplayName: ${user.displayName}</li>
+                    <li>Username: ${user.username}</li>
+                    <li>Bio: ${user.bio}</li>
+                </ul>
+                <p>
+                    The only other things we have stored that relate to you
+                    are other site settings that you set.
+                </p>`
+            return RequestData(user.email, dataList)
+        })
+        .then(() => {
+            req.flash('message', {
+                content: 'You data has been sent via email, you should receive it soon. If not, check spam',
+                type: 'success'
+            })
+            res.redirect('/request-my-data')
+        })
+        .catch(() => {
+            req.flash('message', {
+                content:  'Something didn\'t work out, please try again',
+                type:     'error'
+            })
+            res.redirect('/request-my-data')
+        })
 }

@@ -3,6 +3,8 @@ const Message = require("../models/message")
 const Vote = require("../models/vote")
 const User = require("../models/user")
 
+const { ForumNotification } = require('../data/nodeMailer')
+
 exports.postMessage = (req, res, next) => {
     const urlFrom = req.body.urlFrom
     const errors = validationResult(req)
@@ -53,6 +55,9 @@ exports.postMessage = (req, res, next) => {
                     connectedContentType: req.body['connectedContentType']
                 })
             }
+
+            message.getEmailsToNotify()
+
             return message.save()
         })
         .then(() => {

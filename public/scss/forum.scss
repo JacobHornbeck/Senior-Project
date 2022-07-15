@@ -23,10 +23,17 @@
         border-radius: 10px;
         margin: 1rem 0.5rem;
         padding: 0.75rem;
-        &.connected {
+        &.connected.comment {
             grid-template-columns: auto;
             border: none;
             margin: 0;
+        }
+        &:not(.question) .answers {
+            display: none;
+        }
+        &.answer {
+            margin: 1rem 0.5rem 0;
+            border-color: rgba($primary-color, 0.5);
         }
 
         h4, p {
@@ -123,6 +130,13 @@
                 }
             }
         }
+        .no-comments, .no-answers {
+            padding: 0.5rem;
+        }
+        button[type="submit"] {
+            margin-top: 0.5rem;
+            padding: 0.25rem 0.75rem;
+        }
         .comments {
             grid-column: 2;
             border: 1px solid $primary-color;
@@ -145,10 +159,6 @@
                 top: -1rem;
             }
 
-            .no-comments {
-                padding: 0.5rem;
-            }
-
             .replyToForm {
                 grid-column: 2;
                 width: calc(100% - 1.5rem);
@@ -157,14 +167,32 @@
                 .input-container {
                     margin-top: 0.75rem;
                 }
-                input[type="submit"] {
-                    margin-top: 0.5rem;
-                    padding: 0.25rem 0.75rem;
-                }
             }
         }
-        &.question .comments::before {
+        &.question > .comments::before {
             left: 5.75rem;
+        }
+        .answers {
+            grid-column: 2;
+
+            .answerForm {
+                display: none;
+                position: relative;
+
+                &::before {
+                    content: '';
+                    position: absolute;
+                    border: 0.5rem solid transparent;
+                    border-bottom-color: $primary-color;
+                    height: 0; width: 0;
+                    left: 1.5em;
+                    top: -1rem;
+                }
+
+                &.show {
+                    display: block;
+                }
+            }
         }
     }
 }

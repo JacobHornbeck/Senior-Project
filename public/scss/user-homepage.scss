@@ -81,6 +81,34 @@
             @include box-shadow;
             width: 100%;
             margin: 0;
+
+            .project-list {
+                padding: 0.25rem 1rem 0.5rem;
+                width: 100%;
+                overflow: hidden;
+                h4 { margin: 0; text-align: center; }
+                a {
+                    display: flex;
+                    column-gap: 0.25rem;
+                    align-items: center;
+                    color: $primary-color;
+                    @include box-shadow();
+                    padding: 0.5rem 0.75rem;
+                    text-decoration: none;
+                    @include ellipses();
+                    font-size: 1.2rem;
+                    width: 100%;
+
+                    span {
+                        font-size: 0.9rem;
+                        font-family: $heading-font;
+                        color: $accent2-color;
+                    }
+                    & + a {
+                        margin-top: 0.75rem;
+                    }
+                }
+            }
         }
     }
 }

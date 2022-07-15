@@ -5,11 +5,7 @@
             <section class="user-info">
                 <h2 class="name"><%= user.firstname %> <%= user.lastname %></h2>
                 <p class="bio">
-                    <% if (user.bio) { %>
-                        <%= user.bio %>
-                    <% } else { %>
-                        Click to add a bio
-                    <% } %>
+                    <%= user.bio ? user.bio : "No bio yet" %>
                 </p>
             </section>
         </div>
@@ -42,8 +38,15 @@
                 </div>
             </section>
             <section class="user-widget">
-                <h2>User Widget</h2>
-                <p><a href="/code/project">User project</a></p>
+                <h2>User Projects</h2>
+                <div class="project-list">
+                    <% for (let project of userProjects) { %>
+                        <a href="/code/project/<%= project._id %>" class="user-project"><span>[<%= project.language.toUpperCase() %>]</span><%= project.title %></a>
+                    <% } %>
+                    <% if (userProjects.length < 1) { %>
+                        <h4>You don't have any projects</h4>
+                    <% } %>
+                </div>
             </section>
         </div>
     </div>

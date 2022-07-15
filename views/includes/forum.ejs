@@ -15,11 +15,11 @@
                 <label for="message-type" class="form-label">Select Type</label>
             </div>
             <input type="hidden" name="urlFrom" value="<%= previous ? previous.urlFrom : path %>">
-            <input type="hidden" name="connectedContent" value="<%= contentType == 'project' ? projectId : (contentType == 'article' ? articleId : (contentType == 'reference' ? referenceId : (contentType == 'tutorial' ? tutorialId : ''))) %>">
+            <input type="hidden" name="connectedContent" value="<%= contentType == 'Project' ? projectId : (contentType == 'Article' ? articleId : (contentType == 'Reference' ? referenceId : (contentType == 'Tutorial' ? tutorialId : ''))) %>">
             <input type="hidden" name="connectedContentType" value="<%= contentType %>">
             <input type="hidden" name="connectedMessage" value="">
             <%- include('csrf-token.ejs') %>
-            <input type="submit" value="Post">
+            <button type="submit" class="btn withSymbol"><span class="material-symbols-outlined">send</span>Post</button>
         </form>
     <% } else { %>
         <p>Please <a href='/login?redirectTo=<%= encodeURIComponent(path) %>'>login</a> or <a href='/signup'>signup</a> to post a question or comment!</p>
@@ -30,7 +30,7 @@
             <section class="message <%= message.type %>" id="cg-<%= message._id %>">
                 <div class="votes">
                     <button onclick="vote('<%= message._id %>','up')" class="up <%= message.activatedUp ? 'activated' : '' %>"></button>
-                    <span class="numVotes"><%= message.votes || 1 %></span>
+                    <span class="numVotes"><%= message.votes %></span>
                     <button onclick="vote('<%= message._id %>','down')" class="down <%= message.activatedDown ? 'activated' : '' %>"></button>
                 </div>
                 <h4><%= message.userId.displayName %> <span class="date"><%= message.sendDate.toDateString() %></span></h4>
@@ -48,22 +48,78 @@
                             <p><%= comment.content %></p>
                         </section>
                     <% } %>
-                   <% if (message.comments.length < 1) { %>
-                       <p class="no-comments">No comments yet. Be the first to comment!</p>
-                   <% } %>
+                    <% if (message.comments.length < 1) { %>
+                        <p class="no-comments">No comments yet. Be the first to comment!</p>
+                    <% } %>
                     <form class="replyToForm" action="/post-message" method="post">
                         <div class="input-container">
-                            <textarea name="message-content" id="message-content2"></textarea>
+                            <textarea name="message-content" id="message-content2" required></textarea>
                             <label for="message-content2" class="form-label">Enter Message</label>
                         </div>
                         <input type="hidden" name="message-type" value="comment">
                         <input type="hidden" name="urlFrom" value="<%= previous ? previous.urlFrom : path %>">
-                        <input type="hidden" name="connectedContent" value="<%= contentType == 'project' ? projectId : (contentType == 'article' ? articleId : (contentType == 'reference' ? referenceId : (contentType == 'tutorial' ? tutorialId : ''))) %>">
+                        <input type="hidden" name="connectedContent" value="<%= contentType == 'Project' ? projectId : (contentType == 'Article' ? articleId : (contentType == 'Reference' ? referenceId : (contentType == 'Tutorial' ? tutorialId : ''))) %>">
                         <input type="hidden" name="connectedContentType" value="<%= contentType %>">
                         <input type="hidden" name="connectedMessage" value="<%= message._id %>">
                         <%- include('csrf-token.ejs') %>
-                        <input type="submit" value="Comment">
+                        <button type="submit" class="btn withSymbol"><span class="material-symbols-outlined">comment</span>Comment</button>
                     </form>
+                </div>
+                <div class="answers">
+                    <form class="answerForm" action="/post-message" method="post">
+                        <div class="input-container">
+                            <textarea name="message-content" id="message-content3" required></textarea>
+                            <label for="message-content3" class="form-label">Enter Message</label>
+                        </div>
+                        <input type="hidden" name="message-type" value="answer">
+                        <input type="hidden" name="urlFrom" value="<%= previous ? previous.urlFrom : path %>">
+                        <input type="hidden" name="connectedContent" value="<%= contentType == 'Project' ? projectId : (contentType == 'Article' ? articleId : (contentType == 'Reference' ? referenceId : (contentType == 'Tutorial' ? tutorialId : ''))) %>">
+                        <input type="hidden" name="connectedContentType" value="<%= contentType %>">
+                        <input type="hidden" name="connectedMessage" value="<%= message._id %>">
+                        <%- include('csrf-token.ejs') %>
+                        <button type="submit" class="btn withSymbol"><span class="material-symbols-outlined">send</span>Answer</button>
+                    </form>
+                    <% for (let answer of message.answers) { %>
+                        <section class="message answer connected" id="cg-<%= answer._id %>">
+                            <div class="votes">
+                                <button onclick="vote('<%= answer._id %>','up')" class="up <%= answer.activatedUp ? 'activated' : '' %>"></button>
+                                <span class="numVotes"><%= answer.votes %></span>
+                                <button onclick="vote('<%= answer._id %>','down')" class="down <%= answer.activatedDown ? 'activated' : '' %>"></button>
+                            </div>
+                            <h4><%= answer.userId.displayName %> <span class="date"><%= answer.sendDate.toDateString() %></span></h4>
+                            <p><%= answer.content %></p>
+                            <div class="replyTo">
+                                <a href="javascript: openCommentOnForm('cg-<%= answer._id %>')" class="commentOn">Comments</a>
+                            </div>
+                            <div class="comments">
+                                <% for (let answerComment of answer.comments) { %>
+                                    <section class="message comment connected">
+                                        <h4><%= answerComment.userId.displayName %> <span class="date"><%= answerComment.sendDate.toDateString() %></span></h4>
+                                        <p><%= answerComment.content %></p>
+                                    </section>
+                                <% } %>
+                                <% if (answer.comments.length < 1) { %>
+                                    <p class="no-comments">No comments yet. Be the first to comment!</p>
+                                <% } %>
+                                <form class="replyToForm" action="/post-message" method="post">
+                                    <div class="input-container">
+                                        <textarea name="message-content" id="message-content4" required></textarea>
+                                        <label for="message-content4" class="form-label">Enter Message</label>
+                                    </div>
+                                    <input type="hidden" name="message-type" value="comment">
+                                    <input type="hidden" name="urlFrom" value="<%= previous ? previous.urlFrom : path %>">
+                                    <input type="hidden" name="connectedContent" value="<%= contentType == 'Project' ? projectId : (contentType == 'Article' ? articleId : (contentType == 'Reference' ? referenceId : (contentType == 'Tutorial' ? tutorialId : ''))) %>">
+                                    <input type="hidden" name="connectedContentType" value="<%= contentType %>">
+                                    <input type="hidden" name="connectedMessage" value="<%= answer._id %>">
+                                    <%- include('csrf-token.ejs') %>
+                                    <button type="submit" class="btn withSymbol"><span class="material-symbols-outlined">comment</span>Comment</button>
+                                </form>
+                            </div>
+                        </section>
+                    <% } %>
+                    <% if (message.answers.length < 1) { %>
+                        <p class="no-answers">No answers yet. Be the first to answer!</p>
+                    <% } %>
                 </div>
             </section>
         <% } %>

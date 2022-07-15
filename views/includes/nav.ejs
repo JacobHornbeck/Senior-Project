@@ -14,8 +14,8 @@
             <% if (links.length > 0) { %>
                 <% links.forEach((link) => { %>
                     <li class="nav-list-item" <%- link.class ? `title='${link.title}'` : '' %>>
-                        <a class="nav-list-item-link <%= link.class ? 'with-material' : '' %> <%= (link.href === '/' ? (link.href === path ? 'active' : '') : (path.includes(link.href) ? 'active' : '')) %>" data-temp="<%= path %>" href="<%= link.href %>">
-                            <%- link.class ? `<span class="${link.class}">${link.text}</span>` : link.text %><%- link.class ? `<span class="link-message">${link.title}</span>` : '' %>
+                        <a class="nav-list-item-link with-material <%= (link.href === '/' ? (link.href === path ? 'active' : '') : (path.includes(link.href) ? 'active' : '')) %>" data-temp="<%= path %>" href="<%= link.href %>">
+                            <span class="material-symbols-outlined"><%= link.text %></span><span class="link-message"><%= link.title %></span>
                         </a>
                     </li>
                 <% }) %>

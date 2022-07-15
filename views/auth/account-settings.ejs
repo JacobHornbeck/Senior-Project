@@ -19,11 +19,11 @@
                     <label for="email" class="form-label">Email</label>
                 </div>
                 <div class="input-container">
-                    <input type="text" name="firstname" id="firstname" required value="<%= previous ? previous.firstName : user.firstName %>">
+                    <input type="text" name="firstname" id="firstname" required value="<%= previous ? previous.firstname : user.firstName %>">
                     <label for="firstname" class="form-label">First name</label>
                 </div>
                 <div class="input-container">
-                    <input type="text" name="lastname" id="lastname" required value="<%= previous ? previous.lastName : user.lastName %>">
+                    <input type="text" name="lastname" id="lastname" required value="<%= previous ? previous.lastname : user.lastName %>">
                     <label for="lastname" class="form-label">Last name</label>
                 </div>
             </fieldset>
@@ -49,12 +49,12 @@
                 </div>
             </fieldset>
             <fieldset>
-                <legend>Editor & Code Example Settings</legend>
+                <legend>Code Example & Editor Settings</legend>
                 <div class="input-container">
                     <input type="text" name="codeTheme" id="codeTheme" required value="<%= user.codeTheme %>">
                     <label for="codeTheme" class="form-label">Code Example Theme</label>
                 </div>
-                <label class="container-label" for="showLineNumbers"><input type="checkbox" name="showLineNumbers" id="showLineNumbers" onchange="this.value = this.checked" value="false">Show line numbers on code examples</label>
+                <label class="container-label" for="showLineNumbers"><input type="checkbox" name="showLineNumbers" id="showLineNumbers" onchange="this.value = this.checked" value="<%= user.showLineNumbers ? (user.showLineNumbers ? 'true' : 'false') : 'false' %>" <%= user.showLineNumbers ? 'checked' : '' %>>Show line numbers on code examples</label>
                 <div class="input-container">
                     <input type="text" name="editorTheme" id="editorTheme" required value="<%= user.editorTheme %>">
                     <label for="editorTheme" class="form-label">Code Editor Theme</label>
@@ -66,6 +66,28 @@
             </fieldset>
             <%- include('../includes/csrf-token.ejs') %>
             <input type="submit" value="Update">
+        </form>
+        <hr>
+        <form action="/request-my-data" class="settings-update-form" method="get">
+            <h3>Request My Data</h3>
+            <p>
+                Even though you can see all you info here that is stored on our
+                database, you can request your data in an email format.
+            </p>
+            <input type="submit" value="Request My Data">
+        </form>
+        <hr>
+        <form action="/user/delete-account" class="settings-update-form" method="post">
+            <h3>Delete My Account</h3>
+            <p>
+                If you no longer want an account, you can delete it. But know
+                that if you delete it, all your projects, comments, questions,
+                and answers will not be in your name. And you cannot undo the
+                delete. Once you delete it, all your progress on any course
+                will be lost.
+            </p>
+            <%- include('../includes/csrf-token.ejs') %>
+            <input type="submit" class="danger-button" value="Delete My Account">
         </form>
     </main>
 

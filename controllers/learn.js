@@ -1,15 +1,14 @@
 const { validationResult } = require("express-validator")
 
 const languages = require('../data/available-ace-editor-languages')
-const Message = require('../models/message')
 const Project = require('../models/project')
-const Vote = require('../models/vote')
+const Course = require('../models/course')
+const Article = require('../models/article')
 
-/* List of sections in the course
-What is HTML?
-Basic HTML tags
-...
-*/
+const niceDate = (date) => {
+    let d = new Date(date)
+    return `${d.getMonth()}/${d.getDate()}/${d.getFullYear()} ${d.getHours() > 12 ? d.getHours() - 12 : d.getHours()}:${d.getMinutes() < 10 ? '0' + d.getMinutes() : d.getMinutes()}`
+}
 
 exports.getLearnHome = (req, res, next) => {
     res.render('learn/learn-home', {
@@ -17,14 +16,16 @@ exports.getLearnHome = (req, res, next) => {
     })
 }
 
-exports.getCourse = (req, res, next) => {
-    console.log(req.params.courseCode)
+exports.getCourse = async (req, res, next) => {
+    const course = await Course.findById(req.params.courseId).populate('articles')
     res.render('learn/course', {
-        pageTitle: 'Course',
+        pageTitle: `Course - ${course.title}`,
+        course: course
     })
 }
 
-exports.getCourseArticle = (req, res, next) => {
+exports.getCourseArticle = async (req, res, next) => {
+    const article = await Article.findById(req.params.articleId)
     res.render('learn/course-article', {
         pageTitle: 'Course Article',
     })
@@ -48,7 +49,7 @@ exports.getUserProject = (req, res, next) => {
 
     Project.findById(req.params.projectId)
            .populate({ path: 'userId', select: ['displayName', 'username', 'profileAvatar']})
-           .then((userProject) => {
+           .then(async (userProject) => {
                 if (!userProject) {
                     req.flash('message', {
                         content: 'Can\t find that project!',
@@ -56,56 +57,25 @@ exports.getUserProject = (req, res, next) => {
                     })
                     return res.redirect('/')
                 }
+                const user = userProject.userId
 
-                Message.find({ connectedContent: userProject._id.toString(), connectedContentType: 'project' })
-                       .populate({ path: 'userId', select: ['displayName'] })
-                       .sort({ "type": -1, "votes": -1, "sendDate": -1 })
-                       .then((messages) => {
-                            Vote.find({ userId: req.user._id })
-                                .then((votes) => {
-                                    const gMessages = messages.filter(msg => !msg.connectedMessage)
-                                    const otherMessages = messages.filter(msg => msg.connectedMessage)
-                                    const mappedMessages = gMessages.map((message) => {
-                                        let connectedComments = []
-                                        for (let i = 0; i < otherMessages.length; i++) {
-                                            if (otherMessages[i].connectedMessage.toString() == message._id.toString())
-                                                connectedComments.push(otherMessages[i])
-                                        }
-                                        connectedComments.sort((a, b) => {
-                                            return a.sendDate - b.sendDate
-                                        })
-
-                                        message = {
-                                            ...message._doc,
-                                            activatedUp: (votes.filter((vote) => {
-                                                return (vote.messageId.toString() == message._id.toString() && vote.direction == 'up')
-                                            }).length > 0),
-                                            activatedDown: (votes.filter((vote) => {
-                                                return (vote.messageId.toString() == message._id.toString() && vote.direction == 'down')
-                                            }).length > 0),
-                                            comments: connectedComments
-                                        }
-                                        return message
-                                    })
-
-                                    const user = userProject.userId
-                                    
-                                    res.render('learn/coding/project', {
-                                        pageTitle: userProject.title,
-                                        projectCode: userProject.code,
-                                        programmingLanguage: userProject.language,
-                                        projectId: userProject._id,
-                                        messages: mappedMessages,
-                                        isOwn: (userProject.userId._id.toString() == req.user._id.toString()),
-                                        user: {
-                                            username: user.username,
-                                            displayName: user.displayName,
-                                            profileImg: user.profileAvatar
-                                        },
-                                        contentType: 'project'
-                                    })
-                                })
-                        })
+                res.render('learn/coding/project', {
+                    pageTitle: userProject.title,
+                    programmingLanguage: userProject.language,
+                    projectTitle: userProject.title,
+                    projectCode: userProject.code,
+                    projectId: userProject._id,
+                    projectCreated: niceDate(userProject.saveDate),
+                    projectUpdated: niceDate(userProject.editDate),
+                    messages: await userProject.getMessages(req.user._id),
+                    isOwn: (userProject.userId._id.toString() == req.user._id.toString()),
+                    user: {
+                        username: user.username,
+                        displayName: user.displayName,
+                        profileImg: user.profileAvatar
+                    },
+                    contentType: 'Project'
+                })
             })
 }
 
@@ -122,6 +92,7 @@ exports.getCodePlayground = (req, res, next) => {
     res.render('learn/coding/playground', {
         pageTitle: 'Code Playground',
         programmingLanguage: requestedLanguage,
+        projectTitle: 'New Project',
         projectCode: '',
         projectId: '',
         isOwn: false

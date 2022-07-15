@@ -45,6 +45,9 @@
             border-radius: 10px;
         }
     }
+    h3 {
+        margin-top: 0;
+    }
 }
 
 .container-label input {
@@ -59,4 +62,8 @@
     font-weight: bold;
     display: block;
     display: grid;
+}
+
+input[type="submit"].danger-button {
+    background-color: $color-html;
 }

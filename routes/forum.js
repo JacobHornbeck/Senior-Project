@@ -38,10 +38,10 @@ router
         body('connectedContentType')
             .custom(value => {
                 const types = [
-                    'project',
-                    'article',
-                    'tutorial',
-                    'reference'
+                    'Project',
+                    'Article',
+                    'Tutorial',
+                    'Reference'
                 ]
                 if (types.includes(value))
                     return true
@@ -51,28 +51,28 @@ router
         body('connectedContent')
             .custom((value, {req}) => {
                 switch (req.body.connectedContentType) {
-                    case "project":
+                    case "Project":
                         return Project
                             .findById(value)
                             .then(project => {
                                 if (!project) return Promise.reject('Project doesn\'t exist')
                             })
                     break;
-                    /* case "article":
+                    /* case "Article":
                         return Article
                             .findById(value)
                             .then(article => {
                                 if (!article) return Promise.reject('Article doesn\'t exist')
                             })
                     break;
-                    case "tutorial":
+                    case "Tutorial":
                         return Tutorial
                             .findById(value)
                             .then(tutorial => {
                                 if (!tutorial) return Promise.reject('Tutorial doesn\'t exist')
                             })
                     break;
-                    case "reference":
+                    case "Reference":
                         return Reference
                             .findById(value)
                             .then(reference => {
@@ -84,12 +84,10 @@ router
     ], controller.postMessage)
     .post('/forum/vote', limiter, [
         body('messageId')
-            .custom((value) => {
-                return Message.findOne({ _id: value.toLowerCase() })
-                    .then((message) => {
-                        if (!message)
-                            throw new Error('Invalid message!')
-                    })
+            .custom(async (value) => {
+                const message = await Message.findOne({ _id: value.toLowerCase() })
+                if (!message)
+                    throw new Error('Invalid message!')
             }),
         body('direction')
             .custom(value => {

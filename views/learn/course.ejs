@@ -1,0 +1,19 @@
+<%- include('../includes/head.ejs') %>
+</head>
+
+<body>
+    <%- include('../includes/nav.ejs') %>
+    <main class="non-transparent-background">
+        <div class="course-header-image"></div>
+        <section class="padded-container">
+            <h2><%= course.title %></h2>
+            <p><%= course.description %></p>
+            <hr>
+            <h3>Course Articles</h3>
+            <% for (let article of course.articles) { %>
+                <a href="/article/<%= article._id %>" class="course-article"><%= article.title %></a>
+            <% } %>
+        </section>
+    </main>
+
+<%- include('../includes/end.ejs') %>

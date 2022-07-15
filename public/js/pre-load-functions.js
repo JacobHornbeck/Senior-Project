@@ -65,15 +65,23 @@ function vote(message, direction) {
 
 
 /* Forum Commenting System */
-function openCommentOnForm(id) {
-    const comments = $(`#${id} .comments`)
-    if (comments.hasClass('open'))
+function openCommentOnForm(id, onlyCollapse = false) {
+    const comments = $(`#${id} > .comments`)
+    if (comments.hasClass('open') || onlyCollapse)
         comments.removeClass('open')
-    else
+    else {
         comments.addClass('open')
+        openAnswerForm(id, true)
+    }
 }
-function openAnswerForm(id) {
-
+function openAnswerForm(id, onlyCollapse = false) {
+    const answerForm = $(`#${id} .answerForm`)
+    if (answerForm.hasClass('show') || onlyCollapse)
+        answerForm.removeClass('show')
+    else {
+        answerForm.addClass('show')
+        openCommentOnForm(id, true)
+    }
 }
 /* Forum Commenting System */
 

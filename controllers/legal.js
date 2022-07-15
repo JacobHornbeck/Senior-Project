@@ -3,6 +3,8 @@ const Credit = require("../models/credit")
 exports.getPrivacyPolicy = (req, res, next) => {
     res.render('legal/privacy-policy', {
         pageTitle: 'Privacy Policy',
+        dev: process.env.NODE_ENV == 'development' ? true : false,
+        serverPort: process.env.PORT
     })
 }
 
