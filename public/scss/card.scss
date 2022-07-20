@@ -1,48 +1,68 @@
 @use 'variables' as *;
 
 .card {
-    background-color: $card-color;
-    grid-template-rows: 130px auto;
-    display: grid;
-    min-width: 260px;
+    height: 100px;
     overflow: hidden;
-    @include box-shadow(1px, 1px, 6px);
+    column-gap: 20px;
+    border-radius: 5px;
+    padding-right: 0.5rem;
+    background-color: #F1F1F1;
+    grid-template-rows: 50% 50%;
+    grid-template-columns: 100px auto;
+    @include box-shadow();
+    position: relative;
+    align-items: end;
+    display: grid;
+    width: 260px;
 
-    .image-holder {
-        display: flex;
-        flex-wrap: nowrap;
+    h3 {
+        grid-row: 1;
+        grid-column: 2;
+        margin: 0 0 0.5rem;
+    }
+    .img-holder {
+        height: 100%;
+        grid-column: 1;
+        grid-row: 1 / span 2;
+        transition: all 0.3s;
+        transform: translate(-2px, 1px) scale(1.1) rotate(-5deg);
+        box-shadow: 1px 1px 5px $primary-color;
+        
         div {
-            height: 130px;
             width: 100%;
-            border-radius: 0 !important;
+            height: 100%;
+            background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
-            background-size: fit;
         }
-        .html {
-            background-color: $color-html;
-            background-image: url('/images/site-images/card-images/html.png');
+        &.java {
+            background-image: linear-gradient(#E76F00,#8C4201);
         }
-        .css {
-            background-color: $color-css;
-            background-image: url('/images/site-images/card-images/css.png');
+        &.java div {
+            background-size: 70%;
         }
-        .cpp {
-            background-color: $color-cpp;
-            background-image: url('/images/site-images/card-images/cpp.png');
-        }
-        .python {
-            background-color: $color-python;
-            background-image: url('/images/site-images/card-images/python.png');
+        &.pjs div {
+            background-size: 115%;
         }
     }
-    .card-content {
-        padding: 1rem;
-        h3 { margin: 0; text-align: center; }
-        .btn { padding: 0.5rem 1rem; margin-top: 1rem; }
-        .btn-group {
-            display: flex;
-            justify-content: space-between;
+    &:hover .img-holder {
+        transform: translate(-8px, 1px) scale(1.3) rotate(-8deg);
+    }
+    .img-holder.two {
+        background-image: linear-gradient(#E34E24 50%,#1173BC 50%);
+        div {
+            width: 100%;
+            height: 50%;
+            background-position: center;
+            background-size: 75%;
         }
+    }
+    .btn {
+        grid-column: 2;
+        align-self: start;
+        padding: 0.25rem 1rem 0.3rem;
+        border-radius: 5px;
+        font-size: 0.95em;
+        margin: 0;
     }
 }

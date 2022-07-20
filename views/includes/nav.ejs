@@ -15,7 +15,7 @@
                 <% links.forEach((link) => { %>
                     <li class="nav-list-item" <%- link.class ? `title='${link.title}'` : '' %>>
                         <a class="nav-list-item-link with-material <%= (link.href === '/' ? (link.href === path ? 'active' : '') : (path.includes(link.href) ? 'active' : '')) %>" data-temp="<%= path %>" href="<%= link.href %>">
-                            <span class="material-symbols-outlined"><%= link.text %></span><span class="link-message"><%= link.title %></span>
+                            <span class="material-symbols-outlined <%= link.title == 'Notifications' ? 'notifToggle' : '' %>"><%= link.text %></span><span class="link-message"><%= link.title %></span>
                         </a>
                     </li>
                 <% }) %>
@@ -23,6 +23,21 @@
         </ul>
     </nav>
 </header>
+<% if (isAuthenticated) { %>
+    <div class="notification-list">
+        <% for (let notification of notifications) { let sendDate = new Date(notification.date) %>
+            <a href="<%= notification.linkToMessage %>" class="notification-list-item <%= !notification.read ? 'unread' : '' %>">
+                <img src="/images/profile-images/pi-<%= notification.profileImg %>.png" alt="profile image">
+                <span class="notification-date"><%= `${sendDate.toDateString()} ${sendDate.getHours() < 12 ? sendDate.getHours() : (sendDate.getHours() - 12)}:${sendDate.getMinutes()}${sendDate.getHours() < 12 ? 'AM' : 'PM'}` %></span>
+                <span class="notification-message-from"><%= notification.from %></span>
+                <span class="notification-message-content"><%= notification.content %></span>
+            </a>
+        <% } %>
+        <% if (notifications.length < 1) { %>
+            <h4>No messages yet!</h4>
+        <% } %>
+    </div>
+<% } %>
 <% if (message) { %>
     <div class="notif <%= message.type %>">
         <img src="/images/site-images/notif-<%= message.type %>.png" alt="<%= message.type %> notification icon">

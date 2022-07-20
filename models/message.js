@@ -55,32 +55,47 @@ const messageSchema = new Schema({
 })
 
 messageSchema.methods.getEmailsToNotify = async function() {
-    const currentUser = this.userId.toString()
     const emailsToNotify = []
+    let currentUser = await this.populate('userId')
+        currentUser = currentUser.userId.email
 
     const addToList = (email) => {
-        if (emailsToNotify.length < 1 || !emailsToNotify.includes(email))
+        if (!currentUser || emailsToNotify.length < 1 || !emailsToNotify.includes(email))
             emailsToNotify.push(email)
     }
 
-    if (this.connectedContentType == 'Project' && !this.connectedMessage) {
+    if (this.connectedContentType == 'Project' && (!this.connectedMessage || this.type == 'answer')) {
         let message = await this.populate('connectedContent')
             message = await message.populate('connectedContent.userId')
-        console.log(message.connectedContent.userId.email)
         addToList(message.connectedContent.userId.email)
     }
     if (this.connectedMessage) {
         let message = await this.populate('connectedMessage')
             message = await message.populate('connectedMessage.userId')
-        
-        if (message.connectedMessage) {
-            message = await message.populate('connectedMessage.connectedMessage')
-            message = await message.populate('connectedMessage.connectedMessage.userId')
-        }
-
-        console.log(message)
+        addToList(message.connectedMessage.userId.email)
     }
-    console.log(emailsToNotify)
+
+    return emailsToNotify
+}
+messageSchema.methods.getUsersToNotify = async function() {
+    const usersToNotify = []
+    let currentUser = this.userId.toString()
+
+    const addToList = (userId) => {
+        if (!currentUser || usersToNotify.length < 1 || !usersToNotify.includes(userId))
+            usersToNotify.push(userId)
+    }
+
+    if (this.connectedContentType == 'Project' && (!this.connectedMessage || this.type == 'answer')) {
+        let message = await this.populate('connectedContent')
+        addToList(message.connectedContent.userId.toString())
+    }
+    if (this.connectedMessage) {
+        let message = await this.populate('connectedMessage')
+        addToList(message.connectedMessage.userId.toString())
+    }
+
+    return usersToNotify
 }
 
 module.exports = mongoose.model('Message', messageSchema)

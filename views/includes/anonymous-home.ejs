@@ -17,24 +17,43 @@
     </section>
     <section class="offered">
         <h2>Learning with Genius Coding</h2>
-        <% for (let card in cards) { %>
-            <div class="card">
-                <div class="image-holder">
-                    <% for (let img in card.imgs) { %>
-                        <div class="<%= img %>"></div>
-                    <% } %>
-                </div>
-                <div class="card-content">
-                    <a href="<%= card.type %>/<%= card.thingId %>"><h3><%= card.title %>></h3></a>
-                    <p><%= card.description %>></p>
-                    <div class="tags">
-                        <% for (let tag in card.tags) { %>
-                            <a href="<%= card.type %>/<%= tag %>" class="tag"><%= tag %></a>
-                        <% } %>
-                    </div>
-                </div>
+        <div class="course">
+            <div class="img-holder two">
+                <div class="html"></div>
+                <div class="css"></div>
             </div>
-        <% } %>
+            <a class="course-title-link" href="/course/62d06b7ce0bcc73738ea3146">
+                <h3 class="noneT"><span class="htmlT">HTML</span> &amp; <span class="cssT">CSS</span></h3>
+            </a>
+            <div class="tags">
+                <div class="tag html">HTML</div>
+                <div class="tag css">CSS</div>
+            </div>
+        </div>
+        <div class="tutorial">
+            <div class="img-holder two">
+                <div class="html"></div>
+                <div class="css"></div>
+            </div>
+            <a class="course-title-link" href="/tutorial/62d72caf980b65242636a913">
+                <h3 class="noneT">Helpful Menu</h3>
+            </a>
+            <div class="tags">
+                <div class="tag html">HTML</div>
+                <div class="tag css">CSS</div>
+            </div>
+        </div>
+        <div class="reference">
+            <div class="img-holder html">
+                <div class="html"></div>
+            </div>
+            <a class="course-title-link" href="/reference/html">
+                <h3 class="noneT">Quick Reference</h3>
+            </a>
+            <div class="tags">
+                <div class="tag html">HTML</div>
+            </div>
+        </div>
     </section>
     <div class="last-call">
         <div>

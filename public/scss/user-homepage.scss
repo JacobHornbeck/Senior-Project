@@ -3,7 +3,9 @@
 .home-grid {
     display: grid;
 
-    * { border-radius: 10px; }
+    *:not(.img-holder):not(.img-holder > div) {
+        border-radius: 10px;
+    }
 
     .profile-hero {
         grid-column: 1 / -1;
@@ -93,6 +95,7 @@
                     align-items: center;
                     color: $primary-color;
                     @include box-shadow();
+                    background-color: $card-color;
                     padding: 0.5rem 0.75rem;
                     text-decoration: none;
                     @include ellipses();

@@ -134,7 +134,7 @@ if (aceEditorElement) {
             if (button.localName != "button")
                 button = button.parentElement
 
-            $(e.target).html("<span class='material-symbols-outlined'>replay</span>Reload")
+            $(button).html("<span class='material-symbols-outlined'>replay</span>Reload")
         }
         else {
             alert("We are sorry, this language does not have running support!")
@@ -361,3 +361,40 @@ if (sideBySideLayoutButton.length > 0 && stackedLayoutButton.length > 0) {
     })
 }
 /* Editor Layout */
+
+
+
+
+
+
+/* Course Menu Toggle */
+$('.aside-toggle').on('click', el => {
+    let toggler = $(el.target)
+    let aside = $(el.target).parent()
+    if (aside.hasClass('open')) {
+        aside.removeClass('open')
+        toggler.html('format_list_bulleted')
+    }
+    else {
+        aside.addClass('open')
+        toggler.html('close')
+    }
+})
+$('.course-article-container').on('click', () => {
+    $('aside').removeClass('open')
+    $('.aside-toggle').html('format_list_bulleted')
+})
+/* Course Menu Toggle */
+
+
+
+
+
+
+/* Notification Menu Closing */
+if ($('.notification-list').length > 0) {
+    $('main').on('click', () => {
+        $('.notification-list').removeClass('open')
+    })
+}
+/* Notification Menu Closing */

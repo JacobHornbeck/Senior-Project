@@ -13,6 +13,7 @@ router
     .get('/confirm-email/:confirmation', controller.getEmailConfirmation)
     .get('/user/account-settings', isAuthenticated, controller.getAccountSettings)
     .get('/request-my-data', isAuthenticated, controller.getRequestData)
+    .get('/mark-as-read', isAuthenticated, controller.markAsRead)
     .post('/login', [
             body('username')
                 .isString()

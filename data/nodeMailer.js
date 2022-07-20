@@ -98,7 +98,7 @@ exports.ForumNotification = (to, name, messageFrom, linkTo, messageContent) => {
         'Notification Service',
         `New Message from ${messageFrom}`,
         template2(`Hello, ${name}!`, `
-            <p>${messageFrom} has posted a message (comment, question, or answer) somewhere you are subscribed to. <a href="${linkTo}">Click here</a> to view the message</p>
+            <p>${messageFrom} has posted a message (comment, question, or answer) somewhere you are subscribed to. <a href="${process.env.NODE_ENV == 'develop' ? `http://localhost:${process.env.PORT}` : 'https://genius-coding.herokuapp.com'}/${linkTo}">Click here</a> to view the message</p>
             ${messageContent ? `<div style="padding: 0.5rem; box-shadow: 2px 2px 5px gray;">${messageContent}</div>` : ''}<br>
             <p>To change your notification settings, go to your <a href="${process.env.NODE_ENV == 'develop' ? `http://localhost:${process.env.PORT}` : 'https://genius-coding.herokuapp.com'}/user/account-settings">account settings</a></p>`)
     )

@@ -13,18 +13,22 @@ h1, h2, h3, h4, h5, h6 {
   font-family: "Play", arial bold, sans-serif;
 }
 
-pre, code, .code {
+pre, .code {
   padding: 0.75rem;
   font-family: monospace;
   overflow-x: auto;
 }
-pre span, code span, .code span {
+pre span, .code span {
   font-family: inherit;
 }
 
 code {
-  background-color: gray;
+  font-family: monospace;
+  padding: 0.2rem 0.25rem;
+  background-color: #cdcdcd;
+  color: #272727;
   border-radius: 5px;
+  font-size: 0.8em;
 }
 
 pre {
@@ -66,7 +70,7 @@ header, footer {
   box-shadow: 0 0 10px #202020;
 }
 
-p {
+p, li {
   font-size: 1.13rem;
 }
 
@@ -555,18 +559,68 @@ header {
   display: inline-block;
   width: max-content;
 }
-
 .nav-list-item-link.with-material:hover {
   width: 100%;
 }
-
 .nav-list-item-link.active {
   background-color: rgba(255, 255, 255, 0.2);
 }
-
 .nav-list-item-link:hover {
   color: #676767;
   background-color: #FFFF64;
+}
+
+.notification-list {
+  width: 300px;
+  position: fixed;
+  box-shadow: 2px 2px 8px #202020;
+  transition: top 0.3s, opacity 0.3s, pointer-events 0.3s 0.5s;
+  background-color: #FEFEFE;
+  pointer-events: none;
+  z-index: 100;
+  right: 10px;
+  opacity: 0;
+  top: 25px;
+}
+.notification-list h4 {
+  margin: 0;
+  padding: 1rem;
+}
+.notification-list.open {
+  pointer-events: all;
+  opacity: 1;
+  top: 50px;
+}
+.notification-list .notification-list-item {
+  display: grid;
+  align-items: center;
+  color: #202020;
+  grid-template-columns: 50px auto;
+  grid-template-rows: 1.25rem 1.5rem max-content;
+  text-decoration: none;
+  min-height: 60px;
+  padding: 0.5rem;
+}
+.notification-list .notification-list-item img {
+  grid-row: 1/span 3;
+  border: 3px solid #FFFF64;
+  width: calc(100% - 0.5rem);
+  margin-top: 0.8rem;
+  border-radius: 50%;
+  align-self: start;
+}
+.notification-list .notification-list-item .notification-date {
+  font-size: 0.9em;
+  color: #676767;
+}
+.notification-list .notification-list-item .notification-message-from {
+  font-weight: bold;
+}
+.notification-list .notification-list-item .notification-message-content {
+  font-size: 0.95em;
+}
+.notification-list .notification-list-item + .notification-list-item {
+  border-top: 1px solid rgba(103, 103, 103, 0.5);
 }
 
 section:not(.account-container) h2 {
@@ -738,7 +792,7 @@ section:not(.account-container) h2 {
 .home-grid {
   display: grid;
 }
-.home-grid * {
+.home-grid *:not(.img-holder):not(.img-holder > div) {
   border-radius: 10px;
 }
 .home-grid .profile-hero {
@@ -833,6 +887,7 @@ section:not(.account-container) h2 {
   align-items: center;
   color: #676767;
   box-shadow: 2px 2px 8px #202020;
+  background-color: #F0F0F0;
   padding: 0.5rem 0.75rem;
   text-decoration: none;
   overflow: hidden;
@@ -914,6 +969,38 @@ section:not(.account-container) h2 {
 
 input[type=submit].danger-button {
   background-color: #E34E24;
+}
+
+.notification-preferences {
+  display: flex;
+}
+.notification-preferences .notification-option {
+  display: flex;
+  align-items: center;
+}
+.notification-preferences .notification-option span:not(.material-symbols-outlined) {
+  padding: 0.1rem 0.3rem 0.1rem 0.1rem;
+  border: 3px solid #10D15A;
+  align-items: center;
+  border-radius: 5px;
+  margin-top: 0.5rem;
+  display: flex;
+  transition: background-color 0.3s, color 0.3s;
+}
+.notification-preferences .notification-option #in-website, .notification-preferences .notification-option #via-email, .notification-preferences .notification-option #via-browser {
+  height: 0;
+  width: 0;
+}
+.notification-preferences .notification-option #in-website::before, .notification-preferences .notification-option #in-website::after, .notification-preferences .notification-option #via-email::before, .notification-preferences .notification-option #via-email::after, .notification-preferences .notification-option #via-browser::before, .notification-preferences .notification-option #via-browser::after {
+  content: none;
+}
+.notification-preferences .notification-option input[type=checkbox]:disabled + span {
+  opacity: 0.8;
+  cursor: help;
+}
+.notification-preferences .notification-option input[type=checkbox]:checked + span {
+  background-color: #10D15A;
+  color: #FEFEFE;
 }
 
 .input-container .valid {
@@ -1506,6 +1593,13 @@ a.tag:hover, div.tag:hover {
   background-color: #4A98C8;
 }
 
+.img-holder > div.html {
+  background-image: url("/images/site-images/card-images/html.png");
+}
+.img-holder > div.css {
+  background-image: url("/images/site-images/card-images/css.png");
+}
+
 .great-idea {
   width: 50%;
   min-width: 250px;
@@ -1778,73 +1872,281 @@ button.withSymbol {
   text-align: left !important;
 }
 
-.course-article {
-  display: block;
+.course-article-link {
+  display: flex;
   padding: 0.5rem;
+  color: #676767;
   border: 1px solid #676767;
   text-decoration: none;
+  align-items: center;
+  height: 36px;
 }
-.course-article:hover {
+.course-article-link.at {
+  box-shadow: inset 0 0 2px 1px #10D15A;
+}
+.course-article-link:hover span:not(.material-symbols-outlined) {
   text-decoration: underline;
 }
-.course-article:first-of-type {
+.course-article-link:first-of-type {
   margin-top: 0.5rem;
   border-radius: 10px 10px 0 0;
 }
-.course-article:last-of-type {
+.course-article-link:last-of-type {
   border-radius: 0 0 10px 10px;
 }
 
-.card {
-  background-color: #F0F0F0;
-  grid-template-rows: 130px auto;
+.course-article-container, .tutorial-container, .course-reference {
+  padding-bottom: 0;
+}
+.course-article-container section, .tutorial-container section, .course-reference section {
+  margin-left: 1.5rem;
+  padding-right: 1rem;
+}
+.course-article-container section pre, .tutorial-container section pre, .course-reference section pre {
+  margin: 1rem 0;
+}
+.course-article-container li, .tutorial-container li, .course-reference li {
+  margin: 0.5rem 0;
+}
+.course-article-container .article-nav, .tutorial-container .article-nav, .course-reference .article-nav {
+  padding: 2rem 1.5rem;
+  grid-template-columns: 1fr 1fr;
+  padding-top: 0;
   display: grid;
-  min-width: 260px;
-  overflow: hidden;
-  box-shadow: 1px 1px 6px #202020;
 }
-.card .image-holder {
+.course-article-container .article-nav a, .tutorial-container .article-nav a, .course-reference .article-nav a {
   display: flex;
-  flex-wrap: nowrap;
+  align-items: center;
+  border-radius: 10px;
+  background-color: #202020;
+  border: 1px solid #202020;
+  box-shadow: inset 0 0 1px 2px #FEFEFE;
+  text-decoration: none;
+  color: #FEFEFE;
+  width: max-content;
+  padding: 0.75rem;
 }
-.card .image-holder div {
-  height: 130px;
+.course-article-container .article-nav a.disabled, .tutorial-container .article-nav a.disabled, .course-reference .article-nav a.disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+.course-article-container .article-nav a:nth-of-type(1), .tutorial-container .article-nav a:nth-of-type(1), .course-reference .article-nav a:nth-of-type(1) {
+  padding-right: 1.25rem;
+}
+.course-article-container .article-nav a:nth-of-type(2), .tutorial-container .article-nav a:nth-of-type(2), .course-reference .article-nav a:nth-of-type(2) {
+  justify-self: end;
+  padding-left: 1.25rem;
+}
+.course-article-container .semantic-tags-list, .course-article-container .units-list, .tutorial-container .semantic-tags-list, .tutorial-container .units-list, .course-reference .semantic-tags-list, .course-reference .units-list {
+  display: grid;
+  grid-template-columns: max-content auto;
+  align-items: start;
+  gap: 0.5rem 0.75rem;
+}
+.course-article-container .semantic-tags-list h5, .course-article-container .units-list h5, .tutorial-container .semantic-tags-list h5, .tutorial-container .units-list h5, .course-reference .semantic-tags-list h5, .course-reference .units-list h5 {
+  grid-column: 1/-1;
+  margin-top: 0.5rem;
+  margin-bottom: 0;
+}
+.course-article-container .semantic-tags-list li, .course-article-container .units-list li, .tutorial-container .semantic-tags-list li, .tutorial-container .units-list li, .course-reference .semantic-tags-list li, .course-reference .units-list li {
+  display: contents;
+}
+.course-article-container .semantic-tags-list li code, .course-article-container .units-list li code, .tutorial-container .semantic-tags-list li code, .tutorial-container .units-list li code, .course-reference .semantic-tags-list li code, .course-reference .units-list li code {
+  width: max-content;
+  white-space: nowrap;
+}
+.course-article-container .semantic-tags-list li span, .course-article-container .units-list li span, .tutorial-container .semantic-tags-list li span, .tutorial-container .units-list li span, .course-reference .semantic-tags-list li span, .course-reference .units-list li span {
+  line-height: 1.35em;
+}
+.course-article-container #element-relationship-diagram, .tutorial-container #element-relationship-diagram, .course-reference #element-relationship-diagram {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: repeat(1fr, 5);
+  justify-items: center;
+  align-items: center;
+  min-width: 300px;
+  max-width: 400px;
+  row-gap: 2rem;
+}
+.course-article-container #element-relationship-diagram .element, .tutorial-container #element-relationship-diagram .element, .course-reference #element-relationship-diagram .element {
+  display: flex;
+  position: relative;
+  flex-direction: column;
+  background-color: #F0F0F0;
+  padding: 0.5rem 0 0.35rem;
+  box-shadow: 2px 2px 8px #202020;
+  align-items: center;
+  border-radius: 5px;
+  grid-column: 1;
+  width: 100px;
+}
+.course-article-container #element-relationship-diagram .element code, .tutorial-container #element-relationship-diagram .element code, .course-reference #element-relationship-diagram .element code {
+  width: max-content;
+  background-color: transparent;
+  font-size: 1.2em;
+}
+.course-article-container #element-relationship-diagram #s, .tutorial-container #element-relationship-diagram #s, .course-reference #element-relationship-diagram #s {
+  grid-column: 2;
+  grid-row: 3;
+}
+.course-article-container #element-relationship-diagram #gp, .course-article-container #element-relationship-diagram #p, .tutorial-container #element-relationship-diagram #gp, .tutorial-container #element-relationship-diagram #p, .course-reference #element-relationship-diagram #gp, .course-reference #element-relationship-diagram #p {
+  grid-column: 1/span 2;
+}
+.course-article-container #element-relationship-diagram #gp::after, .course-article-container #element-relationship-diagram #e::after, .course-article-container #element-relationship-diagram #c::after, .tutorial-container #element-relationship-diagram #gp::after, .tutorial-container #element-relationship-diagram #e::after, .tutorial-container #element-relationship-diagram #c::after, .course-reference #element-relationship-diagram #gp::after, .course-reference #element-relationship-diagram #e::after, .course-reference #element-relationship-diagram #c::after {
+  content: "";
+  bottom: -2rem;
+  background-color: #676767;
+  position: absolute;
+  height: 2rem;
+  width: 2px;
+  left: calc(50% - 1px);
+}
+.course-article-container #element-relationship-diagram #p::before, .tutorial-container #element-relationship-diagram #p::before, .course-reference #element-relationship-diagram #p::before {
+  content: "";
+  bottom: -1px;
+  background-color: #676767;
+  position: absolute;
+  height: 7rem;
+  width: 2px;
+  left: calc(50% - 1px);
+  transform: rotate(252deg);
+  transform-origin: center bottom;
+}
+.course-article-container #element-relationship-diagram #p::after, .tutorial-container #element-relationship-diagram #p::after, .course-reference #element-relationship-diagram #p::after {
+  content: "";
+  bottom: -1px;
+  background-color: #676767;
+  position: absolute;
+  height: 7rem;
+  width: 2px;
+  left: calc(50% - 1px);
+  transform: rotate(108deg);
+  transform-origin: center bottom;
+}
+
+aside {
   width: 100%;
-  border-radius: 0 !important;
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: fit;
-}
-.card .image-holder .html {
-  background-color: #E34E24;
-  background-image: url("/images/site-images/card-images/html.png");
-}
-.card .image-holder .css {
-  background-color: #1173BC;
-  background-image: url("/images/site-images/card-images/css.png");
-}
-.card .image-holder .cpp {
-  background-color: #00A0FD;
-  background-image: url("/images/site-images/card-images/cpp.png");
-}
-.card .image-holder .python {
-  background-color: #4A98C8;
-  background-image: url("/images/site-images/card-images/python.png");
-}
-.card .card-content {
+  position: fixed;
+  overflow-y: auto;
+  box-shadow: 2px 2px 8px #202020;
+  background-color: #FEFEFE;
+  height: calc(100vh - 60px);
+  transition: left 0.4s;
+  max-width: 300px;
   padding: 1rem;
+  left: -310px;
+  top: 60px;
 }
-.card .card-content h3 {
-  margin: 0;
-  text-align: center;
+aside .aside-toggle {
+  padding: 0.5rem;
+  cursor: pointer;
+  box-shadow: 2px 2px 8px #202020;
+  background-color: #FEFEFE;
+  border-radius: 0 10px 10px 0;
+  padding-left: calc(10px + 0.5rem);
+  transition: left 0.4s, padding 0.4s;
+  color: #202020;
+  position: fixed;
+  display: block;
+  left: -10px;
 }
-.card .card-content .btn {
-  padding: 0.5rem 1rem;
+aside.open {
+  left: 0;
+}
+aside.open .aside-toggle {
+  padding-left: 0.5rem;
+  border-radius: 10px;
+  box-shadow: none;
+  left: 240px;
+}
+
+.course-reference {
+  display: grid;
+  column-gap: 0.5rem;
+  justify-items: start;
+  grid-template-columns: max-content auto;
+}
+.course-reference h2, .course-reference h3 {
+  grid-column: 1/-1;
+}
+.course-reference .publishDate {
+  grid-column: 1/-1;
+}
+.course-reference code {
+  grid-column: 1;
+  font-size: 0.9rem;
+  justify-self: end;
+}
+.course-reference code + span + code, .course-reference code + span + code + span {
   margin-top: 1rem;
 }
-.card .card-content .btn-group {
-  display: flex;
-  justify-content: space-between;
+.course-reference span {
+  grid-column: 2;
+}
+
+.card {
+  height: 100px;
+  overflow: hidden;
+  column-gap: 20px;
+  border-radius: 5px;
+  padding-right: 0.5rem;
+  background-color: #F1F1F1;
+  grid-template-rows: 50% 50%;
+  grid-template-columns: 100px auto;
+  box-shadow: 2px 2px 8px #202020;
+  position: relative;
+  align-items: end;
+  display: grid;
+  width: 260px;
+}
+.card h3 {
+  grid-row: 1;
+  grid-column: 2;
+  margin: 0 0 0.5rem;
+}
+.card .img-holder {
+  height: 100%;
+  grid-column: 1;
+  grid-row: 1/span 2;
+  transition: all 0.3s;
+  transform: translate(-2px, 1px) scale(1.1) rotate(-5deg);
+  box-shadow: 1px 1px 5px #676767;
+}
+.card .img-holder div {
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+.card .img-holder.java {
+  background-image: linear-gradient(#E76F00, #8C4201);
+}
+.card .img-holder.java div {
+  background-size: 70%;
+}
+.card .img-holder.pjs div {
+  background-size: 115%;
+}
+.card:hover .img-holder {
+  transform: translate(-8px, 1px) scale(1.3) rotate(-8deg);
+}
+.card .img-holder.two {
+  background-image: linear-gradient(#E34E24 50%, #1173BC 50%);
+}
+.card .img-holder.two div {
+  width: 100%;
+  height: 50%;
+  background-position: center;
+  background-size: 75%;
+}
+.card .btn {
+  grid-column: 2;
+  align-self: start;
+  padding: 0.25rem 1rem 0.3rem;
+  border-radius: 5px;
+  font-size: 0.95em;
+  margin: 0;
 }
 
 .logo-name {

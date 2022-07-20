@@ -3,6 +3,9 @@ const { validationResult } = require("express-validator")
 const User = require('../models/user')
 const jwt = require("jsonwebtoken")
 
+const availableCodeThemes = require('../data/codeThemes')
+const availableEditorThemes = require('../data/editorThemes')
+
 const {
     AccountCreated,
     AccountUpdated,
@@ -54,6 +57,8 @@ exports.getAccountSettings = (req, res, next) => {
             res.render('auth/account-settings', {
                 pageTitle: 'Account Settings',
                 user: loadedUser,
+                availableCodeThemes: availableCodeThemes,
+                availableEditorThemes: availableEditorThemes,
                 domainUrl: (req.hostname == 'localhost' ? 'http' : 'https') + '://' + req.headers.host
             })
         })
@@ -116,6 +121,7 @@ exports.postLogin = (req, res, next) => {
                                     ('http://localhost:'+process.env.PORT) :
                                     ('https://genius-coding.herokuapp.com')) + '/confirm-email/' + emailConfirmationToken)
                                 .catch(err => {
+                                    console.log(err)
                                     req.flash('message', {
                                         content:  'Couldn\'t send confirmation email, please contact support',
                                         type:     'error'
@@ -144,6 +150,7 @@ exports.postLogin = (req, res, next) => {
                     res.redirect('/login')
                 })
                 .catch(err => {
+                    console.log(err)
                     req.flash('message', {
                         content:  'Something went wrong, please try again',
                         type:     'error'
@@ -152,6 +159,7 @@ exports.postLogin = (req, res, next) => {
                 })
         })
         .catch(err => {
+            console.log(err)
             req.flash('message', {
                 content:  'Something went wrong, please try again',
                 type:     'error'
@@ -201,6 +209,7 @@ exports.postSignUp = (req, res, next) => {
                     ('http://localhost:'+process.env.PORT) :
                     ('https://genius-coding.herokuapp.com')) + '/confirm-email/' + emailConfirmationToken)
                 .catch(err => {
+                    console.log(err)
                     req.flash('message', {
                         content:  'Couldn\'t send confirmation email, please contact support',
                         type:     'error'
@@ -293,6 +302,8 @@ exports.postUpdateSettings = (req, res, next) => {
             user.editorLayout = req.body.editorLayout
             user.codeTheme = req.body.codeTheme
             user.showLineNumbers = showLineNumbers
+            user.allowForumEmailNotifications = req.body['via-email']
+            user.allowDesktopNotifications = req.body['via-browser']
 
             return user.save()
                 .then(() => {
@@ -305,6 +316,7 @@ exports.postUpdateSettings = (req, res, next) => {
                             previousEmail,
                             user.firstName + ' ' + user.lastName,
                             req.body.email).catch(err => {
+                                console.log(err)
                                 req.flash('message', {
                                     content:  'Couldn\'t send confirmation email, please contact support',
                                     type:     'error'
@@ -318,6 +330,7 @@ exports.postUpdateSettings = (req, res, next) => {
                                 ('http://localhost:'+process.env.PORT) :
                                 ('https://genius-coding.herokuapp.com')) + '/confirm-email/' + emailConfirmationToken)
                                 .catch(err => {
+                                    console.log(err)
                                     req.flash('message', {
                                         content:  'Couldn\'t send confirmation email, please contact support',
                                         type:     'error'
@@ -333,6 +346,7 @@ exports.postUpdateSettings = (req, res, next) => {
                         previousEmail,
                         user.firstName + ' ' + user.lastName)
                         .catch(err => {
+                            console.log(err)
                             req.flash('message', {
                                 content:  'Couldn\'t send confirmation email, please contact support',
                                 type:     'error'
@@ -347,6 +361,7 @@ exports.postUpdateSettings = (req, res, next) => {
 
         })
         .catch(err => {
+            console.log(err)
             req.flash('message', {
                 content:  'Something didn\'t work out, please try again',
                 type:     'error'
@@ -375,6 +390,7 @@ exports.usernameTaken = (req, res, next) => {
             else return res.json({ "taken": false })
         })
         .catch(err => {
+            console.log(err)
             res.status(500).json({ "taken": true, "error": "Something went wrong" })
         })
 }
@@ -415,7 +431,8 @@ exports.postRequestData = (req, res, next) => {
             })
             res.redirect('/request-my-data')
         })
-        .catch(() => {
+        .catch((err) => {
+            console.log(err)
             req.flash('message', {
                 content:  'Something didn\'t work out, please try again',
                 type:     'error'
@@ -423,3 +440,23 @@ exports.postRequestData = (req, res, next) => {
             res.redirect('/request-my-data')
         })
 }
+
+exports.markAsRead = (req, res, next) => {
+    User.findById(req.user._id)
+        .then(user => {
+            user.markAllAsRead().then(() => res.json({ status: 'success' }))
+        })
+        .catch(err => {
+            res.status(500).json({ status: 'error', message: err })
+        })
+}
+
+// exports.getNotifications = (req, res, next) => {
+//     User.findOne({ email: req.body.email, username: req.body.username })
+//         .then(user => {
+
+//         })
+//         .catch(err => {
+
+//         })
+// }

@@ -21,17 +21,17 @@ exports.postMessage = (req, res, next) => {
                 urlFrom: urlFrom
             })
         }
-        return res.redirect(urlFrom)
+        return res.redirect(urlFrom+'#messages')
     }
 
     User.findById(req.user._id)
-        .then(userDoc => {
+        .then(async userDoc => {
             if (!userDoc) {
                 req.flash('message', {
                     content: 'Cannot find that user!',
                     type: 'error'
                 })
-                return res.redirect(urlFrom)
+                return res.redirect(urlFrom+'#messages')
             }
             let message
             if (req.body['connectedMessage']) {
@@ -56,14 +56,42 @@ exports.postMessage = (req, res, next) => {
                 })
             }
 
-            message.getEmailsToNotify()
+            
+            let usersToNotify = await message.getUsersToNotify()
+                usersToNotify.map(async (userId) => {
+                    let user = await User.findById(userId)
+                    if (user.allowForumEmailNotifications) {
+                        ForumNotification(
+                            user.email,
+                            user.displayName,
+                            userDoc.displayName,
+                            urlFrom+'#messages',
+                            message.content)
+                    }
+                    user.notifications.push({
+                        from: userDoc.displayName,
+                        profileImg: userDoc.profileAvatar,
+                        content: message.content,
+                        date: new Date(),
+                        linkToMessage: urlFrom+'#messages'
+                    })
+                    user.save()
+                })
 
             return message.save()
         })
         .then(() => {
-            res.redirect(urlFrom)
+            res.redirect(urlFrom+'#messages')
         })
-        .catch(err => console.log(err))
+        .catch(err => {
+            console.log(err)
+            console.log(err)
+            req.flash('message', {
+                content: 'Something went wrong, please try again later',
+                type: 'error'
+            })
+            return res.redirect(urlFrom+'#messages')
+        })
 }
 
 exports.postVote = (req, res, next) => {

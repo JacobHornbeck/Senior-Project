@@ -15,24 +15,13 @@
                 <div class="course-card-container">
                     <% for (let card of courseCards) { %>
                         <div class="card">
-                            <div class="image-holder">
+                            <div class="img-holder <%= card.imgs.length == 2 ? 'two' : '' %>">
                                 <% for (let imgName of card.imgs) { %>
                                     <div class="<%= imgName %>"></div>
                                 <% } %>
                             </div>
-                            <div class="card-content">
-                                <h3><%- card.title %></h3>
-                                <div class="btn-group">
-                                    <a href="/<%= card.type %>/<%= card.thingId %>" class="btn">Continue</a>
-                                    <form action="/remove-card" method="post">
-                                        <%- include('../includes/csrf-token.ejs') %>
-                                        <input type="hidden" name="type" value="<%= card.type %>">
-                                        <input type="hidden" name="id" value="<%= card.thingId %>">
-                                        <input type="hidden" name="userEmail" value="<%= user.email %>">
-                                        <input type="submit" value="Remove" class="btn danger">
-                                    </form>
-                                </div>
-                            </div>
+                            <h3><%- card.title %></h3>
+                            <a href="/<%= card.type %>/<%= card.thingId %>" class="btn">Continue</a>
                         </div>
                     <% } %>
                 </div>

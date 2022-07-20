@@ -11,7 +11,7 @@
             <hr>
             <h3>Course Articles</h3>
             <% for (let article of course.articles) { %>
-                <a href="/article/<%= article._id %>" class="course-article"><%= article.title %></a>
+                <a href="/article/<%= article._id %>" class="course-article-link"><span><%= article.title %></span></a>
             <% } %>
         </section>
     </main>

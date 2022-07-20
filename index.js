@@ -67,8 +67,8 @@ app.set('view engine', 'ejs')
         let temp2 = req.flash('previous')
         res.locals.previous = temp2.length > 0 ? temp2[0] : undefined
         res.locals.path = req.url
-        res.locals.codeTheme = 'monokai'
-        res.locals.editorTheme = 'github-dark'
+        res.locals.codeTheme = 'github-dark'
+        res.locals.editorTheme = 'monokai'
         res.locals.editorLayout = 'side-by-side'
         res.locals.showLineNumbers = false
         if (req.session.isLoggedIn) {
@@ -133,24 +133,57 @@ app.set('view engine', 'ejs')
     .use((req, res, next) => {
         if (!req.session.user) return next()
         User.findById(req.session.user._id)
-            .then((user) => {
+            .then(async (user) => {
                 res.locals.username = user.username
                 res.locals.codeTheme = user.codeTheme
                 res.locals.editorTheme = user.editorTheme
                 res.locals.editorLayout = user.editorLayout
                 res.locals.showLineNumbers = user.showLineNumbers
+                res.locals.notifications = user.notifications
+                res.locals.links = [
+                    { 
+                        'href': '/',
+                        'text': 'home',
+                        'title': 'Home'
+                    },
+                    { 
+                        'href': '/learn',
+                        'text': 'school',
+                        'title': 'Learn'
+                    },
+                    { 
+                        'href': '/code/new',
+                        'text': 'play_circle',
+                        'title': 'Playground'
+                    },
+                    { 
+                        'href': '/user/account-settings',
+                        'text': 'settings',
+                        'title': 'Account Settings'
+                    },
+                    { 
+                        'href': '/logout',
+                        'text': 'logout',
+                        'title': 'Logout'
+                    },
+                    {
+                        'href': 'javascript: openNotifications()',
+                        'text': await user.hasUnread() ? 'notifications_active' : 'notifications',
+                        'title': 'Notifications'
+                    }
+                ]
                 let publicUser = JSON.parse(JSON.stringify(user))
                 delete publicUser.password
                 req.user = publicUser
                 next()
             })
             .catch(err => {
+                console.log(err)
                 const error = new Error(err)
                 error.httpStatusCode = 500
                 return next(error)
             })
     })
-    //    .use(routes)
     .use('/legal', legalRoutes)
     .use(learnRoutes)
     .use(authRoutes)
@@ -166,9 +199,9 @@ app.set('view engine', 'ejs')
                         courseCards: [
                             {
                                 imgs: ['html','css'],
-                                title: 'Build Your Website',
+                                title: 'HTML & CSS',
                                 type: 'course',
-                                thingId: 'abc123'
+                                thingId: '62d06b7ce0bcc73738ea3146'
                             },
                         ],
                         userProjects: await user.getProjects()

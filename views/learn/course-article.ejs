@@ -3,8 +3,27 @@
 
 <body>
     <%- include('../includes/nav.ejs') %>
-    <main>
-        
+    <main class="non-transparent-background course-article-container">
+        <article class="course-article">
+            <span class="publishDate"><%= article.publishDate.toDateString() %></span>
+            <%- article.content %>
+        </article>
+        <div class="article-nav">
+            <a <%- previousArticle.length > 0 ? `href="/article/${previousArticle}"` : 'class="disabled"' %>><span class="material-symbols-outlined">navigate_before</span><span>Previous Article</span></a>
+            <a <%- nextArticle.length > 0 ? `href="/article/${nextArticle}"` : 'class="disabled"' %>><span>Next Article</span><span class="material-symbols-outlined">navigate_next</span></a>
+        </div>
+        <%- include('../includes/forum.ejs') %>
     </main>
+    <aside class="">
+        <span class="aside-toggle material-symbols-outlined">format_list_bulleted</span>
+        <% let course = article.courseFrom %>
+        <a href="/course/<%= course._id %>"><h2><%= course.title %></h2></a>
+        <p><%= course.description %></p>
+        <hr>
+        <h3>Course Articles</h3>
+        <% for (let courseArticle of course.articles) { %>
+            <a href="/article/<%= courseArticle._id %>" class="course-article-link <%= courseArticle._id.toString() == article._id.toString() ? 'at' : '' %>"><%- courseArticle._id.toString() == article._id.toString() ? '<span class="material-symbols-outlined">arrow_right</span>' : '' %><span><%= courseArticle.title %></span></a>
+        <% } %>
+    </aside>
 
 <%- include('../includes/end.ejs') %>

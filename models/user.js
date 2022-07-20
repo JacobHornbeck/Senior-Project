@@ -82,12 +82,61 @@ const userSchema = new Schema({
         required: false,
         ref: 'Article'
     }],
+    allowForumEmailNotifications: {
+        type: Boolean,
+        required: true,
+        default: true
+    },
+    allowDesktopNotifications: {
+        type: Boolean,
+        required: true,
+        default: false
+    },
+    notifications: [{
+        from: {
+            type: String,
+            required: true
+        },
+        profileImg: {
+            type: String,
+            required: true
+        },
+        content: {
+            type: String,
+            required: true
+        },
+        date: {
+            type: Date,
+            required: true
+        },
+        linkToMessage: {
+            type: String,
+            required: true
+        },
+        read: {
+            type: Boolean,
+            default: false
+        }
+    }],
     resetToken: String,
     resetTokenExpiration: Date
 })
 
 userSchema.methods.getProjects = async function() {
     return await Project.find({ userId: this._id })
+}
+
+userSchema.methods.markAllAsRead = function() {
+    Array.from(this.notifications).map(notification => {
+        notification.read = true
+    })
+    return this.save()
+}
+userSchema.methods.hasUnread = function() {
+    return Array.from(this.notifications).reduce((prev, curr) => {
+        if (prev) return prev
+        return !curr.read
+    }, false)
 }
 
 module.exports = mongoose.model('User', userSchema)

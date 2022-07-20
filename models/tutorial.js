@@ -4,7 +4,7 @@ const Schema = mongoose.Schema
 const Message = require('../models/message')
 const Vote = require('../models/vote')
 
-const articleSchema = new Schema({
+const tutorialSchema = new Schema({
     title: {
         type: String,
         required: true
@@ -13,23 +13,14 @@ const articleSchema = new Schema({
         type: String,
         required: true
     },
-    order: {
-        type: Number,
-        required: true
-    },
     publishDate: {
         type: Date,
         required: true
-    },
-    courseFrom: {
-        type: Schema.Types.ObjectId,
-        required: true,
-        ref: 'Course'
     }
 })
 
-articleSchema.methods.getMessages = async function(userId = '') {
-    const messages = await Message.find({ connectedContent: this._id.toString(), connectedContentType: 'Article' })
+tutorialSchema.methods.getMessages = async function(userId = '') {
+    const messages = await Message.find({ connectedContent: this._id.toString(), connectedContentType: 'Tutorial' })
                                   .populate({ path: 'userId', select: ['displayName'] })
                                   .sort({ "type": -1, "votes": -1, "sendDate": -1 })
 
@@ -87,4 +78,4 @@ articleSchema.methods.getMessages = async function(userId = '') {
     })
 }
 
-module.exports = mongoose.model('Article', articleSchema)
+module.exports = mongoose.model('Tutorial', tutorialSchema)

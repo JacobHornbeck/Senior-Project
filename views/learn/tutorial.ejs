@@ -1,0 +1,14 @@
+<%- include('../includes/head.ejs') %>
+</head>
+
+<body>
+    <%- include('../includes/nav.ejs') %>
+    <main class="non-transparent-background tutorial-container">
+        <article class="course-tutorial">
+            <span class="publishDate"><%= tutorial.publishDate.toDateString() %></span>
+            <%- tutorial.content %>
+        </article>
+        <%- include('../includes/forum.ejs') %>
+    </main>
+
+<%- include('../includes/end.ejs') %>

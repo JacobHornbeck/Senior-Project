@@ -4,6 +4,8 @@ const languages = require('../data/available-ace-editor-languages')
 const Project = require('../models/project')
 const Course = require('../models/course')
 const Article = require('../models/article')
+const Tutorial = require('../models/tutorial')
+const Reference = require('../models/reference')
 
 const niceDate = (date) => {
     let d = new Date(date)
@@ -18,6 +20,9 @@ exports.getLearnHome = (req, res, next) => {
 
 exports.getCourse = async (req, res, next) => {
     const course = await Course.findById(req.params.courseId).populate('articles')
+    course.articles = Array.from(course.articles).sort((a,b) => {
+        return (a.order > b.order ? 1 : -1)
+    })
     res.render('learn/course', {
         pageTitle: `Course - ${course.title}`,
         course: course
@@ -25,9 +30,51 @@ exports.getCourse = async (req, res, next) => {
 }
 
 exports.getCourseArticle = async (req, res, next) => {
-    const article = await Article.findById(req.params.articleId)
+    let article = await Article.findById(req.params.articleId).populate('courseFrom')
+        article = await article.populate('courseFrom.articles')
+    let articleArray = Array.from(article.courseFrom.articles)
+    let previousArticle = ''
+    let nextArticle = ''
+    for (let i = 0; i < articleArray.length; i++) {
+        if (i < articleArray.length - 1 && articleArray[i+1]._id.toString() == article._id.toString()) {
+            previousArticle = articleArray[i]._id.toString()
+        }
+        if (i > 0 && articleArray[i-1]._id.toString() == article._id.toString()) {
+            nextArticle = articleArray[i]._id.toString()
+        }
+    }
     res.render('learn/course-article', {
-        pageTitle: 'Course Article',
+        pageTitle: article.title,
+        article: article,
+        previousArticle: previousArticle,
+        nextArticle: nextArticle,
+        messages: await article.getMessages(req.isLoggedIn ? req.user._id : ''),
+        contentType: 'Article',
+        articleId: article._id
+    })
+}
+
+exports.getTutorial = async (req, res, next) => {
+    let tutorial = await Tutorial.findById(req.params.tutorialId)
+    
+    res.render('learn/tutorial', {
+        pageTitle: tutorial.title,
+        tutorial: tutorial,
+        messages: await tutorial.getMessages(req.isLoggedIn ? req.user._id : ''),
+        contentType: 'Tutorial',
+        tutorialId: tutorial._id
+    })
+}
+
+exports.getReference = async (req, res, next) => {
+    let reference = await Reference.findOne({ language: req.params.language.toLowerCase() })
+    
+    res.render('learn/reference', {
+        pageTitle: reference.language.toUpperCase() + ' Reference',
+        reference: reference,
+        messages: await reference.getMessages(req.isLoggedIn ? req.user._id : ''),
+        contentType: 'Reference',
+        referenceId: reference._id
     })
 }
 

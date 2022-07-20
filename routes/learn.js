@@ -9,6 +9,8 @@ router
     .get('/learn', controller.getLearnHome)
     .get('/course/:courseId', controller.getCourse)
     .get('/article/:articleId', controller.getCourseArticle)
+    .get('/tutorial/:tutorialId', controller.getTutorial)
+    .get('/reference/:language', controller.getReference)
     .get('/code/new', controller.getNewPlayground)
     .get('/code/new/:type', controller.getCodePlayground)
     .get('/code/project/:projectId', controller.getUserProject)

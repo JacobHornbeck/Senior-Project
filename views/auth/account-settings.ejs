@@ -28,6 +28,23 @@
                 </div>
             </fieldset>
             <fieldset>
+                <legend>Notification Preferences</legend>
+                <div class="notification-preferences">
+                    <label class="notification-option">
+                        <input type="checkbox" name="in-website" id="in-website" disabled checked>
+                        <span title="You will always get notifications through the website, and cannot change this setting"><span class="material-symbols-outlined">check</span>In-Website</span>
+                    </label>
+                    <label class="notification-option">
+                        <input type="checkbox" name="via-email" id="via-email" <%= user.allowForumEmailNotifications ? 'checked' : '' %>>
+                        <span><span class="material-symbols-outlined">check</span>Email</span>
+                    </label>
+                    <label class="notification-option">
+                        <input type="checkbox" name="via-browser" id="via-browser" <%= user.allowDesktopNotifications ? 'checked' : '' %>>
+                        <span><span class="material-symbols-outlined">check</span>Browser</span>
+                    </label>
+                </div>
+            </fieldset>
+            <fieldset>
                 <legend>User Profile</legend>
                 <div class="input-container">
                     <input type="text" name="displayName" id="displayName" required value="<%= previous ? previous.displayName : user.displayName %>">
@@ -51,16 +68,27 @@
             <fieldset>
                 <legend>Code Example & Editor Settings</legend>
                 <div class="input-container">
-                    <input type="text" name="codeTheme" id="codeTheme" required value="<%= user.codeTheme %>">
+                    <select type="text" name="codeTheme" id="codeTheme" required value="<%= user.codeTheme %>">
+                        <% for (let availableCodeTheme of availableCodeThemes) { %>
+                            <option value="<%= availableCodeTheme %>" <%= user.codeTheme == availableCodeTheme ? 'selected' : '' %>><%= availableCodeTheme %></option>
+                        <% } %>
+                    </select>
                     <label for="codeTheme" class="form-label">Code Example Theme</label>
                 </div>
                 <label class="container-label" for="showLineNumbers"><input type="checkbox" name="showLineNumbers" id="showLineNumbers" onchange="this.value = this.checked" value="<%= user.showLineNumbers ? (user.showLineNumbers ? 'true' : 'false') : 'false' %>" <%= user.showLineNumbers ? 'checked' : '' %>>Show line numbers on code examples</label>
                 <div class="input-container">
-                    <input type="text" name="editorTheme" id="editorTheme" required value="<%= user.editorTheme %>">
+                    <select type="text" name="editorTheme" id="editorTheme" required>
+                        <% for (let availableEditorTheme of availableEditorThemes) { %>
+                            <option value="<%= availableEditorTheme %>" <%= user.editorTheme == availableEditorTheme ? 'selected' : '' %>><%= availableEditorTheme %></option>
+                        <% } %>
+                    </select>
                     <label for="editorTheme" class="form-label">Code Editor Theme</label>
                 </div>
                 <div class="input-container">
-                    <input type="text" name="editorLayout" id="editorLayout" required value="<%= user.editorLayout %>">
+                    <select type="text" name="editorLayout" id="editorLayout" required>
+                        <option value="side-by-side" <%= user.editorLayout == "side-by-side" ? 'selected' : '' %>>side-by-side</option>
+                        <option value="stacked" <%= user.editorLayout == "stacked" ? 'selected' : '' %>>stacked</option>
+                    </select>
                     <label for="editorLayout" class="form-label">Code Editor Layout</label>
                 </div>
             </fieldset>

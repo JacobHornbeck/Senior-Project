@@ -7,9 +7,9 @@ const controller = require("../controllers/forum.js")
 const Message = require("../models/message")
 const User = require("../models/user")
 const Project = require("../models/project")
-// const Article = require("../models/article")
-// const Tutorial = require("../models/tutorial")
-// const Reference = require("../models/reference")
+const Article = require("../models/article")
+const Tutorial = require("../models/tutorial")
+const Reference = require("../models/reference")
 
 const limiter = rateLimit({
     windowMs: 2000,
@@ -58,7 +58,7 @@ router
                                 if (!project) return Promise.reject('Project doesn\'t exist')
                             })
                     break;
-                    /* case "Article":
+                    case "Article":
                         return Article
                             .findById(value)
                             .then(article => {
@@ -78,7 +78,9 @@ router
                             .then(reference => {
                                 if (!reference) return Promise.reject('Reference doesn\'t exist')
                             })
-                    break; */
+                    break;
+                    default:
+                        throw new Error('Invalid content type!')
                 }
             })
     ], controller.postMessage)

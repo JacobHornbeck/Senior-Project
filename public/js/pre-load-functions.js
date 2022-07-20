@@ -99,3 +99,30 @@ function loadPreviewImage(el) {
         imgEl.attr('src', imgEl.attr('src').replace(/\-\d{2}/, '-'+el.val()))
 }
 /* User Account Settings */
+
+
+
+/* User Notifications */
+function openNotifications() {
+    $('.notification-list').toggleClass('open')
+    if ($('.notification-list').hasClass('open')) {
+        setTimeout(openNotifications, 10000);
+        if ($('.notification-list').text() == 'notifications_active') {
+            fetch('/mark-as-read')
+                .then((response) => {
+                    return response.json()
+                })
+                .then((jsonData) => {
+                    if (jsonData.status == 'success') {
+                        $('.notifToggle').text('notifications')
+                        return true
+                    }
+                    else {
+                        console.log(jsonData.message)
+                        createMessage('Couldn\'t mark as read, please try again later')
+                    }
+                })
+        }
+    }
+}
+/* User Notifications */

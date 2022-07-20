@@ -67,3 +67,36 @@
 input[type="submit"].danger-button {
     background-color: $color-html;
 }
+
+.notification-preferences {
+    display: flex;
+
+    .notification-option {
+        display: flex;
+        align-items: center;
+        
+        span:not(.material-symbols-outlined) {
+            padding: 0.1rem 0.3rem 0.1rem 0.1rem;
+            border: 3px solid $accent1-color;
+            align-items: center;
+            border-radius: 5px;
+            margin-top: 0.5rem;
+            display: flex;
+            transition: background-color 0.3s,
+                        color 0.3s;
+        }
+        #in-website, #via-email, #via-browser {
+            height: 0;
+            width: 0;
+            &::before, &::after { content: none; }
+        }
+        input[type=checkbox]:disabled + span {
+            opacity: 0.8;
+            cursor: help;
+        }
+        input[type=checkbox]:checked + span {
+            background-color: $accent1-color;
+            color: $other-color;
+        }
+    }
+}

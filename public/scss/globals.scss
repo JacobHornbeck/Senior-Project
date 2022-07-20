@@ -14,7 +14,7 @@
 h1, h2, h3, h4, h5, h6 {
     font-family: $heading-font;
 }
-pre, code, .code {
+pre, .code {
     padding: 0.75rem;
     font-family: $code-font;
     overflow-x: auto;
@@ -24,8 +24,12 @@ pre, code, .code {
     }
 }
 code {
-    background-color: gray;
+    font-family: $code-font;
+    padding: 0.2rem 0.25rem;
+    background-color: lighten($primary-color, 40);
+    color: darken($primary-color, 25);
     border-radius: 5px;
+    font-size: 0.8em;
 }
 pre {
     max-width: 90%;
@@ -64,7 +68,7 @@ pre {
 header, footer {
     box-shadow: 0 0 10px $accent2-color;
 }
-p {
+p, li {
     font-size: 1.13rem;
 }
 .bigText {
