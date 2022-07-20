@@ -103,10 +103,13 @@ function loadPreviewImage(el) {
 
 
 /* User Notifications */
+function closeNotifications() {
+    $('.notification-list').removeClass('open')
+}
 function openNotifications() {
     $('.notification-list').toggleClass('open')
     if ($('.notification-list').hasClass('open')) {
-        setTimeout(openNotifications, 10000);
+        setTimeout(closeNotifications, 10000);
         if ($('.notification-list').text() == 'notifications_active') {
             fetch('/mark-as-read')
                 .then((response) => {

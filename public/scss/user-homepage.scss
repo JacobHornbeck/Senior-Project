@@ -80,6 +80,7 @@
         .user-widget {
             justify-self: start;
             background-color: $other-color;
+            padding-bottom: 0.5rem;
             @include box-shadow;
             width: 100%;
             margin: 0;

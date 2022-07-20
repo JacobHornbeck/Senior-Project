@@ -868,6 +868,7 @@ section:not(.account-container) h2 {
 .home-grid .widgets .user-widget {
   justify-self: start;
   background-color: #FEFEFE;
+  padding-bottom: 0.5rem;
   box-shadow: 2px 2px 8px #202020;
   width: 100%;
   margin: 0;
