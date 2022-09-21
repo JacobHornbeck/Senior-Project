@@ -73,5 +73,6 @@ router
     .post('/user/update-settings', controller.postUpdateSettings)
     .post('/user/request-data', isAuthenticated, controller.postRequestData)
     .get('/username-validity', controller.usernameTaken)
+    .get('/user/notifications', controller.getNotifications)
 
 module.exports = router

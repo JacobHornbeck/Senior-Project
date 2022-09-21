@@ -451,12 +451,16 @@ exports.markAsRead = (req, res, next) => {
         })
 }
 
-// exports.getNotifications = (req, res, next) => {
-//     User.findOne({ email: req.body.email, username: req.body.username })
-//         .then(user => {
-
-//         })
-//         .catch(err => {
-
-//         })
-// }
+exports.getNotifications = (req, res, next) => {
+    User.findOne({ email: req.query.email, username: req.query.username })
+        .then(user => {
+            if (!user)
+                return res.status(401).json({ err: 'Not a valid user!' })
+            
+            res.status(200).json({ status: 'success', notifications: user.notifications })
+        })
+        .catch(err => {
+            console.log(err)
+            res.status(500).json({ err: err })
+        })
+}

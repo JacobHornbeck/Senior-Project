@@ -40,9 +40,7 @@ const options = {
 
 app.set('view engine', 'ejs')
     .set('views', 'views')
-    .use(bodyParser.urlencoded({
-        extended: false
-    }))
+    .use(bodyParser.urlencoded({ extended: false }))
     .use(express.static(path.join(__dirname, 'public')))
     .use(cors(corsOptions))
     .use(session({
@@ -51,14 +49,14 @@ app.set('view engine', 'ejs')
         saveUninitialized: false,
         store: store
     }))
-    .use(csrfProtection)
-    .use(flash())
     .use((req, res, next) => {
         if (!req.secure && req.get('x-forwarded-proto') !== 'https' && process.env.NODE_ENV !== "development") {
             return res.redirect('https://' + req.get('host') + req.url);
         }
         next();
     })
+    .use(csrfProtection)
+    .use(flash())
     .use((req, res, next) => {
         res.locals.isAuthenticated = req.session.isLoggedIn
         res.locals.csrfToken = req.csrfToken()

@@ -110,7 +110,7 @@ function openNotifications() {
     $('.notification-list').toggleClass('open')
     if ($('.notification-list').hasClass('open')) {
         setTimeout(closeNotifications, 10000);
-        if ($('.notification-list').text() == 'notifications_active') {
+        if ($('.notifToggle').text() == 'notifications_active') {
             fetch('/mark-as-read')
                 .then((response) => {
                     return response.json()
