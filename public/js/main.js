@@ -26,9 +26,6 @@ const editorStart = {
 
 
 
-
-
-
 /* Syntax Highlighting */
 hljs.configure({
     cssSelector: 'pre',
@@ -40,9 +37,6 @@ hljs.configure({
 });
 hljs.highlightAll();
 /* Syntax Highlighting */
-
-
-
 
 
 
@@ -145,9 +139,6 @@ if (aceEditorElement) {
 
 
 
-
-
-
 /* Add lines and line number to pre blocks */
 function addLineClass(pre) {
     var lines = pre.innerHTML.split("\n"); // can use innerHTML also
@@ -171,9 +162,6 @@ setTimeout(() => {
 
 
 
-
-
-
 /* Code to interact with notification */
 $('span.close')?.on('click', (e) => {
     let notif = $(e.target.parentElement)
@@ -193,9 +181,6 @@ setTimeout(() => {
     }
 }, 10000);
 /* Code to interact with notification */
-
-
-
 
 
 
@@ -291,9 +276,6 @@ $('.valid').each((i,el) => {
 
 
 
-
-
-
 /* Input Helps */
 const inputHelpRules = {
     "username-rule-1": /^[\S]{4,100}$/i,
@@ -319,9 +301,6 @@ $('.input-help').each((i, el) => {
 
 
 
-
-
-
 /* Scrolling Images */
 function AdjustImage() {
     let img1 = $(".hero-image")
@@ -334,9 +313,6 @@ if ($('main.scrolling-images').length > 0) {
     document.body.onscroll = AdjustImage
 }
 /* Scrolling Images */
-
-
-
 
 
 
@@ -364,9 +340,6 @@ if (sideBySideLayoutButton.length > 0 && stackedLayoutButton.length > 0) {
 
 
 
-
-
-
 /* Course Menu Toggle */
 $('.aside-toggle').on('click', el => {
     let toggler = $(el.target)
@@ -385,9 +358,6 @@ $('.course-article-container').on('click', () => {
     $('.aside-toggle').html('format_list_bulleted')
 })
 /* Course Menu Toggle */
-
-
-
 
 
 
