@@ -115,7 +115,7 @@ exports.getUserProject = (req, res, next) => {
                     projectCreated: niceDate(userProject.saveDate),
                     projectUpdated: niceDate(userProject.editDate),
                     messages: await userProject.getMessages(req.user?._id),
-                    isOwn: (userProject.userId._id.toString() == req.user._id.toString()),
+                    isOwn: (userProject.userId._id.toString() == req.user?._id.toString()),
                     user: {
                         username: user.username,
                         displayName: user.displayName,
