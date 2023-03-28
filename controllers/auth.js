@@ -119,7 +119,7 @@ exports.postLogin = (req, res, next) => {
                                 req.body.firstname + " " + req.body.lastname,
                                 ((process.env.NODE_ENV === 'development') ?
                                     ('http://localhost:'+process.env.PORT) :
-                                    ('https://genius-coding.herokuapp.com')) + '/confirm-email/' + emailConfirmationToken)
+                                    ('https://genius-coding.onrender.com')) + '/confirm-email/' + emailConfirmationToken)
                                 .catch(err => {
                                     console.log(err)
                                     req.flash('message', {
@@ -207,7 +207,7 @@ exports.postSignUp = (req, res, next) => {
                 req.body.firstname + " " + req.body.lastname,
                 ((process.env.NODE_ENV === 'development') ?
                     ('http://localhost:'+process.env.PORT) :
-                    ('https://genius-coding.herokuapp.com')) + '/confirm-email/' + emailConfirmationToken)
+                    ('https://genius-coding.onrender.com')) + '/confirm-email/' + emailConfirmationToken)
                 .catch(err => {
                     console.log(err)
                     req.flash('message', {
@@ -328,7 +328,7 @@ exports.postUpdateSettings = (req, res, next) => {
                             user.firstName + ' ' + user.lastName,
                             ((process.env.NODE_ENV === 'development') ?
                                 ('http://localhost:'+process.env.PORT) :
-                                ('https://genius-coding.herokuapp.com')) + '/confirm-email/' + emailConfirmationToken)
+                                ('https://genius-coding.onrender.com')) + '/confirm-email/' + emailConfirmationToken)
                                 .catch(err => {
                                     console.log(err)
                                     req.flash('message', {

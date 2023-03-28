@@ -23,7 +23,7 @@ const sendEmail = (to, from, subject, content) => {
 }
 const template = (heading, content) => {
     return `<div style="width: 95%; max-width: 800px; margin: 0 auto;">
-                <img src="https://genius-coding.herokuapp.com/images/site-images/email-banner.png" alt="Genius Coding Email Banner"
+                <img src="https://genius-coding.onrender.com/images/site-images/email-banner.png" alt="Genius Coding Email Banner"
                 style="width: 100%; height: 60px; object-fit: cover; object-position: left;">
                 <h2 style="text-align: center; max-width: 90%; margin-left: auto; margin-right: auto;">${heading}</h2>
                 ${content}
@@ -31,7 +31,7 @@ const template = (heading, content) => {
 }
 const template2 = (heading, content) => {
     return `<div style="width: 95%; max-width: 800px; margin: 0 auto;">
-                <img src="https://genius-coding.herokuapp.com/images/site-images/email-banner.png" alt="Genius Coding Email Banner"
+                <img src="https://genius-coding.onrender.com/images/site-images/email-banner.png" alt="Genius Coding Email Banner"
                 style="width: 100%; height: 60px; object-fit: cover; object-position: left;">
                 <h2>${heading}</h2>
                 ${content}
@@ -98,9 +98,9 @@ exports.ForumNotification = (to, name, messageFrom, linkTo, messageContent) => {
         'Notification Service',
         `New Message from ${messageFrom}`,
         template2(`Hello, ${name}!`, `
-            <p>${messageFrom} has posted a message (comment, question, or answer) somewhere you are subscribed to. <a href="${process.env.NODE_ENV == 'develop' ? `http://localhost:${process.env.PORT}` : 'https://genius-coding.herokuapp.com'}/${linkTo}">Click here</a> to view the message</p>
+            <p>${messageFrom} has posted a message (comment, question, or answer) somewhere you are subscribed to. <a href="${process.env.NODE_ENV == 'develop' ? `http://localhost:${process.env.PORT}` : 'https://genius-coding.onrender.com'}/${linkTo}">Click here</a> to view the message</p>
             ${messageContent ? `<div style="padding: 0.5rem; box-shadow: 2px 2px 5px gray;">${messageContent}</div>` : ''}<br>
-            <p>To change your notification settings, go to your <a href="${process.env.NODE_ENV == 'develop' ? `http://localhost:${process.env.PORT}` : 'https://genius-coding.herokuapp.com'}/user/account-settings">account settings</a></p>`)
+            <p>To change your notification settings, go to your <a href="${process.env.NODE_ENV == 'develop' ? `http://localhost:${process.env.PORT}` : 'https://genius-coding.onrender.com'}/user/account-settings">account settings</a></p>`)
     )
 }
 
@@ -123,7 +123,7 @@ exports.RequestData = (to, dataList) => {
                 take out your data, this is just a copy. To remove
                 your data from our database, you will need to delete
                 your account, which you can do on your
-                <a href="https://genius-coding.herokuapp.com/user/account-settings">
+                <a href="https://genius-coding.onrender.com/user/account-settings">
                 settings page</a>.
             </p>`)
     )

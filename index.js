@@ -27,7 +27,7 @@ const store = new MongoDBStore({
 const csrfProtection = csrf()
 
 const corsOptions = {
-    origin: process.env.NODE_ENV == 'development' ? `http://localhost:${process.env.PORT}/` : "https://genius-coding.herokuapp.com/",
+    origin: process.env.NODE_ENV == 'development' ? `http://localhost:${process.env.PORT}/` : "https://genius-coding.onrender.com/",
     optionSuccessStatus: 200
 }
 
